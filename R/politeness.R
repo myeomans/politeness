@@ -1,18 +1,18 @@
 #source("politenessTools.R")
 
-# 
+#
 # ######################################################
 # polite.wrap<-function(x){
 #   as.numeric(politeness(iconv(x,"latin1", "ASCII", sub="")))
 # }
-# 
+#
 # xx<-list()
 # for (z in 1:length(text.vector)){
 #   xx[[z]]<-as.numeric(politeness(iconv(text.vector[z],"latin1", "ASCII", sub="")))
 #   print(z)
 # }
-# 
-# 
+#
+#
 # rownames(xx)<-names(politeness(text.vector[1]))
 # #xx<-apply(sapply(text.vector,politeness),1:2, as.numeric)
 # map.type<-"Fraction of Documents Using Strategy"
@@ -30,7 +30,7 @@ politeness<-function(text, set=c("short","long")){
   long.set=("long"%in%set)
   ########################################################
   text<-iconv(text,to="UTF-8",sub=" ")
-  l.text<-LIWCwrap(text.vector, dict=polite.dicts)
+  l.text<-LIWCwrap(text, dict=polite.dicts)
   c.text<-cleantext(text, stop.words=FALSE)
   c.words<-strsplit(c.text, " ")[[1]]
   if(long.set){
@@ -42,14 +42,14 @@ politeness<-function(text, set=c("short","long")){
   features[["Hedges"]]<-sum(textcounter(hedge.list,c.words,words=T))
   features[["Positive"]]<-sum(textcounter(positive.list,c.words,words=T))
   features[["Negative"]]<-sum(textcounter(negative.list,c.words,words=T))
-  
+
   features[["ImpersPronoun"]]<-l.text[,"ipron"]
   features[["Swear"]]<-l.text[,"swear"]
   features[["Negate"]]<-l.text[,"negate"]
   features[["FillerPause"]]<-l.text[,"pause"]
   features[["InformalTitle"]]<-l.text[,"intitle"]
   features[["FormalTitle"]]<-l.text[,"title"]
-  
+
   features[["Subjunctive"]]<-textcounter(c("could you","would you"),c.text)
   features[["Indicative"]]<-textcounter(c("can you","will you"),c.text)
   features[["ByTheWay"]]<-textcounter(c("by the way"),c.text)
@@ -58,16 +58,16 @@ politeness<-function(text, set=c("short","long")){
   features[["Goodbye"]]<-sum(textcounter(c("goodbye", "bye", "see you later"),c.text))
   features[["ForMe"]]<-sum(textcounter(c("for me","for us"),c.text))
   features[["ForYou"]]<-textcounter("for you",c.text)
-  
+
   features[["Reasoning"]]<-sum(textcounter(c("reason", "why i", "why we", "explain", "you understand","because"),c.text))
-  features[["Reassurance"]]<-sum(textcounter(c("'s okay", "n't worry", "no big deal", "not a big deal", "no problem", 
+  features[["Reassurance"]]<-sum(textcounter(c("'s okay", "n't worry", "no big deal", "not a big deal", "no problem",
                                                "no worries", "'s fine", "you 're good", "is fine", "is okay"),c.text))
   features[["AskAgency"]]<-sum(textcounter(c("do me a favor", "let me", "allow me", "can i", "should i", "may i", "might i", "could i"),c.text))
   features[["GiveAgency"]]<-sum(textcounter(c("let you", "allow you", "you can", "you may", "you could"),c.text))
   features[["GroupIdentity"]]<-sum(textcounter(c("we", "our", "ours", "us", "ourselves"),c.words,words=T))
   features[["questions"]]<-sum(textcounter(c("who","what","where","when","why","how","which"),c.words,words=T))
   #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)
-  
+
   if(!long.set){
     features[["Apologies"]]<-sum(textcounter(c("sorry"," woops","oops","whoops"),c.words,words=T))
     features[["InFact"]]<-sum(textcounter(c("really", "actually", "honestly", "surely"),c.words,words=T))
@@ -82,7 +82,7 @@ politeness<-function(text, set=c("short","long")){
                            +sum(textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),p.nonum,words=T)))
     features[["Deference"]]<-sum(textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),c.nums,words=T))
     features[["ConjStart"]]<-sum(textcounter(paste0(c("so","then","and","but","or"),"-1"),c.nums,words=T))
-    
+
     features[["PleaseStart"]]<-sum(c.nums=="please-1")
     features[["Please"]]<-sum((!grepl("-1",p.words,fixed=T))&grepl("please",p.words,fixed=T))
     features[["FirstPersonStart"]]<-sum(textcounter(paste0(c("i","my","mine","myself"),"-1"),c.nums,words=T))
