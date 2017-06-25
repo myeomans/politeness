@@ -1,13 +1,14 @@
 
 # ######################################################
 politeness<-function(texts,set=c("long","short"), binary=FALSE){
-  tallies<-list()
+  counts<-list()
   tpb<-txtProgressBar(0,length(texts))
   for (x in 1:length(texts)){
-    tallies[[x]]<-as.numeric(polite.unit(texts[x], set=set, binary=binary))
+    counts[[x]]<-politeness::polite.unit(texts[x], set=set, binary=binary)
     setTxtProgressBar(tpb,x)
   }
-  return(tallies)
+  counted<-data.frame(t(do.call(cbind,counts)))
+  return(counted)
 }
 
 polite.unit<-function(text, set=c("long","short"), binary=FALSE){
