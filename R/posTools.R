@@ -15,9 +15,10 @@ row.to.char<-function(deps){
 core.parser<-function(text){
   sentences<-as.list(qdap::sent_detect(text))
   parses<-list()
+  pos.nums<-list()
   for (s in 1:length(sentences)){
-    s.s=sentences[[s]]
-    a.s<-coreNLP::annotateString(s.s)
+    a.s<-coreNLP::annotateString(sentences[[s]])
+    pos.table<-coreNLP::getToken(a.s)[,c("id","token","POS")]
     dep.table<-coreNLP::getDependency(a.s, type="collapsed")
     dep.table<-dep.table[dep.table$sentence==1,]
     dep.char<-c()
@@ -25,10 +26,13 @@ core.parser<-function(text){
       dep.char<-c(dep.char,row.to.char(dep.table[dep.table$depIndex==x,]))
     }
     parses[[s]]<-dep.char
+    pos.nums[[s]]<-paste0("(",apply(pos.table,1,paste, collapse="-"),")")
   }
   all.parses=do.call(c, parses)
+  all.pos.nums=do.call(c, pos.nums)
   return(list(sentences=sentences,
               parses=parses,
-              all.parses=all.parses))
+              all.parses=all.parses,
+              all.pos.nums=all.pos.nums))
 }
 ################################################################

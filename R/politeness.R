@@ -1,17 +1,17 @@
 
 # ######################################################
-# polite.wrap<-function(x){
-#   as.numeric(politeness(iconv(x,"latin1", "ASCII", sub="")))
-# }
-#
-# xx<-list()
-# for (z in 1:length(text.vector)){
-#   xx[[z]]<-as.numeric(politeness(iconv(text.vector[z],"latin1", "ASCII", sub="")))
-#   print(z)
-# }
-#
+politeness<-function(texts){
+  tallies<-list()
+  tpb<-txtProgressBar(0,length(texts))
+  for (x in 1:length(texts)){
+    textchar<-iconv(texts[x],"latin1", "ASCII", sub="")
+    tallies[[x]]<-as.numeric(politeness(textchar))
+    setTxtProgressBar(tpb,x)
+  }
+  return(data.frame(tallies))
+}
 
-politeness<-function(text, set="long", binary=FALSE){
+polite.unit<-function(text, set=c("long","short"), binary=FALSE){
   if(length(text)>1){
     text<-text[1]
     message("Only one text at a time - first text will be used")
@@ -24,8 +24,10 @@ politeness<-function(text, set="long", binary=FALSE){
   c.text<-cleantext(text, stop.words=FALSE)
   c.words<-strsplit(c.text, " ")[[1]]
   if(long.set){
-    p.words<-tolower(core.parser(text)$all.parses)
+    c.p<-core.parser(text)
+    p.words<-tolower(c.p$all.parses)
     p.nonum<-gsub("-[0-99]","",p.words)
+    pos.nums<-tolower(c.p$all.pos.nums)
     c.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
   }
   ########################################################
@@ -75,9 +77,12 @@ politeness<-function(text, set="long", binary=FALSE){
     features[["InFact"]]<-(sum(textcounter(c("really", "actually", "honestly", "surely"),c.words,words=T))
                            +sum(textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),p.nonum,words=T)))
     features[["Deference"]]<-sum(textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),c.nums,words=T))
+    features[["AdvJust"]]<-sum(grepl("advmod",p.nonum)&grepl("just)",p.nonum,fixed=T))
+    features[["BareCommand"]]<-sum(grepl("(1-",pos.nums,fixed=T)&grepl("-VB)",pos.nums,fixed=T)
+                                   &(!(textcounter(paste0("-",c("be","do","have","thank","please","hang"),"-"),pos.nums))))
 
-    # Bald Command	 The first word in a sentence is a bare verb with part-of-speech tag VB ("look", "give", "wait" etc.) but is not one of "be", "do", "have", "thank", "please", "hang".
-    # Adverbial "Just" 	"Just" occurs in a dependency arc as the head of an advmod relation
+    # Bald Command	 The first word in a sentence is a bare verb with part-of-speech tag VB ("look", "give", "wait" etc.)
+    #but is not one of
 
     features[["ConjStart"]]<-sum(textcounter(paste0(c("so","then","and","but","or"),"-1"),c.nums,words=T))
 
@@ -100,7 +105,7 @@ politeness<-function(text, set="long", binary=FALSE){
 
 # Colloquialism	Regular expression capturing "y'all", "ain't" and words ending in "in'" such as "walkin'", "talkin'", etc., as marked by transcribers
 # Safety	Regular expression for all words beginning with the prefix "safe", such as "safe", "safety", "safely"
-# Time Minimizing	Regular expression capturing cases like "in a minute" and "let's get this done quick":
+# Time Minimizing	Regular expression capturing cases like "in a minute" and "let's get this done quick":  ("hurry up?")
 #
 # Disfluency	Word fragment ("Well I thi-") as indicated by transcribers
 # Last Names	Top 5000 most common last names from the 1990 US Census, where first letter is capitalized in transcript
