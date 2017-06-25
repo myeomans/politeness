@@ -27,7 +27,8 @@ core.parser<-function(text){
   sentences<-as.list(qdap::sent_detect(text))
   parses<-list()
   for (s in 1:length(sentences)){
-    a.s<-coreNLP::annotateString(sentences[[s]])
+    s.s=sentences[[s]]
+    a.s<-coreNLP::annotateString(s.s)
     dep.table<-coreNLP::getDependency(a.s, type="collapsed")
     dep.table<-dep.table[dep.table$sentence==1,]
     dep.char<-c()
