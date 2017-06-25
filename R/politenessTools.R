@@ -1,12 +1,12 @@
-options(java.parameters = "-Xmx8g")
+#options(java.parameters = "-Xmx8g")
 
 require(qdap)
-require(coreNLP)
 require(tm)
-require(rJava)
 require(quanteda)
 
-initCoreNLP("/stanford-corenlp/", mem="8g")
+#require(rJava)
+#require(coreNLP)
+#initCoreNLP("/stanford-corenlp/", mem="8g")
 ################################################################
 
 hedge.list<-readLines("modeldata/hedges.txt")
@@ -53,7 +53,7 @@ textcounter<-function (counted, texts, words=F, fixed = T) {
     for (x in counted) counts <- counts + (texts==x)
   }else {
     for (x in counted) {
-      counts <- counts + sapply(gregexpr(x, texts, fixed = fixed), 
+      counts <- counts + sapply(gregexpr(x, texts, fixed = fixed),
                                 function(z) ifelse(z[1] == (-1), 0, length(z)))
     }
   }
@@ -101,15 +101,15 @@ LIWCwrap<-function (text, dict = liwc.lists, binary = F, ...) {
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
   WC <- qdap::word_count(text)
   wc1 <- (!is.na(WC))
-  CTD <- as.matrix(quanteda::dfm(text[wc1], dictionary = dict, 
+  CTD <- as.matrix(quanteda::dfm(text[wc1], dictionary = dict,
                                  verbose = F, ...))[, 1:length(dict)]
-  if (is.null(nrow(CTD))) 
+  if (is.null(nrow(CTD)))
     CTD <- CTD/WC[wc1]
-  if (!is.null(nrow(CTD))) 
+  if (!is.null(nrow(CTD)))
     CTD <- apply(CTD, 2, function(x) x/WC[wc1])
   CTB[wc1, ] <- CTD
   colnames(CTB) <- substr(names(dict), 0, unlist(gregexpr("@", names(dict))) - 1)
-  if (binary) 
+  if (binary)
     CTB <- 1 * (CTB == 0)
   return(CTB)
 }

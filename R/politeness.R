@@ -27,6 +27,7 @@ politeness<-function(text, set=c("short","long")){
     message("Only one text at a time - first text will be used")
   }
   features<-list()
+  if(coreNLP::annotateString(sentences[[s]]))
   long.set=("long"%in%set)
   ########################################################
   text<-iconv(text,to="UTF-8",sub=" ")
