@@ -75,7 +75,7 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
                            +sum(textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),p.nonum,words=T)))
     features[["Deference"]]<-sum(textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),c.nums,words=T))
     features[["AdvJust"]]<-sum(grepl("advmod",p.nonum)&grepl("just)",p.nonum,fixed=T))
-    features[["BareCommand"]]<-sum(grepl("(1-",pos.nums,fixed=T)&grepl("-VB)",pos.nums,fixed=T)
+    features[["BareCommand"]]<-sum(grepl("(1-",pos.nums,fixed=T)&grepl("-vb)",pos.nums,fixed=T)
                                    &(!(textcounter(paste0("-",c("be","do","have","thank","please","hang"),"-"),pos.nums))))
     features[["ConjStart"]]<-sum(textcounter(paste0(c("so","then","and","but","or"),"-1"),c.nums,words=T))
 
