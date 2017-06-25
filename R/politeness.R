@@ -99,7 +99,6 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
 # Colloquialism	Regular expression capturing "y'all", "ain't" and words ending in "in'" such as "walkin'", "talkin'", etc., as marked by transcribers
 # Safety	Regular expression for all words beginning with the prefix "safe", such as "safe", "safety", "safely"
 # Time Minimizing	Regular expression capturing cases like "in a minute" and "let's get this done quick":  ("hurry up?")
-#
-# Disfluency	Word fragment ("Well I thi-") as indicated by transcribers
+
 # Last Names	Top 5000 most common last names from the 1990 US Census, where first letter is capitalized in transcript
 # First Names	Top 1000 most common first names from the 1990 US Census, where first letter is capitalized in transcript
