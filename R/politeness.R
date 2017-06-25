@@ -4,8 +4,7 @@ politeness<-function(texts){
   tallies<-list()
   tpb<-txtProgressBar(0,length(texts))
   for (x in 1:length(texts)){
-    textchar<-iconv(texts[x],"latin1", "ASCII", sub="")
-    tallies[[x]]<-as.numeric(politeness(textchar))
+    tallies[[x]]<-as.numeric(polite.unit(texts[x]))
     setTxtProgressBar(tpb,x)
   }
   return(data.frame(tallies))
@@ -19,7 +18,7 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
   features<-list()
   long.set=("long"%in%set)
   ########################################################
-  text<-iconv(text,to="UTF-8",sub=" ")
+  text<-iconv(text,to="ASCII",sub=" ")
   l.text<-LIWCwrap(text, dict=polite.dicts)
   c.text<-cleantext(text, stop.words=FALSE)
   c.words<-strsplit(c.text, " ")[[1]]
