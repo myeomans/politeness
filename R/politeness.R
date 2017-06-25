@@ -27,18 +27,17 @@ politeness<-function(text, set=c("short","long")){
     message("Only one text at a time - first text will be used")
   }
   features<-list()
-  if(coreNLP::annotateString(sentences[[s]]))
-    long.set=("long"%in%set)
+  long.set=("long"%in%set)
   ########################################################
   text<-iconv(text,to="UTF-8",sub=" ")
   l.text<-LIWCwrap(text, dict=polite.dicts)
   c.text<-cleantext(text, stop.words=FALSE)
   c.words<-strsplit(c.text, " ")[[1]]
-  #if(long.set){
-  p.words<-tolower(core.parser(text)$all.parses)
-  p.nonum<-gsub("-[0-99]","",p.words)
-  c.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
-  #}
+  if(long.set){
+    p.words<-tolower(core.parser(text)$all.parses)
+    p.nonum<-gsub("-[0-99]","",p.words)
+    c.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
+  }
   ########################################################
   features[["Hedges"]]<-sum(textcounter(hedge.list,c.words,words=T))
   features[["Positive"]]<-sum(textcounter(positive.list,c.words,words=T))
