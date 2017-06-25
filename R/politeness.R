@@ -1,6 +1,4 @@
-#source("politenessTools.R")
 
-#
 # ######################################################
 # polite.wrap<-function(x){
 #   as.numeric(politeness(iconv(x,"latin1", "ASCII", sub="")))
@@ -13,19 +11,12 @@
 # }
 #
 #
-# rownames(xx)<-names(politeness(text.vector[1]))
-# #xx<-apply(sapply(text.vector,politeness),1:2, as.numeric)
-# map.type<-"Fraction of Documents Using Strategy"
-# feature.map<-function(x) return(rowMeans(x>0))
-# #map.type<-"Average Strategy Use per Document"
-# #feature.map<-function(x) return(rowMeans(x))
 
-
-politeness<-function(text, set="long"){
-  if(length(text)>1){
-    text<-text[1]
-    message("Only one text at a time - first text will be used")
-  }
+politeness<-function(text, set="long", binary=FALSE){
+  # if(length(text)>1){
+  #   text<-text[1]
+  #   message("Only one text at a time - first text will be used")
+  # }
   features<-list()
   long.set=("long"%in%set)
   ########################################################
@@ -90,6 +81,9 @@ politeness<-function(text, set="long"){
     features[["FirstPerson"]]<-sum(textcounter(c("i","my","mine","myself"),c.words,words=T))-features[["FirstPersonStart"]]
     features[["SecondPersonStart"]]<-sum(textcounter(paste0(c("you","your","yours","yourself"),"-1"),c.nums,words=T))
     features[["SecondPerson"]]<-sum(textcounter(c("you","your","yours","yourself"),c.words,words=T))-features[["SecondPersonStart"]]
+  }
+  if(binary){
+    features<-lapply(features, function(x) 1*(x>0))
   }
   return(features)
 }
