@@ -1,9 +1,4 @@
 #options(java.parameters = "-Xmx8g")
-
-require(qdap)
-require(tm)
-require(quanteda)
-
 #require(rJava)
 #require(coreNLP)
 #initCoreNLP("/stanford-corenlp/", mem="8g")
