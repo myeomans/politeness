@@ -12,10 +12,7 @@ politeness<-function(texts,set=c("long","short"), binary=FALSE){
 }
 
 polite.unit<-function(text, set=c("long","short"), binary=FALSE){
-  if(length(text)>1){
-    text<-text[1]
-    message("Only one text at a time - first text will be used")
-  }
+  text<-text[1]
   features<-list()
   long.set=("long"%in%set)
   ########################################################
@@ -80,10 +77,6 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
     features[["AdvJust"]]<-sum(grepl("advmod",p.nonum)&grepl("just)",p.nonum,fixed=T))
     features[["BareCommand"]]<-sum(grepl("(1-",pos.nums,fixed=T)&grepl("-VB)",pos.nums,fixed=T)
                                    &(!(textcounter(paste0("-",c("be","do","have","thank","please","hang"),"-"),pos.nums))))
-
-    # Bald Command	 The first word in a sentence is a bare verb with part-of-speech tag VB ("look", "give", "wait" etc.)
-    #but is not one of
-
     features[["ConjStart"]]<-sum(textcounter(paste0(c("so","then","and","but","or"),"-1"),c.nums,words=T))
 
     features[["PleaseStart"]]<-sum(c.nums=="please-1")
