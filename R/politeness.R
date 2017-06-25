@@ -21,7 +21,7 @@
 # #feature.map<-function(x) return(rowMeans(x))
 
 
-politeness<-function(text, set=c("short","long")){
+politeness<-function(text, set="long"){
   if(length(text)>1){
     text<-text[1]
     message("Only one text at a time - first text will be used")
@@ -54,7 +54,6 @@ politeness<-function(text, set=c("short","long")){
   features[["Indicative"]]<-textcounter(c("can you","will you"),c.text)
   features[["ByTheWay"]]<-textcounter(c("by the way"),c.text)
   features[["Hello"]]<-sum(textcounter(c("hi","hello","hey"),c.words,words=T))
-  features[["Gratitude"]]<-sum(c(startsWith(c.words,"thank"),grepl("(appreciate, i)",p.nonum,fixed=T)))
   features[["Goodbye"]]<-sum(textcounter(c("goodbye", "bye", "see you later"),c.text))
   features[["ForMe"]]<-sum(textcounter(c("for me","for us"),c.text))
   features[["ForYou"]]<-textcounter("for you",c.text)
@@ -69,6 +68,7 @@ politeness<-function(text, set=c("short","long")){
   #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)
 
   if(!long.set){
+    features[["Gratitude"]]<-sum(startsWith(c.words,"thank"))
     features[["Apologies"]]<-sum(textcounter(c("sorry"," woops","oops","whoops"),c.words,words=T))
     features[["InFact"]]<-sum(textcounter(c("really", "actually", "honestly", "surely"),c.words,words=T))
     features[["Please"]]<-sum(grepl("please",p.words,fixed=T))
@@ -76,6 +76,7 @@ politeness<-function(text, set=c("short","long")){
     features[["SecondPerson"]]<-sum(textcounter(c("you","your","yours","yourself"),c.words,words=T))
   }
   if(long.set){
+    features[["Gratitude"]]<-sum(c(startsWith(c.words,"thank"),grepl("(appreciate, i)",p.nonum,fixed=T)))
     features[["Apologies"]]<-(sum(textcounter(c("sorry"," woops","oops","whoops"),c.words,words=T))
                               +sum(textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),p.nonum, words=T)))
     features[["InFact"]]<-(sum(textcounter(c("really", "actually", "honestly", "surely"),c.words,words=T))
