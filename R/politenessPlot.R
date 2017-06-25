@@ -1,7 +1,4 @@
-# require(ggplot2)
-# source("politenessTools.R")
-# source("politeness.R")
-#
+
 # messages<-read.csv("NiceNegotiation_Study1Final_6417_CLEAN.csv",stringsAsFactors = F)
 #
 # messages<-messages[(messages$Droppedout==0)&(messages$PassedAC==1)&(messages$FollowedInstructions==1),]
@@ -9,15 +6,7 @@
 # split<-(messages$ToughWarm..0.Tough..1.Warm==1)
 # split.name<-"Message Style"
 # split.levels<-c("Tough","Warm")
-#
-#
-# # load("pairs.RData")
-# # pair.set<-(pair.data$TriPart!="Moderate")&(pair.data$parent_TriPart!="Moderate")
-# # text.vector<-pair.data[pair.set,"body"]
-# # split<-(pair.data[pair.set,"TriPart_gap"]==0)
-# # split.name<-"Reply Type"
-# # split.levels<-c("Cross-Party","Intra-Party")
-#
+
 # ######################################################
 # polite.wrap<-function(x){
 #   as.numeric(politeness(iconv(x,"latin1", "ASCII", sub="")))

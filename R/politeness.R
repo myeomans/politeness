@@ -10,13 +10,12 @@
 #   print(z)
 # }
 #
-#
 
 politeness<-function(text, set="long", binary=FALSE){
-  # if(length(text)>1){
-  #   text<-text[1]
-  #   message("Only one text at a time - first text will be used")
-  # }
+  if(length(text)>1){
+    text<-text[1]
+    message("Only one text at a time - first text will be used")
+  }
   features<-list()
   long.set=("long"%in%set)
   ########################################################
@@ -58,6 +57,9 @@ politeness<-function(text, set="long", binary=FALSE){
   features[["questions"]]<-sum(textcounter(c("who","what","where","when","why","how","which"),c.words,words=T))
   #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)
 
+  # opening up the conversation/engaging - “Let me know what you think”, “I look forward to your response”, “Please let me know”, etc.
+  # Tag Question	Regular expression capturing cases like "..., right?" and "..., don't you?"
+
   if(!long.set){
     features[["Gratitude"]]<-sum(startsWith(c.words,"thank"))
     features[["Apologies"]]<-sum(textcounter(c("sorry"," woops","oops","whoops"),c.words,words=T))
@@ -73,6 +75,10 @@ politeness<-function(text, set="long", binary=FALSE){
     features[["InFact"]]<-(sum(textcounter(c("really", "actually", "honestly", "surely"),c.words,words=T))
                            +sum(textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),p.nonum,words=T)))
     features[["Deference"]]<-sum(textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),c.nums,words=T))
+
+    # Bald Command	 The first word in a sentence is a bare verb with part-of-speech tag VB ("look", "give", "wait" etc.) but is not one of "be", "do", "have", "thank", "please", "hang".
+    # Adverbial "Just" 	"Just" occurs in a dependency arc as the head of an advmod relation
+
     features[["ConjStart"]]<-sum(textcounter(paste0(c("so","then","and","but","or"),"-1"),c.nums,words=T))
 
     features[["PleaseStart"]]<-sum(c.nums=="please-1")
@@ -87,3 +93,15 @@ politeness<-function(text, set="long", binary=FALSE){
   }
   return(features)
 }
+
+# MARTHA'S IDEAS!
+# -compliments for phone or seller? “exact model”, “exact phone”, “just the phone”, “perfect phone”, “definitely interested”, “very interested”, how the seller took great “care”, etc.
+# -empathy/constraints: “budget”, “strapped for cash”, “limited”, etc.
+
+# Colloquialism	Regular expression capturing "y'all", "ain't" and words ending in "in'" such as "walkin'", "talkin'", etc., as marked by transcribers
+# Safety	Regular expression for all words beginning with the prefix "safe", such as "safe", "safety", "safely"
+# Time Minimizing	Regular expression capturing cases like "in a minute" and "let's get this done quick":
+#
+# Disfluency	Word fragment ("Well I thi-") as indicated by transcribers
+# Last Names	Top 5000 most common last names from the 1990 US Census, where first letter is capitalized in transcript
+# First Names	Top 1000 most common first names from the 1990 US Census, where first letter is capitalized in transcript

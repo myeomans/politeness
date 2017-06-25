@@ -2,14 +2,15 @@ Package: politeness
 Type: Package
 Title: Detecting Politeness Features in Text
 Version: 0.1.0
-Author: Who wrote it
+Author: Mike Yeomans
 Maintainer: Mike Yeomans <yeomans@fas.harvard.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: What license is it under?
+License: Enjoy!
 Encoding: UTF-8
 LazyData: true
 Imports:
     qdap,
     tm,
-    quanteda
+    quanteda,
+    ggplot2
