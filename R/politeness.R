@@ -1,5 +1,5 @@
 
-# ######################################################
+#######################################################
 politeness<-function(texts,set=c("long","short"), binary=FALSE){
   counts<-list()
   tpb<-txtProgressBar(0,length(texts))
@@ -89,8 +89,10 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
   if(binary){
     features<-lapply(features, function(x) 1*(x>0))
   }
-  return(features)
+  feature.data<-apply(data.frame(features),2,unlist)
+  return(feature.data)
 }
+###############################################################
 
 # MARTHA'S IDEAS!
 # -compliments for phone or seller? “exact model”, “exact phone”, “just the phone”, “perfect phone”, “definitely interested”, “very interested”, how the seller took great “care”, etc.
