@@ -4,14 +4,17 @@ politeness<-function(texts,set=c("long","short"), binary=FALSE, drop.blank=TRUE)
   counts<-list()
   tpb<-txtProgressBar(0,length(texts))
   for (x in 1:length(texts)){
-    counts[[x]]<-polite.unit(texts[x], set=set, binary=binary, drop.blank=drop.blank)
+    counts[[x]]<-polite.unit(texts[x], set=set, binary=binary)
     setTxtProgressBar(tpb,x)
   }
-  counted<-data.frame(t(do.call(cbind,counts)))
-  return(counted)
+  feature.data<-apply(data.frame(t(do.call(cbind,counts))),2,unlist)
+  if(drop.blank){
+    feature.data<-feature.data[,colMeans(feature.data)!=0]
+  }
+  return(feature.data)
 }
 
-polite.unit<-function(text, set=c("long","short"), binary=FALSE, drop.blank=TRUE){
+polite.unit<-function(text, set=c("long","short"), binary=FALSE){
   text<-text[1]
   features<-list()
   long.set=("long"%in%set)
@@ -89,11 +92,7 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE, drop.blank=TRUE
   if(binary){
     features<-lapply(features, function(x) 1*(x>0))
   }
-  feature.data<-apply(data.frame(features),2,unlist)
-  if(drop.blank){
-    feature.data<-feature.data[,colMeans(feature.data)!=0]
-  }
-  return(feature.data)
+  return(features)
 }
 ###############################################################
 
