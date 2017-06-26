@@ -90,6 +90,9 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE, drop.blank=TRUE
     features<-lapply(features, function(x) 1*(x>0))
   }
   feature.data<-apply(data.frame(features),2,unlist)
+  if(drop.blank){
+    feature.data<-feature.data[,colMeans(feature.data)!=0]
+  }
   return(feature.data)
 }
 ###############################################################
