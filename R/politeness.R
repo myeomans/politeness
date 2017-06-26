@@ -1,17 +1,17 @@
 
 #######################################################
-politeness<-function(texts,set=c("long","short"), binary=FALSE){
+politeness<-function(texts,set=c("long","short"), binary=FALSE, drop.blank=TRUE){
   counts<-list()
   tpb<-txtProgressBar(0,length(texts))
   for (x in 1:length(texts)){
-    counts[[x]]<-politeness::polite.unit(texts[x], set=set, binary=binary)
+    counts[[x]]<-polite.unit(texts[x], set=set, binary=binary, drop.blank=TRUE)
     setTxtProgressBar(tpb,x)
   }
   counted<-data.frame(t(do.call(cbind,counts)))
   return(counted)
 }
 
-polite.unit<-function(text, set=c("long","short"), binary=FALSE){
+polite.unit<-function(text, set=c("long","short"), binary=FALSE, drop.blank=TRUE){
   text<-text[1]
   features<-list()
   long.set=("long"%in%set)
