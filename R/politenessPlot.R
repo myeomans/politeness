@@ -4,6 +4,7 @@ politenessPlot<-function(polite.data,
                          split.name=NA,
                          top.title,
                          drop.blank=0.05){
+
   polite.data<-polite.data[,colMeans(polite.data)>=drop.blank]
   split.data<-data.frame(feature=rep(colnames(polite.data),2),
                          count=c(colMeans(polite.data[!split,],na.rm=T),
@@ -11,7 +12,7 @@ politenessPlot<-function(polite.data,
                          cond=c(rep(split.levels[1],ncol(polite.data)),
                                 rep(split.levels[2],ncol(polite.data))),
                          se=rep(NA,ncol(polite.data)*2))
-  if((sort(unique(unlist(polite.data)))==0:1)){
+  if(all(sort(unique(unlist(polite.data)))==0:1)){
     split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(split.data))
     map.type<-"Fraction of Documents Using Strategy"
   } else {
@@ -22,7 +23,7 @@ politenessPlot<-function(polite.data,
   wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
   # Re-order features base on mutual information!!
   f.order<-(wide$feature)[order(wide$count.total,decreasing=T)]
-  split.data$cond<-factor(cond, ordered=T,levels=f.order)
+  split.data$feature<-factor(split.data$feature, ordered=T,levels=f.order)
   ######################################################
   ggplot(data=split.data,
          aes(x=feature,y=count,fill=cond),
