@@ -3,8 +3,8 @@ politenessPlot<-function(polite.data,
                          split.levels=NA,
                          split.name=NA,
                          top.title,
-                         drop.blank=TRUE){
-  if(drop.blank) polite.data<-polite.data[,colMeans(polite.data)!=0]
+                         drop.blank=0.05){
+  polite.data<-polite.data[,colMeans(polite.data)>=drop.blank]
   split.data<-data.frame(feature=rep(colnames(polite.data),2),
                          count=c(colMeans(polite.data[!split,],na.rm=T),
                                  colMeans(polite.data[split,],na.rm=T)),
