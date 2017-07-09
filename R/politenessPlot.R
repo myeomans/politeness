@@ -21,7 +21,8 @@ politenessPlot<-function(polite.data,
   wide<-reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
   wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
   # Re-order features base on mutual information!!
-  split.data$cond<-factor(cond, levels=(wide$feature)[order(wide$count.total,decreasing=T)])
+  f.order<-(wide$feature)[order(wide$count.total,decreasing=T)]
+  split.data$cond<-factor(cond, ordered=T,levels=f.order)
   ######################################################
   ggplot(data=split.data,
          aes(x=feature,y=count,fill=cond),
