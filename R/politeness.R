@@ -51,8 +51,8 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
   features[["ForYou"]]<-textcounter("for you",c.text)
 
   features[["Reasoning"]]<-sum(textcounter(c("reason", "why i", "why we", "explain", "you understand","because"),c.text))
-  features[["Reassurance"]]<-sum(textcounter(c("'s okay", "n't worry", "no big deal", "not a big deal", "no problem",
-                                               "no worries", "'s fine", "you 're good", "is fine", "is okay"),c.text))
+  features[["Reassurance"]]<-sum(textcounter(c("is okay", "not worry", "no big deal", "not a big deal", "no problem",
+                                               "no worries", "is fine", "you are good", "is fine", "is okay"),c.text))
   features[["AskAgency"]]<-sum(textcounter(c("do me a favor", "let me", "allow me", "can i", "should i", "may i", "might i", "could i"),c.text))
   features[["GiveAgency"]]<-sum(textcounter(c("let you", "allow you", "you can", "you may", "you could"),c.text))
   features[["GroupIdentity"]]<-sum(textcounter(c("we", "our", "ours", "us", "ourselves"),c.words,words=T))
