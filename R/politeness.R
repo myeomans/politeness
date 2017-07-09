@@ -56,7 +56,7 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
   features[["AskAgency"]]<-sum(textcounter(c("do me a favor", "let me", "allow me", "can i", "should i", "may i", "might i", "could i"),c.text))
   features[["GiveAgency"]]<-sum(textcounter(c("let you", "allow you", "you can", "you may", "you could"),c.text))
   features[["GroupIdentity"]]<-sum(textcounter(c("we", "our", "ours", "us", "ourselves"),c.words,words=T))
-  features[["questions"]]<-sum(textcounter(c("who","what","where","when","why","how","which"),c.words,words=T))
+  features[["Questions"]]<-sum(textcounter(c("who","what","where","when","why","how","which"),c.words,words=T))
   #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)
 
   # opening up the conversation/engaging - “Let me know what you think”, “I look forward to your response”, “Please let me know”, etc.
