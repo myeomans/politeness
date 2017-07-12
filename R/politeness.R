@@ -77,7 +77,7 @@ polite.unit<-function(text, parser=c("none","core","spacy"), binary=FALSE){
     features[["Gratitude"]]<-sum(startsWith(c.words,"thank"))
     features[["Apologies"]]<-sum(textcounter(c("sorry"," woops","oops","whoops"),c.words,words=T))
     features[["InFact"]]<-sum(textcounter(c("really", "actually", "honestly", "surely"),c.words,words=T))
-    features[["Please"]]<-sum(grepl("please",p.words,fixed=T))
+    features[["Please"]]<-sum(grepl("please",c.words,fixed=T))
     features[["FirstPerson"]]<-sum(textcounter(c("i","my","mine","myself"),c.words,words=T))
     features[["SecondPerson"]]<-sum(textcounter(c("you","your","yours","yourself"),c.words,words=T))
   } else {
