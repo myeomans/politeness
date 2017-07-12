@@ -1,8 +1,27 @@
+#require(spacyr)
+#spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
 
-#options(java.parameters = "-Xmx8g")
-#require(rJava)
-#require(coreNLP)
-#initCoreNLP("/stanford-corenlp/", mem="8g")
+################################################################
+spacy.parser<-function(txt){
+  parsedtxt <- spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
+  parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
+  parsedtxt$head_token<-lapply(1:nrow(parsedtxt),head_token_grab, data=parsedtxt)
+  parsedtxt[parsedtxt$dep_rel=="ROOT",c("dep_rel","head_token","head_token_id")]<-c("root","ROOT",0)
+  parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
+  parsedtxt$parses<-paste0(parsedtxt$dep_rel, "(",parsedtxt$head_token,"-",parsedtxt$head_token_id,", ",parsedtxt$token,"-",parsedtxt$token_id,")")
+  return(list(all.parses=parsedtxt$parses,
+              all.pos.nums=parsedtxt$pos.nums))
+}
+head_token_grab<-function(x, data){
+  return(data[(data$doc_id==data[x,]$doc_id)&(data$sentence_id==data[x,]$sentence_id)&(data$token_id==data[x,"head_token_id"]),"token"])
+}
+################################################################
+
+
+# options(java.parameters = "-Xmx8g")
+# require(rJava)
+# require(coreNLP)
+# initCoreNLP("/stanford-corenlp/", mem="8g")
 ################################################################
 row.to.char<-function(deps){
   return(paste0(deps$type,"(",

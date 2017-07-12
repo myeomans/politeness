@@ -14,17 +14,28 @@ politeness<-function(texts,set=c("long","short"), binary=FALSE, drop.blank=TRUE)
   return(feature.data)
 }
 
-polite.unit<-function(text, set=c("long","short"), binary=FALSE){
-  text<-text[1]
+polite.unit<-function(text, parser=c("none","core","spacy"), binary=FALSE){
+  #text<-text[1]
+  # text<-c("Could you please test this first text passage? Thank you.",
+  #         "I am hoping you will handle the second, as well. Do it.")
+  # set="spacy"
+  # binary=FALSE
   features<-list()
-  long.set=("long"%in%set)
+  long.set=parser[1]
   ########################################################
   text<-iconv(text,to="ASCII",sub=" ")
   l.text<-LIWCwrap(text, dict=polite.dicts)
+
   c.text<-cleantext(text, stop.words=FALSE)
   c.words<-strsplit(c.text, " ")[[1]]
-  if(long.set){
+  if(long.set=="core"){
     c.p<-core.parser(text)
+    p.words<-tolower(c.p$all.parses)
+    p.nonum<-gsub("-[0-99]","",p.words)
+    pos.nums<-tolower(c.p$all.pos.nums)
+    c.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
+  } else if(long.set=="spacy"){
+    c.p<-spacy.parser(text)
     p.words<-tolower(c.p$all.parses)
     p.nonum<-gsub("-[0-99]","",p.words)
     pos.nums<-tolower(c.p$all.pos.nums)
@@ -62,15 +73,14 @@ polite.unit<-function(text, set=c("long","short"), binary=FALSE){
   # opening up the conversation/engaging - “Let me know what you think”, “I look forward to your response”, “Please let me know”, etc.
   # Tag Question	Regular expression capturing cases like "..., right?" and "..., don't you?"
 
-  if(!long.set){
+  if(long.set=="none"){
     features[["Gratitude"]]<-sum(startsWith(c.words,"thank"))
     features[["Apologies"]]<-sum(textcounter(c("sorry"," woops","oops","whoops"),c.words,words=T))
     features[["InFact"]]<-sum(textcounter(c("really", "actually", "honestly", "surely"),c.words,words=T))
     features[["Please"]]<-sum(grepl("please",p.words,fixed=T))
     features[["FirstPerson"]]<-sum(textcounter(c("i","my","mine","myself"),c.words,words=T))
     features[["SecondPerson"]]<-sum(textcounter(c("you","your","yours","yourself"),c.words,words=T))
-  }
-  if(long.set){
+  } else {
     features[["Gratitude"]]<-sum(c(startsWith(c.words,"thank"),grepl("(appreciate, i)",p.nonum,fixed=T)))
     features[["Apologies"]]<-(sum(textcounter(c("sorry"," woops","oops","whoops"),c.words,words=T))
                               +sum(textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),p.nonum, words=T)))
