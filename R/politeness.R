@@ -1,6 +1,6 @@
 
 #######################################################
-politeness<-function(texts,set=c("long","short"), binary=FALSE, drop.blank=TRUE){
+politeness<-function(texts,parser=c("none","core","spacy"), binary=FALSE, drop.blank=TRUE){
   counts<-list()
   tpb<-txtProgressBar(0,length(texts))
   for (x in 1:length(texts)){
