@@ -1,6 +1,6 @@
 
 #######################################################
-politeness<-function(texts,parser=c("none","core","spacy"), binary=FALSE, drop.blank=TRUE){
+slow.polite<-function(texts,parser=c("none","core","spacy"), binary=FALSE, drop.blank=TRUE){
   counts<-list()
   tpb<-txtProgressBar(0,length(texts))
   for (x in 1:length(texts)){
@@ -18,7 +18,7 @@ polite.unit<-function(text, parser=c("none","core","spacy"), binary=FALSE){
   #text<-text[1]
   # text<-c("Could you please test this first text passage? Thank you.",
   #         "I am hoping you will handle the second, as well. Do it.")
-  # set="spacy"
+  # parser="spacy"
   # binary=FALSE
   features<-list()
   long.set=parser[1]
@@ -66,6 +66,8 @@ polite.unit<-function(text, parser=c("none","core","spacy"), binary=FALSE){
                                                "no worries", "is fine", "you are good", "is fine", "is okay"),c.text))
   features[["AskAgency"]]<-sum(textcounter(c("do me a favor", "let me", "allow me", "can i", "should i", "may i", "might i", "could i"),c.text))
   features[["GiveAgency"]]<-sum(textcounter(c("let you", "allow you", "you can", "you may", "you could"),c.text))
+
+
   features[["GroupIdentity"]]<-sum(textcounter(c("we", "our", "ours", "us", "ourselves"),c.words,words=T))
   features[["Questions"]]<-sum(textcounter(c("who","what","where","when","why","how","which"),c.words,words=T))
   #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)

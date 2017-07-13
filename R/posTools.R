@@ -1,5 +1,5 @@
-#require(spacyr)
-#spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
+# require(spacyr)
+# spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
 
 ################################################################
 spacy.parser<-function(txt){
@@ -9,14 +9,16 @@ spacy.parser<-function(txt){
   parsedtxt[parsedtxt$dep_rel=="ROOT",c("dep_rel","head_token","head_token_id")]<-c("root","ROOT",0)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
   parsedtxt$parses<-paste0(parsedtxt$dep_rel, "(",parsedtxt$head_token,"-",parsedtxt$head_token_id,", ",parsedtxt$token,"-",parsedtxt$token_id,")")
-  return(list(all.parses=parsedtxt$parses,
-              all.pos.nums=parsedtxt$pos.nums))
+  parsedtxt$w.nums<-paste0(parsedtxt$token,"-",parsedtxt$token_id)
+  all.parses<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"parses"]))
+  all.pos.nums<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"pos.nums"]))
+  all.w.nums<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"w.nums"]))
+  return(list(parses=all.parses,pos.nums=all.pos.nums,w.nums=all.w.nums))
 }
 head_token_grab<-function(x, data){
   return(data[(data$doc_id==data[x,]$doc_id)&(data$sentence_id==data[x,]$sentence_id)&(data$token_id==data[x,"head_token_id"]),"token"])
 }
 ################################################################
-
 
 # options(java.parameters = "-Xmx8g")
 # require(rJava)

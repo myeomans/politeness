@@ -1,11 +1,12 @@
 
 ################################################################
 textcounter<-function (counted, texts, words=F, fixed = T) {
-  counts <- rep(0, length(texts))
+
   if(words){
-    for (x in counted) counts <- counts + (texts==x)
+    counts<-unlist(mclapply(texts,function(x) sum(unlist(x)%in%counted)))
   }else {
     for (x in counted) {
+      counts <- rep(0, length(texts))
       counts <- counts + sapply(gregexpr(x, texts, fixed = fixed),
                                 function(z) ifelse(z[1] == (-1), 0, length(z)))
     }
