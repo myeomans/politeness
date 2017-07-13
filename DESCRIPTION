@@ -13,4 +13,5 @@ Imports:
     qdap,
     tm,
     quanteda,
-    ggplot2
+    ggplot2,
+    parallel
