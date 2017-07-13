@@ -5,14 +5,14 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   sets[["liwc"]]<-LIWCwrap(text, dict=polite.dicts)
   sets[["clean"]]<-lapply(text, cleantext, stop.words=FALSE)
   sets[["c.words"]]<-lapply(sets[["clean"]], strsplit, split=" ")
-  # if(long.set=="core"){
+  # if(parser=="core"){
   #   c.p<-core.parser(text)
   #   p.words<-tolower(c.p$all.parses)
   #   p.nonum<-gsub("-[0-99]","",p.words)
   #   pos.nums<-tolower(c.p$all.pos.nums)
   #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
   # } else
-  if(long.set=="spacy"){
+  if(parser=="spacy"){
     s.p<-spacy.parser(text)
     sets[["p.words"]]<-mclapply(s.p$parses,tolower)
     sets[["p.nonum"]]<-mclapply(sets[["p.words"]],gsub, pattern="-[0-9][0-9][0-9]",replacement="")
@@ -56,8 +56,8 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   # opening up the conversation/engaging - “Let me know what you think”, “I look forward to your response”, “Please let me know”, etc.
   # Tag Question	Regular expression capturing cases like "..., right?" and "..., don't you?"
 
-  #if(long.set=="none"){
-  if(long.set!="spacy"){
+  #if(parser=="none"){
+  if(parser!="spacy"){
     features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
     features[["Apologies"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
     features[["InFact"]]<-textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)
