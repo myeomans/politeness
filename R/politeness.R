@@ -73,7 +73,6 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
                            +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=T))
     features[["Deference"]]<-textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=T)
     features[["AdvJust"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=T))))
-    features[["AdvJust"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=T))))
 
     features[["BareCommand"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=T)&grepl("-vb)",unlist(x),fixed=T)
                                                                                 &(!grepl(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),unlist(x),fixed=T)))))
