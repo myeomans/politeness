@@ -1,5 +1,6 @@
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
   ########################################################
+
   text<-iconv(text,to="ASCII",sub=" ")
   sets<-list()
   sets[["liwc"]]<-LIWCwrap(text, dict=polite.dicts)
@@ -23,6 +24,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
 
   }
   ########################################################
+  features<-list()
   features[["Hedges"]]<-textcounter(hedge.list,sets[["c.words"]],words=T)
   features[["Positive"]]<-textcounter(positive.list,sets[["c.words"]],words=T)
   features[["Negative"]]<-textcounter(negative.list,sets[["c.words"]],words=T)
@@ -34,7 +36,6 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   features[["InformalTitle"]]<-sets[["liwc"]][,"intitle"]
   features[["FormalTitle"]]<-sets[["liwc"]][,"title"]
 
-  features<-list()
   features[["Subjunctive"]]<-textcounter(c("could you","would you"),sets[["clean"]])
   features[["Indicative"]]<-textcounter(c("can you","will you"),sets[["clean"]])
   features[["ByTheWay"]]<-textcounter(c("by the way"),sets[["clean"]])
