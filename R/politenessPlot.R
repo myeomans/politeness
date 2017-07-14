@@ -5,7 +5,6 @@ politenessPlot<-function(polite.data,
                          top.title,
                          drop.blank=0.05){
 
-  polite.data<-polite.data[,colMeans(polite.data)>=drop.blank]
   split.data<-data.frame(feature=rep(colnames(polite.data),2),
                          count=c(colMeans(polite.data[!split,],na.rm=T),
                                  colMeans(polite.data[split,],na.rm=T)),
@@ -13,17 +12,21 @@ politenessPlot<-function(polite.data,
                                 rep(split.levels[2],ncol(polite.data))),
                          se=rep(NA,ncol(polite.data)*2))
   if(all(sort(unique(unlist(polite.data)))==0:1)){
-    split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(split.data))
     map.type<-"Fraction of Documents Using Strategy"
+    split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(split.data))
+    split.data<-split.data[split.data$feature%in%colnames(polite.data)[colMeans(polite.data)>=drop.blank]]
   } else {
     map.type<-"Average Strategy Use per Document"
+    split.data$se<-sqrt((split.data$count)/nrow(polite.data))
   }
   ######################################################
   wide<-reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
   wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
-  wide$slogodds<-slogodds(wide$count.0,wide$count.1)$slor
+  wide$slogodds<-slogodds(wide[,paste0("count.",split.levels[1])],
+                          wide[,paste0("count.",split.levels[2])])$slor
   f.order<-unique(wide$feature)[order(wide$slogodds)]
   split.data$feature<-factor(split.data$feature, ordered=T,levels=f.order)
+  split.data$cond<-factor(split.data$cond,ordered=T,levels=rev(split.levels))
   ######################################################
   ggplot(data=split.data,
          aes(x=feature,y=count,fill=cond),
