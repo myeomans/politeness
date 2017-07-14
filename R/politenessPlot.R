@@ -14,7 +14,7 @@ politenessPlot<-function(polite.data,
 
   if(all(sort(unique(unlist(polite.data)))==0:1)){
     map.type<-"Fraction of Documents Using Strategy"
-    split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(split.data))
+    split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(polite.data))
     selected<-colnames(polite.data)[colMeans(polite.data)>=drop.blank]
   } else {
     map.type<-"Average Strategy Use per Document"
