@@ -12,8 +12,14 @@ spacy.parser<-function(txt){
   parsedtxt$w.nums<-paste0(parsedtxt$token,"-",parsedtxt$token_id)
   all.parses<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"parses"]))
   all.pos.nums<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"pos.nums"]))
-  all.w.nums<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"w.nums"]))
-  return(list(parses=all.parses,pos.nums=all.pos.nums,w.nums=all.w.nums))
+  nonums=mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="")
+  nonums=mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="")
+  nonums=mclapply(nonums,gsub, pattern="-[0-9]",replacement="")
+  w.nums<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"w.nums"]))
+  return(list(parses=all.parses,
+              pos.nums=all.pos.nums,
+              nonums=nonums,
+              w.nums=w.nums))
 }
 head_token_grab<-function(x, data){
   return(data[(data$doc_id==data[x,]$doc_id)&(data$sentence_id==data[x,]$sentence_id)&(data$token_id==data[x,"head_token_id"]),"token"])
@@ -51,9 +57,13 @@ core.parser<-function(text){
   }
   all.parses=do.call(c, parses)
   all.pos.nums=do.call(c, pos.nums)
-  return(list(sentences=sentences,
-              parses=parses,
-              all.parses=all.parses,
-              all.pos.nums=all.pos.nums))
+  nonums=mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="")
+  nonums=mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="")
+  nonums=mclapply(nonums,gsub, pattern="-[0-9]",replacement="")
+  w.nums<-substr(all.parses, sapply(all.parses, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(all.parses)-1)
+  return(list(parses=all.parses,
+              pos.nums=all.pos.nums,
+              nonums=nonums,
+              w.nums=w.nums))
 }
 ################################################################

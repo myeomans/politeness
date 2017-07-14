@@ -6,19 +6,17 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   sets[["liwc"]]<-LIWCwrap(text, dict=polite.dicts)
   sets[["clean"]]<-lapply(text, cleantext, stop.words=FALSE)
   sets[["c.words"]]<-lapply(sets[["clean"]], strsplit, split=" ")
-  # if(parser=="core"){
-  #   c.p<-core.parser(text)
-  #   p.words<-tolower(c.p$all.parses)
-  #   p.nonum<-gsub("-[0-99]","",p.words)
-  #   pos.nums<-tolower(c.p$all.pos.nums)
-  #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
-  # } else
-  if(parser=="spacy"){
+  if(parser=="core"){
+    c.p<-core.parser(text)
+    sets[["p.words"]]<-mclapply(c.p$parses,tolower)
+    sets[["p.nonum"]]<-mclapply(c.p$nonums,tolower)
+    sets[["pos.nums"]]<-mclapply(c.p$pos.nums,tolower)
+    sets[["w.nums"]]<-mclapply(c.p$w.nums,tolower)
+    #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
+  } else if(parser=="spacy"){
     s.p<-spacy.parser(text)
     sets[["p.words"]]<-mclapply(s.p$parses,tolower)
-    sets[["p.nonum"]]<-mclapply(sets[["p.words"]],gsub, pattern="-[0-9][0-9][0-9]",replacement="")
-    sets[["p.nonum"]]<-mclapply(sets[["p.nonum"]],gsub, pattern="-[0-9][0-9]",replacement="")
-    sets[["p.nonum"]]<-mclapply(sets[["p.nonum"]],gsub, pattern="-[0-9]",replacement="")
+    sets[["p.nonum"]]<-mclapply(s.p$nonums,tolower)
     sets[["pos.nums"]]<-mclapply(s.p$pos.nums,tolower)
     sets[["w.nums"]]<-mclapply(s.p$w.nums,tolower)
 
