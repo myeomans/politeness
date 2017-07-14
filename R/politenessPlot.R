@@ -11,14 +11,17 @@ politenessPlot<-function(polite.data,
                          cond=c(rep(split.levels[1],ncol(polite.data)),
                                 rep(split.levels[2],ncol(polite.data))),
                          se=rep(NA,ncol(polite.data)*2))
+
   if(all(sort(unique(unlist(polite.data)))==0:1)){
     map.type<-"Fraction of Documents Using Strategy"
     split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(split.data))
-    split.data<-split.data[split.data$feature%in%colnames(polite.data)[colMeans(polite.data)>=drop.blank]]
+    selected<-colnames(polite.data)[colMeans(polite.data)>=drop.blank]
   } else {
     map.type<-"Average Strategy Use per Document"
     split.data$se<-sqrt((split.data$count)/nrow(polite.data))
+    selected<-colnames(polite.data)[colMeans(polite.data)>=drop.blank]
   }
+  split.data<-split.data[split.data$feature%in%selected,]
   ######################################################
   wide<-reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
   wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
