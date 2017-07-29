@@ -2,6 +2,7 @@ politenessPlot<-function(polite.data,
                          split=NA,
                          split.levels=NA,
                          split.name=NA,
+                         split.cols=c("navy","firebrick"),
                          top.title,
                          drop.blank=0.05){
 
@@ -40,7 +41,7 @@ politenessPlot<-function(polite.data,
                   position=position_dodge(width = 0.8)) +
     coord_flip() +
     scale_y_continuous(name=map.type) +
-    scale_fill_manual(values=c("navy","firebrick"), name=split.name) +
+    scale_fill_manual(values=split.cols, name=split.name) +
     theme_bw() +
     ggtitle(top.title) +
     theme(plot.title = element_text(hjust = 0.5))
