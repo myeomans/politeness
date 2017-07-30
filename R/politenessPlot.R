@@ -14,7 +14,7 @@ politenessPlot<-function(polite.data,
                          se=rep(NA,ncol(polite.data)*2))
 
   if(all(sort(unique(unlist(polite.data)))==0:1)){
-    map.type<-"Fraction of Documents Using Strategy"
+    map.type<-"Percentage of Documents Using Strategy"
     split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(polite.data))
     selected<-colnames(polite.data)[colMeans(polite.data)>=drop.blank]
   } else {
@@ -33,17 +33,17 @@ politenessPlot<-function(polite.data,
   split.data$cond<-factor(split.data$cond,ordered=T,levels=rev(split.levels))
   ######################################################
   ggplot(data=split.data,
-         aes(x=feature,y=count,fill=cond),
-         width=2) +
+         aes(x=feature,y=count,fill=cond),width=2) +
     geom_bar(position=position_dodge(width = 0.8),
              stat="identity") +
     geom_errorbar(aes(ymin=count-se, ymax=count+se), width=0.3,
                   position=position_dodge(width = 0.8)) +
     coord_flip() +
-    scale_y_continuous(name=map.type) +
+    scale_x_discrete(name="") +
     scale_fill_manual(values=split.cols, name=split.name) +
-    scale_x_discrete(breaks = seq(0,1,.25), labels=paste0(seq(0,100,25),"%")) +
-    theme_bw() +
+    scale_y_continuous(name=map.type, breaks = seq(0,1,.25), labels=paste0(seq(0,100,25),"%")) +
+    theme_bw(base_size=14) +
     ggtitle(top.title) +
-    theme(plot.title = element_text(hjust = 0.5),family="Times")
+    theme(plot.title = element_text(hjust = 0.5),
+          text=element_text(family="Times"))
 }
