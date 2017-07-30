@@ -41,7 +41,8 @@ politenessPlot<-function(polite.data,
     coord_flip() +
     scale_y_continuous(name=map.type) +
     scale_fill_manual(values=c("navy","firebrick"), name=split.name) +
+    scale_x_discrete(breaks = seq(0,1,.25), labels=paste0(seq(0,100,25),"%")) +
     theme_bw() +
     ggtitle(top.title) +
-    theme(plot.title = element_text(hjust = 0.5))
+    theme(plot.title = element_text(hjust = 0.5),family="Times")
 }
