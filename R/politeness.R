@@ -24,12 +24,12 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   ########################################################
   features<-list()
   features[["Hedges"]]<-textcounter(hedge.list,sets[["c.words"]],words=T)
-  features[["Positive"]]<-textcounter(positive.list,sets[["c.words"]],words=T)
-  features[["Negative"]]<-textcounter(negative.list,sets[["c.words"]],words=T)
+  features[["PosEmotion"]]<-textcounter(positive.list,sets[["c.words"]],words=T)
+  features[["NegEmotion"]]<-textcounter(negative.list,sets[["c.words"]],words=T)
 
-  features[["ImpersPronoun"]]<-sets[["liwc"]][,"ipron"]
+  features[["ImpersonalPronoun"]]<-sets[["liwc"]][,"ipron"]
   features[["Swear"]]<-sets[["liwc"]][,"swear"]
-  features[["Negate"]]<-sets[["liwc"]][,"negate"]
+  features[["Negation"]]<-sets[["liwc"]][,"negate"]
   features[["FillerPause"]]<-sets[["liwc"]][,"pause"]
   features[["InformalTitle"]]<-sets[["liwc"]][,"intitle"]
   features[["FormalTitle"]]<-sets[["liwc"]][,"title"]
@@ -58,24 +58,25 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   #if(parser=="none"){
   if(parser!="spacy"){
     features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
-    features[["Apologies"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
-    features[["InFact"]]<-textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)
+    features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
+    features[["InFact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)+
+                               textcounter(c("in fact"),sets[["clean"]]))
     features[["Please"]]<-grepl("please",sets[["c.words"]],fixed=T)
     features[["FirstPerson"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)
     features[["SecondPerson"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)
   } else {
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, i)",x,fixed=T)))))
-    features[["Apologies"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
-                              +textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=T))
+    features[["Apology"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
+                            +textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=T))
     features[["InFact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)
                            +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=T))
     features[["Deference"]]<-textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=T)
-    features[["AdvJust"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=T))))
+    features[["AdverbJust"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=T))))
 
     features[["BareCommand"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=T)&grepl("-vb)",unlist(x),fixed=T)
                                                                                 &(!grepl(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),unlist(x),fixed=T)))))
-    features[["ConjStart"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
+    features[["ConjugationStart"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
 
     features[["PleaseStart"]]<-textcounter("please-1",sets[["w.nums"]],words=T)
     features[["Please"]]<-textcounter("please",sets[["c.words"]],words=T)-features[["PleaseStart"]]
