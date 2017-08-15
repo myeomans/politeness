@@ -12,8 +12,19 @@
 
 politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_test = NULL, mnlm_cluster = NULL, ...){
   if(!is.null(df_covar)){
-    # check that all colums of df_covar are numeric
-    stopifnot( sapply(df_covar, is.numeric))
+    # check that all colums of df_covar are numeric or logical
+    v_s_not_num_or_logical <- names(df_covar)[ ! sapply(df_covar, function(col) is.numeric(col) | is.logical(col)) ]
+    if(length(v_s_not_num_or_logical)>0 ){
+      stop( paste0("All variables in df_covar must be logical or numeric. \n See following variables ",
+                   paste0(v_s_not_num_or_logical, collapse = ", ")) )
+    }
+
+    if(!is.null(df_polite_test)){
+      # check that df_polite_train and df_polite_test have the same columns
+      if( !setequal(names(df_polite_train), names(df_polite_test)) ){
+        stop("There must be the same variables in df_polite_train and df_polite_test")
+      }
+    }
 
     m_polite_train <- as.matrix(df_polite_train)
     mnlm_fit <- textir::mnlm(mnlm_cluster,
