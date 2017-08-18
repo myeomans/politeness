@@ -7,8 +7,12 @@
 #' @param df_polite_test  optional data.frame with politeness features as outputed by \code{politeness} used for model testing.
 #' @param mnlm_cluster cluster to be used in \code{mnlm} see  \code{mnlm} and \code{makeCluster}.
 #' @param ... additional parameters to be passed to \code{mnlm}.
-#' @return List of df_polite_train and df_polite_test with projection.
-#' @details detailed explanation
+#' @return List of df_polite_train and df_polite_test with projection see details.
+#' @details List:
+#' * train_proj matrix of projection of mlmn using df_covar and df_polite_train.
+#' * test_proj matrix of projection of mlmn using df_covar and df_polite_train on df_polite_test data.
+#' * train_coef coeficients of mnlm model using df_covar and df_polite_train.
+#' @md
 #' @examples
 #'
 #'
@@ -33,7 +37,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     mnlm_fit <- textir::mnlm(mnlm_cluster,
                              covars = df_covar,
                              counts = m_polite_train, ...)
-    mnlm_coefs = coef(mnlm_fit)
+    mnlm_coef = coef(mnlm_fit)
 
     m_train_proj <- textir::srproj(mnlm_fit, m_polite_train )
 
@@ -44,7 +48,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
       m_test_proj <- NULL
     }
 
-    l_out <- list(train_proj = m_train_proj, test_proj = m_test_proj, train_coefs=mnlm_coefs)
+    l_out <- list(train_proj = m_train_proj, test_proj = m_test_proj, train_coefs=mnlm_coef)
 
   } else {
     stop("Function is not implemented for NULL df_covar")
