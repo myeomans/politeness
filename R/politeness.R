@@ -1,6 +1,5 @@
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
   ########################################################
-
   text<-iconv(text,to="ASCII",sub=" ")
   sets<-list()
   sets[["liwc"]]<-LIWCwrap(text, dict=polite.dicts)
@@ -81,13 +80,13 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
     features[["Conjugation Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
 
     features[["Please Start"]]<-textcounter("please-1",sets[["w.nums"]],words=T)
-    features[["Please"]]<-textcounter("please",sets[["c.words"]],words=T)-features[["PleaseStart"]]
+    features[["Please"]]<-textcounter("please",sets[["c.words"]],words=T)-features[["Please Start"]]
 
     features[["First Person Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=T)
-    features[["First Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)-features[["FirstPersonStart"]]
+    features[["First Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)-features[["First Person Start"]]
 
     features[["Second Person Start"]]<-textcounter(paste0(c("you","your","yours","yourself"),"-1"),sets[["w.nums"]],words=T)
-    features[["Second Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["SecondPersonStart"]]
+    features[["Second Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["Second Person Start"]]
   }
   if(binary){
     features<-mclapply(features, function(x) 1*(x>0))
