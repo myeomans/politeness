@@ -14,15 +14,15 @@ politenessProjection(df_polite_train, df_covar = NULL,
 
 \item{df_polite_test}{optional data.frame with politeness features as outputed by \code{politeness} used for model testing.}
 
-\item{mnlm_cluster}{cluster to be used in \code{mnlm} see  \code{mnlm} and \code{makeCluster}.}
+\item{mnlm_cluster}{cluster to be used in \code{mnlm}. See  \code{mnlm} and \code{makeCluster}.}
 
 \item{...}{additional parameters to be passed to \code{mnlm}.}
 }
 \value{
-List of df_polite_train and df_polite_test with projection see details.
+List of df_polite_train and df_polite_test with projection. See details.
 }
 \description{
-Projection of Multinomial Inverse regression estimation for a politness matrix and covariates.
+Projection of Multinomial Inverse Rextegression estimation for a politness matrix and covariates.
 }
 \details{
 List:

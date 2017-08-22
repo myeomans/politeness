@@ -2,23 +2,23 @@
 % Please edit documentation in R/findPoliteTexts.R
 \name{findPoliteTexts}
 \alias{findPoliteTexts}
-\title{Find Polite text}
+\title{Find polite text}
 \usage{
 findPoliteTexts(text, df_polite, df_covar, type = c("most", "least", "both"),
   num_docs = 5L, mnlm_cluster = NULL, ...)
 }
 \arguments{
-\item{text}{a character vector of texts}
+\item{text}{a character vector of texts.}
 
-\item{df_polite}{a data.frame with politeness features as outputed by \code{politeness} used to train model.}
+\item{df_polite}{a data.frame with politeness features, as outputed by \code{politeness}, used to train model.}
 
 \item{df_covar}{a data.frame with covariates.}
 
-\item{type}{a string indicating if we want the most or least polite texts or both. If length > 1 only first value is used.}
+\item{type}{a string indicating if function should return the most or least polite texts or both. If \code{length > 1} only first value is used.}
 
-\item{num_docs}{integer of number of documents we want. Default is 5.}
+\item{num_docs}{integer of number of documents to be returned. Default is 5.}
 
-\item{mnlm_cluster}{cluster to be used in \code{mnlm} see  \code{mnlm} and \code{makeCluster}.}
+\item{mnlm_cluster}{cluster to be used in \code{mnlm}. See  \code{mnlm} and \code{makeCluster}.}
 
 \item{...}{additional parameters to be passed to \code{mnlm}.}
 }
@@ -30,12 +30,12 @@ Finds examples of most or least polite text in a corpus
 }
 \details{
 Function returns a data.frame ranked by (more or least) politeness.
-If \code{type == 'most'}, the num_docs most polite texts will be returned.
-If \code{type == 'least'}, the num_docs least polite texts will be returned.
+If \code{type == 'most'}, the \code{num_docs} most polite texts will be returned.
+If \code{type == 'least'}, the \code{num_docs} least polite texts will be returned.
 If \code{type == 'both'}, both most and least polite text will be returned;
 if \code{num_docs} is even, half will be most and half least polite else half + 1 will be most polite.
 
-df_polite and df_covar must have the same number of rows as the length of text.
+\code{df_polite} and \code{df_covar} must have the same number of rows as the \code{length(text)}.
 }
 \examples{
 
