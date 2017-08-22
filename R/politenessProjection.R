@@ -1,10 +1,9 @@
-
-
 #' Politeness projection
+#'
 #' @description Projection of Multinomial Inverse Rextegression estimation for a politness matrix and covariates.
-#' @param df_polite_train a data.frame with politeness features as outputed by \code{politeness} used to train model.
+#' @param df_polite_train a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.
 #' @param df_covar a data.frame with covariates.
-#' @param df_polite_test  optional data.frame with politeness features as outputed by \code{politeness} used for model testing.
+#' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing.
 #' @param mnlm_cluster cluster to be used in \code{mnlm}. See  \code{mnlm} and \code{makeCluster}.
 #' @param ... additional parameters to be passed to \code{mnlm}.
 #' @return List of df_polite_train and df_polite_test with projection. See details.

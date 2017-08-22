@@ -1,7 +1,7 @@
 #' Find polite text
 #' @description Finds examples of most or least polite text in a corpus
 #' @param text a character vector of texts.
-#' @param df_polite a data.frame with politeness features, as outputed by \code{politeness}, used to train model.
+#' @param df_polite a data.frame with politeness features, as outputed by \code{\link{politeness}}, used to train model.
 #' @param df_covar a data.frame with covariates.
 #' @param type a string indicating if function should return the most or least polite texts or both. If \code{length > 1} only first value is used.
 #' @param num_docs integer of number of documents to be returned. Default is 5.

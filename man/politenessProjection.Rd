@@ -8,11 +8,11 @@ politenessProjection(df_polite_train, df_covar = NULL,
   df_polite_test = NULL, mnlm_cluster = NULL, ...)
 }
 \arguments{
-\item{df_polite_train}{a data.frame with politeness features as outputed by \code{politeness} used to train model.}
+\item{df_polite_train}{a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.}
 
 \item{df_covar}{a data.frame with covariates.}
 
-\item{df_polite_test}{optional data.frame with politeness features as outputed by \code{politeness} used for model testing.}
+\item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing.}
 
 \item{mnlm_cluster}{cluster to be used in \code{mnlm}. See  \code{mnlm} and \code{makeCluster}.}
 

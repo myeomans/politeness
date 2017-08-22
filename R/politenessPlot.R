@@ -1,3 +1,18 @@
+#' Politeness plot
+#'
+#' @description Plots
+#' @param polite.data a data.frame with politeness features, as outputed by \code{\link{politeness}}.
+#' @param split logical vector of how to split \code{polite.data}.
+#' @param split.levels character vector of length 2. First value correponds to cases where \code{split} is FALSE and second value when TRUE.
+#' @param split.name
+#' @param split.cols character vector of length 2.
+#' @param top.title character of title of plot
+#' @param drop.bank numeric of threshold
+#' @details Length of \code{split} must be the same as number of rows of \code{polite.data}.
+#' @return a ggplot plot Showing
+#' @examples
+#'
+
 politenessPlot<-function(polite.data,
                          split=NA,
                          split.levels=NA,

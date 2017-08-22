@@ -1,3 +1,16 @@
+#' Politeness Features
+#'
+#' @description Detects politeness features in text
+#' @param text a character vector of texts.
+#' @param parser a character of which parser to use for text. Default is "none" other options are "core" and "spacy".
+#' @param binary logical default is FALSE. If TRUE outputed data.frame will only have 0 and 1 as possible values else values will be between 0 and 1.
+#' @param drop.blank logical dafault is TRUE should columns with only 0 value be removed from outputed data.frame.
+#' @details To use parser = "spacy" requires instalation of
+#' @return a data.frame of politeness features. Posible columns are
+#' @examples
+#'
+
+
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
   ########################################################
 

@@ -10,7 +10,7 @@ findPoliteTexts(text, df_polite, df_covar, type = c("most", "least", "both"),
 \arguments{
 \item{text}{a character vector of texts.}
 
-\item{df_polite}{a data.frame with politeness features, as outputed by \code{politeness}, used to train model.}
+\item{df_polite}{a data.frame with politeness features, as outputed by \code{\link{politeness}}, used to train model.}
 
 \item{df_covar}{a data.frame with covariates.}
 

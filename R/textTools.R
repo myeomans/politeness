@@ -1,5 +1,12 @@
 
-################################################################
+#' Text Counter
+#' @description
+#' @param counted
+#' @param texts
+#' @param words logical. Default FALSE.
+#' @param fixed logical. Default TRUE.
+#' @return a numeric vector
+#' @keywords internal
 textcounter<-function (counted, texts, words=F, fixed = T) {
 
   if(words){
@@ -13,7 +20,14 @@ textcounter<-function (counted, texts, words=F, fixed = T) {
   }
   return(counts)
 }
-################################################################
+
+#' Clean text
+#' @description
+#' @param ex
+#' @param language string. Default "english".
+#' @param stop.words logical. Default TRUE
+#' @return a character vector
+#' @keywords internal
 cleantext<-function (ex, language = "english", stop.words = TRUE) {
   ex <- tolower(ex)
   if (language == "english") {
@@ -31,7 +45,12 @@ cleantext<-function (ex, language = "english", stop.words = TRUE) {
   ex <- tm::stripWhitespace(ex)
   return(as.character(ex))
 }
-################################################################
+
+#'
+#' @description
+#' @param text a character vector of texts.
+#' @return a character vector
+#' @keywords internal
 ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=T))
   text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
@@ -48,5 +67,6 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("u.s.", "usa", x, fixed=T))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=T))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=T))
-  return(text)}
-################################################################
+  return(text)
+}
+

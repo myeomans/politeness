@@ -9,6 +9,16 @@ polite.dicts[["pause@FilledPause"]]<-c("er","sigh","hm*","uh*","um*")
 polite.dicts[["intitle@InformalTitle"]]<-c("dude*", "bro*", "boss", "bud", "buddy", "champ", "man", "guy*", "guy", "brotha", "sista", "son", "sonny", "chief")
 polite.dicts[["title@FormalTitle"]]<-c("sir", "ma'am", "maam", "mister", "mr*", "ms*", "madam", "miss", "gentleman", "lady")
 ################################################################
+
+#' LIWC wrap
+#' @description
+#' @param text a character vector of texts.
+#' @param dict
+#' @param binary
+#' @param ...
+#' @return
+#' @keywords internal
+
 LIWCwrap<-function (text, dict = liwc.lists, binary = F, ...) {
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
   WC <- qdap::word_count(text)

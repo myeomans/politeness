@@ -1,7 +1,11 @@
 # require(spacyr)
 # spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
 
-################################################################
+#' Spacy Parser
+#' @description
+#' @param txt a character vector of texts.
+#' @return list of
+#' @keywords internal
 spacy.parser<-function(txt){
   parsedtxt <- spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
@@ -21,6 +25,15 @@ spacy.parser<-function(txt){
               nonums=nonums,
               w.nums=w.nums))
 }
+
+
+#' Head Token Grab
+#' @description
+#' @param x
+#' @param data a data.frame
+#' @return a data.frame
+#' @keywords internal
+#'
 head_token_grab<-function(x, data){
   return(data[(data$doc_id==data[x,]$doc_id)&(data$sentence_id==data[x,]$sentence_id)&(data$token_id==data[x,"head_token_id"]),"token"])
 }
@@ -30,7 +43,15 @@ head_token_grab<-function(x, data){
 # require(rJava)
 # require(coreNLP)
 # initCoreNLP("/stanford-corenlp/", mem="8g")
-################################################################
+
+#' Head Token Grab
+#' @description
+#' @param depts
+#' @param data a data.frame
+#' @return a character
+#' @keywords internal
+#'
+
 row.to.char<-function(deps){
   return(paste0(deps$type,"(",
                 deps$governor,"-",
@@ -38,7 +59,13 @@ row.to.char<-function(deps){
                 deps$dependent,"-",
                 deps$depIndex,")"))
 }
-################################################################
+
+#' Core Parser
+#' @description
+#' @param text a character vector of texts.
+#' @return list of
+#' @keywords internal
+#'
 core.parser<-function(text){
   sentences<-as.list(qdap::sent_detect(text))
   parses<-list()
@@ -66,4 +93,3 @@ core.parser<-function(text){
               nonums=nonums,
               w.nums=w.nums))
 }
-################################################################
