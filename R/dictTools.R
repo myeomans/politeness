@@ -1,16 +1,4 @@
-################################################################
-hedge.list<-readLines("modeldata/hedges.txt")
-positive.list<-readLines("modeldata/positive-words.txt")
-negative.list<-readLines("modeldata/negative-words.txt")
-liwc.lists<-quanteda::dictionary(file="modeldata/LQ.dic")
-################################################################
-polite.dicts<-liwc.lists[c("ipron@ImpersonalPronouns","swear@Swear","negate@Negations")]
-polite.dicts[["pause@FilledPause"]]<-c("er","sigh","hm*","uh*","um*")
-polite.dicts[["intitle@InformalTitle"]]<-c("dude*", "bro*", "boss", "bud", "buddy", "champ", "man", "guy*", "guy", "brotha", "sista", "son", "sonny", "chief")
-polite.dicts[["title@FormalTitle"]]<-c("sir", "ma'am", "maam", "mister", "mr*", "ms*", "madam", "miss", "gentleman", "lady")
-################################################################
-
-#' LIWC wrap
+#' Dictionary Wrapper
 #' @description
 #' @param text a character vector of texts.
 #' @param dict
@@ -19,7 +7,7 @@ polite.dicts[["title@FormalTitle"]]<-c("sir", "ma'am", "maam", "mister", "mr*", 
 #' @return
 #' @keywords internal
 
-LIWCwrap<-function (text, dict = liwc.lists, binary = F, ...) {
+dictWrap<-function (text, dict = liwc.lists, binary = F, ...) {
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
   WC <- qdap::word_count(text)
   wc1 <- (!is.na(WC))
@@ -42,3 +30,22 @@ LIWCwrap<-function (text, dict = liwc.lists, binary = F, ...) {
   }
 }
 ################################################################
+
+
+# ################################################################
+# hedge_list<-readLines("modeldata/hedges.txt")
+# positive_list<-readLines("modeldata/positive-words.txt")
+# negative_list<-readLines("modeldata/negative-words.txt")
+# other.lists<-quanteda::dictionary(file="modeldata/LQ.dic")
+# ################################################################
+# polite_dicts<-other.lists[c("ipron@ImpersonalPronouns","swear@Swear","negate@Negations")]
+# polite_dicts[["pause@FilledPause"]]<-c("er","sigh","hm*","uh*","um*")
+# polite_dicts[["intitle@InformalTitle"]]<-c("dude*", "bro*", "boss", "bud", "buddy", "champ", "man", "guy*", "guy", "brotha", "sista", "son", "sonny", "chief")
+# polite_dicts[["title@FormalTitle"]]<-c("sir", "ma'am", "maam", "mister", "mr*", "ms*", "madam", "miss", "gentleman", "lady")
+# ################################################################
+#
+# devtools::use_data(hedge_list,
+#                    positive_list,
+#                    negative_list,
+#                    polite_dicts,
+#                    internal = TRUE)

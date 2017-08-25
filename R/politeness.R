@@ -15,7 +15,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   ########################################################
   text<-iconv(text,to="ASCII",sub=" ")
   sets<-list()
-  sets[["liwc"]]<-LIWCwrap(text, dict=polite.dicts)
+  sets[["dicts"]]<-dictWrap(text, dict=polite_dicts)
   sets[["clean"]]<-lapply(text, cleantext, stop.words=FALSE)
   sets[["c.words"]]<-lapply(sets[["clean"]], strsplit, split=" ")
   if(parser=="core"){
@@ -26,7 +26,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
     sets[["w.nums"]]<-mclapply(c.p$w.nums,tolower)
     #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
   } else if(parser=="spacy"){
-    s.p<-spacy.parser(text)
+    s.p<-spacyParser(text)
     sets[["p.words"]]<-mclapply(s.p$parses,tolower)
     sets[["p.nonum"]]<-mclapply(s.p$nonums,tolower)
     sets[["pos.nums"]]<-mclapply(s.p$pos.nums,tolower)
@@ -39,12 +39,12 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   features[["PosEmotion"]]<-textcounter(positive.list,sets[["c.words"]],words=T)
   features[["NegEmotion"]]<-textcounter(negative.list,sets[["c.words"]],words=T)
 
-  features[["Impersonal Pronoun"]]<-sets[["liwc"]][,"ipron"]
-  features[["Swear"]]<-sets[["liwc"]][,"swear"]
-  features[["Negation"]]<-sets[["liwc"]][,"negate"]
-  features[["Filler Pause"]]<-sets[["liwc"]][,"pause"]
-  features[["Informal Title"]]<-sets[["liwc"]][,"intitle"]
-  features[["Formal Title"]]<-sets[["liwc"]][,"title"]
+  features[["Impersonal Pronoun"]]<-sets[["dicts"]][,"ipron"]
+  features[["Swear"]]<-sets[["dicts"]][,"swear"]
+  features[["Negation"]]<-sets[["dicts"]][,"negate"]
+  features[["Filler Pause"]]<-sets[["dicts"]][,"pause"]
+  features[["Informal Title"]]<-sets[["dicts"]][,"intitle"]
+  features[["Formal Title"]]<-sets[["dicts"]][,"title"]
 
   # Rename these two!
   features[["Subjunctive"]]<-textcounter(c("could you","would you"),sets[["clean"]])
