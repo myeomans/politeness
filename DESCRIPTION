@@ -2,7 +2,7 @@ Package: politeness
 Type: Package
 Title: Detecting Politeness Features in Text
 Version: 0.1.0
-Author: Mike Yeomans, Alejandro Kantor
+Author: Mike Yeomans, Alejandro Kantor, Dustin Tingley
 Maintainer: Mike Yeomans <yeomans@fas.harvard.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
