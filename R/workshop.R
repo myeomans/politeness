@@ -1,4 +1,12 @@
-# load("R/polite_test.Rda")
+############################################################
+# TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY
+############################################################
+# This file only for development... Will be removed soon!
+############################################################
+# TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY
+############################################################
+
+# load("data/polite_test.Rda")
 # source("R/dictTools.R")
 # source("R/textTools.R")
 # source("R/posTools.R")
