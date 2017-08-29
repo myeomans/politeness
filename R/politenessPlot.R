@@ -1,34 +1,46 @@
 #' Politeness plot
 #'
-#' @description Plots
+#' @description Plots magnitude of politeness features given a split of data.
 #' @param df_polite a data.frame with politeness features, as outputed by \code{\link{politeness}}.
-#' @param split logical vector of how to split \code{df_polite}.
-#' @param split_levels character vector of length 2. First value correponds to cases where \code{split} is FALSE and second value when TRUE.
-#' @param split_name
+#' @param split a vector with exactly two unique values. of how to split \code{df_polite}.
+#' @param split_levels character vector of length 2 default NULL. Labels of split values for graph legend. If NULL, this will be infered from \code{split}.
+#' @param split_name character default NULL. with the name of the split variable for the graph legend.
 #' @param split_cols character vector of length 2.
-#' @param top_title character of title of plot
-#' @param drop.bank numeric of threshold
+#' @param top_title character default "". Title of plot.
+#' @param drop_blank numeric of threshold,
 #' @details Length of \code{split} must be the same as number of rows of \code{df_polite}.
-#' @return a ggplot plot Showing
+#' @return a ggplot of the magnitude of politeness features split by \code{split}.
 #' @examples
 #'
 
 politenessPlot<-function(df_polite,
-                         split=NA,
-                         split_levels=NA,
-                         split_name=NA,
+                         split=NULL,
+                         split_levels=NULL,
+                         split_name=NULL,
                          split_cols=c("navy","firebrick"),
-                         top_title,
+                         top_title = "",
                          drop_blank=0.05){
 
-  split.data<-data.frame(feature=rep(colnames(df_polite),2),
-                         count=c(colMeans(df_polite[!split,],na.rm=T),
-                                 colMeans(df_polite[split,],na.rm=T)),
-                         cond=c(rep(split_levels[1],ncol(df_polite)),
-                                rep(split_levels[2],ncol(df_polite))),
-                         se=rep(NA,ncol(df_polite)*2))
+  # confirm that split only has two values
+  if( length(unique(split)) !=2){
+    stop("split must have exactly 2 unique values")
+  }
 
-  if(all(sort(unique(unlist(df_polite)))==0:1)){
+  num_features <- ncol(df_polite)
+  l_polite_split <- split(df_polite, split)
+
+  if(is.null(split_levels)){
+    split_levels <- names(l_polite_split)
+  }
+
+  split.data<-data.frame(feature=rep(colnames(df_polite),2),
+                         count=c(colMeans(l_polite_split[[1]],na.rm=T),
+                                 colMeans(l_polite_split[[2]],na.rm=T)),
+                         cond=c(rep(split_levels[1],num_features),
+                                rep(split_levels[2],num_features)),
+                         se=rep(NA_real_,num_features*2))
+
+  if( setequal(unique(unlist(df_polite)),0:1) ){
     map.type<-"Percentage of Documents Using Strategy"
     split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(df_polite))
     selected<-colnames(df_polite)[colMeans(df_polite)>=drop_blank]
@@ -55,7 +67,7 @@ politenessPlot<-function(df_polite,
                   position=position_dodge(width = 0.8)) +
     coord_flip() +
     scale_x_discrete(name="") +
-    scale_fill_manual(values=split_cols, name=split_name) +
+    scale_fill_manual(breaks = split_levels,values=split_cols, name=split_name) +
     scale_y_continuous(name=map.type, breaks = seq(0,1,.25), labels=paste0(seq(0,100,25),"%")) +
     theme_bw(base_size=14) +
     ggtitle(top_title) +

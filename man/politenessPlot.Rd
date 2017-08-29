@@ -4,31 +4,33 @@
 \alias{politenessPlot}
 \title{Politeness plot}
 \usage{
-politenessPlot(polite.data, split = NA, split.levels = NA,
-  split.name = NA, split.cols = c("navy", "firebrick"), top.title,
-  drop.blank = 0.05)
+politenessPlot(df_polite, split = NULL, split_levels = NULL,
+  split_name = NULL, split_cols = c("navy", "firebrick"), top_title = "",
+  drop_blank = 0.05)
 }
 \arguments{
-\item{polite.data}{a data.frame with politeness features, as outputed by \code{\link{politeness}}.}
+\item{df_polite}{a data.frame with politeness features, as outputed by \code{\link{politeness}}.}
 
-\item{split}{logical vector of how to split \code{polite.data}.}
+\item{split}{a vector with exactly two unique values. of how to split \code{df_polite}.}
 
-\item{split.levels}{character vector of length 2. First value correponds to cases where \code{split} is FALSE and second value when TRUE.}
+\item{split_levels}{character vector of length 2 default NULL. Labels of split values for graph legend. If NULL, this will be infered from \code{split}.}
 
-\item{split.cols}{character vector of length 2.}
+\item{split_name}{character default NULL. with the name of the split variable for the graph legend.}
 
-\item{top.title}{character of title of plot}
+\item{split_cols}{character vector of length 2.}
 
-\item{drop.bank}{numeric of threshold}
+\item{top_title}{character default "". Title of plot.}
+
+\item{drop_blank}{numeric of threshold,}
 }
 \value{
-a ggplot plot Showing
+a ggplot of the magnitude of politeness features split by \code{split}.
 }
 \description{
-Plots
+Plots magnitude of politeness features given a split of data.
 }
 \details{
-Length of \code{split} must be the same as number of rows of \code{polite.data}.
+Length of \code{split} must be the same as number of rows of \code{df_polite}.
 }
 \examples{
 
