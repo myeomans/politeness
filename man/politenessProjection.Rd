@@ -12,7 +12,7 @@ politenessProjection(df_polite_train, df_covar = NULL,
 
 \item{df_covar}{a data.frame with covariates.}
 
-\item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing.}
+\item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).}
 
 \item{mnlm_cluster}{cluster to be used in \code{mnlm}. See  \code{mnlm} and \code{makeCluster}.}
 
@@ -29,7 +29,7 @@ List:
 \itemize{
 \item train_proj matrix of projection of mlmn using df_covar and df_polite_train.
 \item test_proj matrix of projection of mlmn using df_covar and df_polite_train on df_polite_test data.
-\item train_coef coeficients of mnlm model using df_covar and df_polite_train.
+\item train_coef coefficients of mnlm model using df_covar and df_polite_train.
 }
 }
 \examples{

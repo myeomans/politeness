@@ -12,4 +12,7 @@ coreParser(text)
 \value{
 list of
 }
+\description{
+(deprecated) Part-Of-Speech tagging using Stanford CoreNLP.
+}
 \keyword{internal}

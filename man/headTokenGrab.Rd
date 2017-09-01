@@ -7,9 +7,14 @@
 headTokenGrab(x, data)
 }
 \arguments{
-\item{data}{a data.frame}
+\item{x}{row in SpaCy parse table}
+
+\item{data}{data.frame SpaCy parse table}
 }
 \value{
-a data.frame
+word tagged as referent from dependencey
+}
+\description{
+Compile dependency relation for each row of a SpaCy parse table
 }
 \keyword{internal}

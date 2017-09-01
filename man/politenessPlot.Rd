@@ -9,7 +9,7 @@ politenessPlot(df_polite, split = NULL, split_levels = NULL,
   drop_blank = 0.05)
 }
 \arguments{
-\item{df_polite}{a data.frame with politeness features calculated from a document set, as outputed by \code{\link{politeness}}.}
+\item{df_polite}{a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.}
 
 \item{split}{a vector with exactly two unique values. must have a length equal to the number of documents included in \code{df_polite}.}
 
@@ -21,10 +21,10 @@ politenessPlot(df_polite, split = NULL, split_levels = NULL,
 
 \item{top_title}{character default "". Title of plot.}
 
-\item{drop_blank}{numeric of threshold,}
+\item{drop_blank}{Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}}
 }
 \value{
-a ggplot of the magnitude of politeness features split by \code{split}.
+a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
 }
 \description{
 Plots the prevalence of politeness features in documents, divided by a binary covariate.

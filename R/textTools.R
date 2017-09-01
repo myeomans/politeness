@@ -1,10 +1,11 @@
+
 #' Text Counter
-#' @description
-#' @param counted
-#' @param texts
-#' @param words logical. Default FALSE.
-#' @param fixed logical. Default TRUE.
-#' @return a numeric vector
+#' @description Counts total prevalence of a set of items in each of a set of texts.
+#' @param counted character vector of items to search for in the texts.
+#' @param texts character vector of to-be-searched text.
+#' @param words logical. Default FALSE. Does \code{counted} contain words, or sequences of chracters?
+#' @param fixed logical. Default TRUE. Use literal characters instead of regular expressions?
+#' @return numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.
 #' @keywords internal
 textcounter<-function (counted, texts, words=F, fixed = T) {
 
@@ -21,8 +22,8 @@ textcounter<-function (counted, texts, words=F, fixed = T) {
 }
 
 #' Clean text
-#' @description
-#' @param ex
+#' @description Basic text cleaning
+#' @param ex character text to be cleaned
 #' @param language string. Default "english".
 #' @param stop.words logical. Default TRUE
 #' @return a character vector
@@ -46,7 +47,7 @@ cleantext<-function (ex, language = "english", stop.words = TRUE) {
 }
 
 #'
-#' @description
+#' @description Expands Contractions
 #' @param text a character vector of texts.
 #' @return a character vector
 #' @keywords internal

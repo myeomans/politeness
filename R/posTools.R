@@ -6,9 +6,9 @@
 ################################################################
 
 #' Spacy Parser
-#' @description
+#' @description Return POS tags from natural language.
 #' @param txt a character vector of texts.
-#' @return list of
+#' @return list of compiled POS-tagged items.
 #' @keywords internal
 spacyParser<-function(txt){
   parsedtxt <- spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
@@ -30,12 +30,11 @@ spacyParser<-function(txt){
               w.nums=w.nums))
 }
 
-
 #' Head Token Grab
-#' @description
-#' @param x
-#' @param data a data.frame
-#' @return a data.frame
+#' @description Compile dependency relation for each row of a SpaCy parse table
+#' @param x row in SpaCy parse table
+#' @param data data.frame SpaCy parse table
+#' @return word tagged as referent from dependencey
 #' @keywords internal
 #'
 headTokenGrab<-function(x, data){
@@ -51,7 +50,7 @@ headTokenGrab<-function(x, data){
 ################################################################
 
 #' Core Parser
-#' @description
+#' @description (deprecated) Part-Of-Speech tagging using Stanford CoreNLP.
 #' @param text a character vector of texts.
 #' @return list of
 #' @keywords internal
@@ -85,8 +84,8 @@ coreParser<-function(text){
 }
 
 #' Row To Char
-#' @description
-#' @param depts
+#' @description constructs POS-tagged words from coreNLP parse table.
+#' @param deps row from coreNLP dependency table
 #' @param data a data.frame
 #' @return a character
 #' @keywords internal

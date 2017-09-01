@@ -7,9 +7,14 @@
 rowToChar(deps)
 }
 \arguments{
+\item{deps}{row from coreNLP dependency table}
+
 \item{data}{a data.frame}
 }
 \value{
 a character
+}
+\description{
+constructs POS-tagged words from coreNLP parse table.
 }
 \keyword{internal}

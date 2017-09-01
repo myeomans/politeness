@@ -7,11 +7,16 @@
 cleantext(ex, language = "english", stop.words = TRUE)
 }
 \arguments{
+\item{ex}{character text to be cleaned}
+
 \item{language}{string. Default "english".}
 
 \item{stop.words}{logical. Default TRUE}
 }
 \value{
 a character vector
+}
+\description{
+Basic text cleaning
 }
 \keyword{internal}

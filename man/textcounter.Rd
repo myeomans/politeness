@@ -7,11 +7,18 @@
 textcounter(counted, texts, words = F, fixed = T)
 }
 \arguments{
-\item{words}{logical. Default FALSE.}
+\item{counted}{character vector of items to search for in the texts.}
 
-\item{fixed}{logical. Default TRUE.}
+\item{texts}{character vector of to-be-searched text.}
+
+\item{words}{logical. Default FALSE. Does \code{counted} contain words, or sequences of chracters?}
+
+\item{fixed}{logical. Default TRUE. Use literal characters instead of regular expressions?}
 }
 \value{
-a numeric vector
+numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.
+}
+\description{
+Counts total prevalence of a set of items in each of a set of texts.
 }
 \keyword{internal}

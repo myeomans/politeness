@@ -10,6 +10,9 @@ spacyParser(txt)
 \item{txt}{a character vector of texts.}
 }
 \value{
-list of
+list of compiled POS-tagged items.
+}
+\description{
+Return POS tags from natural language.
 }
 \keyword{internal}

@@ -8,6 +8,15 @@ dictWrap(text, dict = liwc.lists, binary = F, ...)
 }
 \arguments{
 \item{text}{a character vector of texts.}
+
+\item{dict}{a dictionary class object (see \link[quanteda]{dictionary}) containing dictionaries for six of the politeness features}
+
+\item{binary}{return the prevalence (% of words) or the presence (yes/no) of a feature in each text?}
+
+\item{...}{arguments passes onto the \code{quanteda:dfm} function}
+}
+\value{
+a matrix with six columns (one for each feature) and a row for every text entered into the function.
 }
 \description{
 background function to load

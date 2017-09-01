@@ -8,16 +8,16 @@ politeness(text, parser = c("none", "spacy"), binary = FALSE,
   drop.blank = TRUE)
 }
 \arguments{
-\item{text}{a character vector of texts.}
+\item{text}{character vector of texts.}
 
-\item{parser}{Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.}
+\item{parser}{character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.}
 
-\item{binary}{logical default is FALSE. If TRUE outputed data.frame will only have 0 and 1 as possible values else values will be between 0 and 1.}
+\item{binary}{logical  Return feature counts from each text (default) or a binary indicator for the presence of a feature?}
 
-\item{drop.blank}{logical dafault is TRUE should columns with only 0 value be removed from outputed data.frame.}
+\item{drop.blank}{logical Should features that were not found in any text be removed from the data.frame? Default is TRUE}
 }
 \value{
-a data.frame of politeness features. Posible columns are
+a data.frame of politeness features. Posible columns are listed in LINK_TO_TABLE
 }
 \description{
 Detects politeness features in text
@@ -27,10 +27,10 @@ We currently support SpaCy which must be installed separately and prior to runni
 }
 \examples{
 
+\\code{#install.packages("spacyr")}
+\\code{library(spacyr)}
+\\code{spacyr::spacy_initialize(python_executable = PYTHON_PATH)}
 
-
-require(spacyr)
-spacyr::spacy_initialize(python_executable = PYTHON_PATH)
 
 
 }
