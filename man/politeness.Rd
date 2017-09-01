@@ -10,7 +10,7 @@ politeness(text, parser = c("none", "spacy"), binary = FALSE,
 \arguments{
 \item{text}{a character vector of texts.}
 
-\item{parser}{a character of which parser to use for text. Default is "none" other options are "core" and "spacy".}
+\item{parser}{Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.}
 
 \item{binary}{logical default is FALSE. If TRUE outputed data.frame will only have 0 and 1 as possible values else values will be between 0 and 1.}
 
@@ -23,8 +23,14 @@ a data.frame of politeness features. Posible columns are
 Detects politeness features in text
 }
 \details{
-To use parser = "spacy" requires instalation of
+We currently support SpaCy which must be installed separately and prior to running the detector (see example for implementation).
 }
 \examples{
+
+
+
+require(spacyr)
+spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+
 
 }

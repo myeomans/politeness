@@ -9,15 +9,15 @@ politenessPlot(df_polite, split = NULL, split_levels = NULL,
   drop_blank = 0.05)
 }
 \arguments{
-\item{df_polite}{a data.frame with politeness features, as outputed by \code{\link{politeness}}.}
+\item{df_polite}{a data.frame with politeness features calculated from a document set, as outputed by \code{\link{politeness}}.}
 
-\item{split}{a vector with exactly two unique values. of how to split \code{df_polite}.}
+\item{split}{a vector with exactly two unique values. must have a length equal to the number of documents included in \code{df_polite}.}
 
-\item{split_levels}{character vector of length 2 default NULL. Labels of split values for graph legend. If NULL, this will be infered from \code{split}.}
+\item{split_levels}{character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.}
 
-\item{split_name}{character default NULL. with the name of the split variable for the graph legend.}
+\item{split_name}{character default NULL. Name of the covariate for legend.}
 
-\item{split_cols}{character vector of length 2.}
+\item{split_cols}{character vector of length 2. Name of colors to use.}
 
 \item{top_title}{character default "". Title of plot.}
 
@@ -27,7 +27,7 @@ politenessPlot(df_polite, split = NULL, split_levels = NULL,
 a ggplot of the magnitude of politeness features split by \code{split}.
 }
 \description{
-Plots magnitude of politeness features given a split of data.
+Plots the prevalence of politeness features in documents, divided by a binary covariate.
 }
 \details{
 Length of \code{split} must be the same as number of rows of \code{df_polite}.

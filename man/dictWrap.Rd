@@ -9,4 +9,7 @@ dictWrap(text, dict = liwc.lists, binary = F, ...)
 \arguments{
 \item{text}{a character vector of texts.}
 }
+\description{
+background function to load
+}
 \keyword{internal}

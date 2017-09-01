@@ -1,11 +1,11 @@
 #' Politeness plot
 #'
-#' @description Plots magnitude of politeness features given a split of data.
-#' @param df_polite a data.frame with politeness features, as outputed by \code{\link{politeness}}.
-#' @param split a vector with exactly two unique values. of how to split \code{df_polite}.
-#' @param split_levels character vector of length 2 default NULL. Labels of split values for graph legend. If NULL, this will be infered from \code{split}.
-#' @param split_name character default NULL. with the name of the split variable for the graph legend.
-#' @param split_cols character vector of length 2.
+#' @description Plots the prevalence of politeness features in documents, divided by a binary covariate.
+#' @param df_polite a data.frame with politeness features calculated from a document set, as outputed by \code{\link{politeness}}.
+#' @param split a vector with exactly two unique values. must have a length equal to the number of documents included in \code{df_polite}.
+#' @param split_levels character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.
+#' @param split_name character default NULL. Name of the covariate for legend.
+#' @param split_cols character vector of length 2. Name of colors to use.
 #' @param top_title character default "". Title of plot.
 #' @param drop_blank numeric of threshold,
 #' @details Length of \code{split} must be the same as number of rows of \code{df_polite}.
@@ -24,6 +24,9 @@ politenessPlot<-function(df_polite,
   # confirm that split only has two values
   if( length(unique(split)) !=2){
     stop("split must have exactly 2 unique values")
+  }
+  if( length(split) != nrow(df_polite)){
+    stop("split must be same length as document set")
   }
 
   num_features <- ncol(df_polite)

@@ -2,12 +2,18 @@
 #'
 #' @description Detects politeness features in text
 #' @param text a character vector of texts.
-#' @param parser a character of which parser to use for text. Default is "none" other options are "core" and "spacy".
+#' @param parser Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
 #' @param binary logical default is FALSE. If TRUE outputed data.frame will only have 0 and 1 as possible values else values will be between 0 and 1.
 #' @param drop.blank logical dafault is TRUE should columns with only 0 value be removed from outputed data.frame.
-#' @details To use parser = "spacy" requires instalation of
+#' @details We currently support SpaCy which must be installed separately and prior to running the detector (see example for implementation).
 #' @return a data.frame of politeness features. Posible columns are
 #' @examples
+#'
+#'
+#'
+#' require(spacyr)
+#' spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+#'
 #'
 
 

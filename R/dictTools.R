@@ -1,5 +1,5 @@
 #' Dictionary Wrapper
-#' @description
+#' @description background function to load
 #' @param text a character vector of texts.
 #' @param dict
 #' @param binary
