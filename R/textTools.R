@@ -1,4 +1,3 @@
-
 #' Text Counter
 #' @description
 #' @param counted

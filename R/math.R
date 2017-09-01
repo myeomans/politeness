@@ -1,4 +1,9 @@
-
+#' Variance-Weighted Log Odds
+#' @description background function to load
+#' @param x prevalence in one sample
+#' @param y prevalence in another sample
+#' @return variance-weighted log odds ratio of prevalence across samples
+#' @keywords internal
 slogodds <- function(x,y) {
 
   prior <- 1

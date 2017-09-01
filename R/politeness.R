@@ -1,18 +1,18 @@
 #' Politeness Features
 #'
 #' @description Detects politeness features in text
-#' @param text a character vector of texts.
-#' @param parser Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
-#' @param binary logical default is FALSE. If TRUE outputed data.frame will only have 0 and 1 as possible values else values will be between 0 and 1.
-#' @param drop.blank logical dafault is TRUE should columns with only 0 value be removed from outputed data.frame.
+#' @param text character vector of texts.
+#' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
+#' @param binary logical  Return feature counts from each text (default) or a binary indicator for the presence of a feature?
+#' @param drop.blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
 #' @details We currently support SpaCy which must be installed separately and prior to running the detector (see example for implementation).
-#' @return a data.frame of politeness features. Posible columns are
+#' @return a data.frame of politeness features. Posible columns are listed in LINK_TO_TABLE
 #' @examples
 #'
+#' \code{#install.packages("spacyr")}
+#' \code{library(spacyr)}
+#' \code{spacyr::spacy_initialize(python_executable = PYTHON_PATH)}
 #'
-#'
-#' require(spacyr)
-#' spacyr::spacy_initialize(python_executable = PYTHON_PATH)
 #'
 #'
 
@@ -46,7 +46,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   features[["NegEmotion"]]<-textcounter(negative.list,sets[["c.words"]],words=T)
 
   features[["Impersonal Pronoun"]]<-sets[["dicts"]][,"ipron"]
-  features[["Swear"]]<-sets[["dicts"]][,"swear"]
+  #features[["Swear"]]<-sets[["dicts"]][,"swear"]
   features[["Negation"]]<-sets[["dicts"]][,"negate"]
   features[["Filler Pause"]]<-sets[["dicts"]][,"pause"]
   features[["Informal Title"]]<-sets[["dicts"]][,"intitle"]
@@ -96,7 +96,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
 
     features[["Bare Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=T)&grepl("-vb)",unlist(x),fixed=T)
                                                                                 &(!grepl(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),unlist(x),fixed=T)))))
-    features[["Conjugation Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
+    features[["Conjunction Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
 
     features[["Please Start"]]<-textcounter("please-1",sets[["w.nums"]],words=T)
     features[["Please"]]<-textcounter("please",sets[["c.words"]],words=T)-features[["Please Start"]]

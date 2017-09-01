@@ -1,15 +1,15 @@
 #' Politeness plot
 #'
 #' @description Plots the prevalence of politeness features in documents, divided by a binary covariate.
-#' @param df_polite a data.frame with politeness features calculated from a document set, as outputed by \code{\link{politeness}}.
+#' @param df_polite a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.
 #' @param split a vector with exactly two unique values. must have a length equal to the number of documents included in \code{df_polite}.
 #' @param split_levels character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.
 #' @param split_name character default NULL. Name of the covariate for legend.
 #' @param split_cols character vector of length 2. Name of colors to use.
 #' @param top_title character default "". Title of plot.
-#' @param drop_blank numeric of threshold,
+#' @param drop_blank Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}
 #' @details Length of \code{split} must be the same as number of rows of \code{df_polite}.
-#' @return a ggplot of the magnitude of politeness features split by \code{split}.
+#' @return a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
 #' @examples
 #'
 

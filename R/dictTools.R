@@ -1,10 +1,10 @@
 #' Dictionary Wrapper
 #' @description background function to load
 #' @param text a character vector of texts.
-#' @param dict
-#' @param binary
-#' @param ...
-#' @return
+#' @param dict a dictionary class object (see \link[quanteda]{dictionary}) containing dictionaries for six of the politeness features
+#' @param binary return the prevalence (% of words) or the presence (yes/no) of a feature in each text?
+#' @param ... arguments passes onto the \code{quanteda:dfm} function
+#' @return a matrix with six columns (one for each feature) and a row for every text entered into the function.
 #' @keywords internal
 
 dictWrap<-function (text, dict = liwc.lists, binary = F, ...) {
@@ -31,21 +31,22 @@ dictWrap<-function (text, dict = liwc.lists, binary = F, ...) {
 }
 ################################################################
 
+#################################################################
+# This builds the dicionaries - secret!
+#################################################################
+hedge_list<-readLines("modeldata/hedges.txt")
+positive_list<-readLines("modeldata/positive-words.txt")
+negative_list<-readLines("modeldata/negative-words.txt")
+other.lists<-quanteda::dictionary(file="modeldata/LQ.dic")
+################################################################
+polite_dicts<-other.lists[c("ipron@ImpersonalPronouns","swear@Swear","negate@Negations")]
+polite_dicts[["pause@FilledPause"]]<-c("er","sigh","hm*","uh*","um*")
+polite_dicts[["intitle@InformalTitle"]]<-c("dude*", "bro*", "boss", "bud", "buddy", "champ", "man", "guy*", "guy", "brotha", "sista", "son", "sonny", "chief")
+polite_dicts[["title@FormalTitle"]]<-c("sir", "ma'am", "maam", "mister", "mr*", "ms*", "madam", "miss", "gentleman", "lady")
+################################################################
 
-# ################################################################
-# hedge_list<-readLines("modeldata/hedges.txt")
-# positive_list<-readLines("modeldata/positive-words.txt")
-# negative_list<-readLines("modeldata/negative-words.txt")
-# other.lists<-quanteda::dictionary(file="modeldata/LQ.dic")
-# ################################################################
-# polite_dicts<-other.lists[c("ipron@ImpersonalPronouns","swear@Swear","negate@Negations")]
-# polite_dicts[["pause@FilledPause"]]<-c("er","sigh","hm*","uh*","um*")
-# polite_dicts[["intitle@InformalTitle"]]<-c("dude*", "bro*", "boss", "bud", "buddy", "champ", "man", "guy*", "guy", "brotha", "sista", "son", "sonny", "chief")
-# polite_dicts[["title@FormalTitle"]]<-c("sir", "ma'am", "maam", "mister", "mr*", "ms*", "madam", "miss", "gentleman", "lady")
-# ################################################################
-#
-# devtools::use_data(hedge_list,
-#                    positive_list,
-#                    negative_list,
-#                    polite_dicts,
-#                    internal = TRUE)
+devtools::use_data(hedge_list,
+                   positive_list,
+                   negative_list,
+                   polite_dicts,
+                   internal = TRUE)
