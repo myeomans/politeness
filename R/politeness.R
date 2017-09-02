@@ -45,12 +45,12 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   features[["PosEmotion"]]<-textcounter(positive.list,sets[["c.words"]],words=T)
   features[["NegEmotion"]]<-textcounter(negative.list,sets[["c.words"]],words=T)
 
-  features[["Impersonal Pronoun"]]<-sets[["dicts"]][,"ipron"]
-  #features[["Swear"]]<-sets[["dicts"]][,"swear"]
-  features[["Negation"]]<-sets[["dicts"]][,"negate"]
-  features[["Filler Pause"]]<-sets[["dicts"]][,"pause"]
-  features[["Informal Title"]]<-sets[["dicts"]][,"intitle"]
-  features[["Formal Title"]]<-sets[["dicts"]][,"title"]
+  features[["Impersonal Pronoun"]]<-sets[["dicts"]][,"Pronouns"]
+  features[["Swear"]]<-sets[["dicts"]][,"Swearing"]
+  features[["Negation"]]<-sets[["dicts"]][,"Negation"]
+  features[["Filler Pause"]]<-sets[["dicts"]][,"FilledPause"]
+  features[["Informal Title"]]<-sets[["dicts"]][,"InformalTitle"]
+  features[["Formal Title"]]<-sets[["dicts"]][,"FormalTitle"]
 
   # Rename these two!
   features[["Subjunctive"]]<-textcounter(c("could you","would you"),sets[["clean"]])

@@ -2,12 +2,12 @@
 % Please edit documentation in R/textTools.R
 \name{cleantext}
 \alias{cleantext}
-\title{Clean text}
+\title{Clean Text}
 \usage{
-cleantext(ex, language = "english", stop.words = TRUE)
+cleantext(text, language = "english", stop.words = TRUE)
 }
 \arguments{
-\item{ex}{character text to be cleaned}
+\item{text}{character text to be cleaned}
 
 \item{language}{string. Default "english".}
 

@@ -1,5 +1,5 @@
-
 #' Text Counter
+#'
 #' @description Counts total prevalence of a set of items in each of a set of texts.
 #' @param counted character vector of items to search for in the texts.
 #' @param texts character vector of to-be-searched text.
@@ -7,6 +7,7 @@
 #' @param fixed logical. Default TRUE. Use literal characters instead of regular expressions?
 #' @return numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.
 #' @keywords internal
+#'
 textcounter<-function (counted, texts, words=F, fixed = T) {
 
   if(words){
@@ -21,32 +22,32 @@ textcounter<-function (counted, texts, words=F, fixed = T) {
   return(counts)
 }
 
-#' Clean text
+#' Clean Text
 #' @description Basic text cleaning
-#' @param ex character text to be cleaned
+#' @param text character text to be cleaned
 #' @param language string. Default "english".
 #' @param stop.words logical. Default TRUE
 #' @return a character vector
 #' @keywords internal
-cleantext<-function (ex, language = "english", stop.words = TRUE) {
-  ex <- tolower(ex)
+cleantext<-function (text, language = "english", stop.words = TRUE) {
+  text <- tolower(text)
   if (language == "english") {
-    ex <- ctxpand(ex)
+    text <- ctxpand(text)
   }
-  ex <- gsub("[[:punct:]]", " ", ex)
-  ex <- gsub("[[:cntrl:]]", " ", ex)
+  text <- gsub("[[:punct:]]", " ", text)
+  text <- gsub("[[:cntrl:]]", " ", text)
   if (length(stop.words) > 1) {
-    ex <- tm::removeWords(ex, stop.words)
+    text <- tm::removeWords(text, stop.words)
   }
   else if (stop.words) {
-    ex <- tm::removeWords(ex, tm::stopwords(language))
+    text <- tm::removeWords(text, tm::stopwords(language))
   }
-  ex <- tm::removeNumbers(ex)
-  ex <- tm::stripWhitespace(ex)
-  return(as.character(ex))
+  text <- tm::removeNumbers(text)
+  text <- tm::stripWhitespace(text)
+  return(as.character(text))
 }
 
-#'
+#' Contraction Expander
 #' @description Expands Contractions
 #' @param text a character vector of texts.
 #' @return a character vector
