@@ -18,8 +18,6 @@
 #' politeness(phone_offers$message, parser="spacy",drop.blank=F)
 #'
 
-
-
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
   ########################################################
   text<-iconv(text,to="ASCII",sub=" ")
@@ -29,17 +27,17 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   sets[["c.words"]]<-lapply(sets[["clean"]], strsplit, split=" ")
   if(parser=="core"){
     c.p<-core.parser(text)
-    sets[["p.words"]]<-mclapply(c.p$parses,tolower)
-    sets[["p.nonum"]]<-mclapply(c.p$nonums,tolower)
-    sets[["pos.nums"]]<-mclapply(c.p$pos.nums,tolower)
-    sets[["w.nums"]]<-mclapply(c.p$w.nums,tolower)
+    sets[["p.words"]]<-parallel::mclapply(c.p$parses,tolower)
+    sets[["p.nonum"]]<-parallel::mclapply(c.p$nonums,tolower)
+    sets[["pos.nums"]]<-parallel::mclapply(c.p$pos.nums,tolower)
+    sets[["w.nums"]]<-parallel::mclapply(c.p$w.nums,tolower)
     #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
   } else if(parser=="spacy"){
     s.p<-spacyParser(text)
-    sets[["p.words"]]<-mclapply(s.p$parses,tolower)
-    sets[["p.nonum"]]<-mclapply(s.p$nonums,tolower)
-    sets[["pos.nums"]]<-mclapply(s.p$pos.nums,tolower)
-    sets[["w.nums"]]<-mclapply(s.p$w.nums,tolower)
+    sets[["p.words"]]<-parallel::mclapply(s.p$parses,tolower)
+    sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower)
+    sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower)
+    sets[["w.nums"]]<-parallel::mclapply(s.p$w.nums,tolower)
 
   }
   ########################################################
@@ -102,16 +100,16 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
     features[["Conjunction.Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
 
     features[["Please.Start"]]<-textcounter("please-1",sets[["w.nums"]],words=T)
-    features[["Please"]]<-textcounter("please",sets[["c.words"]],words=T)-features[["Please Start"]]
+    features[["Please"]]<-textcounter("please",sets[["c.words"]],words=T)-features[["Please.Start"]]
 
     features[["First.Person.Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=T)
-    features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)-features[["First Person Start"]]
+    features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)-features[["First.Person.Start"]]
 
     features[["Second.Person.Start"]]<-textcounter(paste0(c("you","your","yours","yourself"),"-1"),sets[["w.nums"]],words=T)
-    features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["Second Person Start"]]
+    features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["Second.Person.Start"]]
   }
   if(binary){
-    features<-mclapply(features, function(x) 1*(x>0))
+    features<-parallel::mclapply(features, function(x) 1*(x>0))
   }
   feature.data<-as.data.frame(features)
   if(drop.blank){
