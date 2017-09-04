@@ -27,10 +27,12 @@ We currently support SpaCy which must be installed separately and prior to runni
 }
 \examples{
 
-\\code{#install.packages("spacyr")}
-\\code{library(spacyr)}
-\\code{spacyr::spacy_initialize(python_executable = PYTHON_PATH)}
+data(phone_offers)
 
+politeness(phone_offers$message, parser="none",drop.blank=F)
 
+#install.packages("spacyr")
+#spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+politeness(phone_offers$message, parser="spacy",drop.blank=F)
 
 }

@@ -42,7 +42,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
 
     if(!is.null(df_polite_test)){
       m_polite_test <- as.matrix(df_polite_test)
-      m_test_proj <- srproj(mnlm_fit, m_polite_test )
+      m_test_proj <- textir::srproj(mnlm_fit, m_polite_test )
     } else{
       m_test_proj <- NULL
     }

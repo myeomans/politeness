@@ -9,12 +9,15 @@
 #' @return a data.frame of politeness features. Posible columns are listed in LINK_TO_TABLE
 #' @examples
 #'
-#' \code{#install.packages("spacyr")}
-#' \code{library(spacyr)}
-#' \code{spacyr::spacy_initialize(python_executable = PYTHON_PATH)}
+#' data(phone_offers)
 #'
+#' politeness(phone_offers$message, parser="none",drop.blank=F)
 #'
+#' #install.packages("spacyr")
+#' #spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+#' politeness(phone_offers$message, parser="spacy",drop.blank=F)
 #'
+
 
 
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
@@ -41,34 +44,34 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   }
   ########################################################
   features<-list()
-  features[["Hedges"]]<-textcounter(hedge.list,sets[["c.words"]],words=T)
-  features[["PosEmotion"]]<-textcounter(positive.list,sets[["c.words"]],words=T)
-  features[["NegEmotion"]]<-textcounter(negative.list,sets[["c.words"]],words=T)
+  features[["Hedges"]]<-textcounter(hedge_list,sets[["c.words"]],words=T)
+  features[["Positive.Emotion"]]<-textcounter(positive_list,sets[["c.words"]],words=T)
+  features[["Negative.Emotion"]]<-textcounter(negative_list,sets[["c.words"]],words=T)
 
-  features[["Impersonal Pronoun"]]<-sets[["dicts"]][,"Pronouns"]
-  features[["Swear"]]<-sets[["dicts"]][,"Swearing"]
+  features[["Impersonal.Pronoun"]]<-sets[["dicts"]][,"Pronouns"]
+  features[["Swearing"]]<-sets[["dicts"]][,"Swearing"]
   features[["Negation"]]<-sets[["dicts"]][,"Negation"]
-  features[["Filler Pause"]]<-sets[["dicts"]][,"FilledPause"]
-  features[["Informal Title"]]<-sets[["dicts"]][,"InformalTitle"]
-  features[["Formal Title"]]<-sets[["dicts"]][,"FormalTitle"]
+  features[["Filler.Pause"]]<-sets[["dicts"]][,"FilledPause"]
+  features[["Informal.Title"]]<-sets[["dicts"]][,"InformalTitle"]
+  features[["Formal.Title"]]<-sets[["dicts"]][,"FormalTitle"]
 
   # Rename these two!
   features[["Subjunctive"]]<-textcounter(c("could you","would you"),sets[["clean"]])
   features[["Indicative"]]<-textcounter(c("can you","will you"),sets[["clean"]])
 
-  features[["By The Way"]]<-textcounter(c("by the way"),sets[["clean"]])
-  features[["Let Me Know"]]<-textcounter(c("let me know"),sets[["clean"]])
+  features[["By.The.Way"]]<-textcounter(c("by the way"),sets[["clean"]])
+  features[["Let.Me.Know"]]<-textcounter(c("let me know"),sets[["clean"]])
   features[["Goodbye"]]<-textcounter(c("goodbye", "bye", "see you later"),sets[["clean"]])
-  features[["For Me"]]<-textcounter(c("for me","for us"),sets[["clean"]])
-  features[["For You"]]<-textcounter("for you",sets[["clean"]])
+  features[["For.Me"]]<-textcounter(c("for me","for us"),sets[["clean"]])
+  features[["For.You"]]<-textcounter("for you",sets[["clean"]])
   features[["Reasoning"]]<-textcounter(c("reason", "why i", "why we", "explain", "you understand","because"),sets[["clean"]])
   features[["Reassurance"]]<-textcounter(c("is okay", "not worry", "no big deal", "not a big deal", "no problem",
                                            "no worries", "is fine", "you are good", "is fine", "is okay") ,sets[["clean"]])
-  features[["Ask Agency"]]<-textcounter(c("do me a favor", "let me", "allow me", "can i", "should i", "may i", "might i", "could i"),sets[["clean"]])
-  features[["Give Agency"]]<-textcounter(c("let you", "allow you", "you can", "you may", "you could"),sets[["clean"]])
+  features[["Ask.Agency"]]<-textcounter(c("do me a favor", "let me", "allow me", "can i", "should i", "may i", "might i", "could i"),sets[["clean"]])
+  features[["Give.Agency"]]<-textcounter(c("let you", "allow you", "you can", "you may", "you could"),sets[["clean"]])
 
   features[["Hello"]]<-textcounter(c("hi","hello","hey"),sets[["c.words"]],words=T)  # "good morning", "good evening", "good afternoon",
-  features[["Group Identity"]]<-textcounter(c("we", "our", "ours", "us", "ourselves"),sets[["c.words"]],words=T)
+  features[["Group.Identity"]]<-textcounter(c("we", "our", "ours", "us", "ourselves"),sets[["c.words"]],words=T)
   features[["Questions"]]<-textcounter(c("who","what","where","when","why","how","which"),sets[["c.words"]],words=T)
   #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)
 
@@ -79,33 +82,33 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   if(parser!="spacy"){
     features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
     features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
-    features[["In Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)+
+    features[["In.Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)+
                                textcounter(c("in fact"),sets[["clean"]]))
     features[["Please"]]<-grepl("please",sets[["c.words"]],fixed=T)
-    features[["First Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)
-    features[["Second Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)
+    features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)
+    features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)
   } else {
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, i)",x,fixed=T)))))
     features[["Apology"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
                             +textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=T))
-    features[["In Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)
+    features[["In.Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)
                            +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=T))
     features[["Affirmation"]]<-textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=T)
-    features[["Adverb Just"]]<-unlist(lapply(sets[["p.nonum"]] ,function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=T))))
+    features[["Adverb.Just"]]<-unlist(lapply(sets[["p.nonum"]] ,function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=T))))
 
-    features[["Bare Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=T)&grepl("-vb)",unlist(x),fixed=T)
+    features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=T)&grepl("-vb)",unlist(x),fixed=T)
                                                                                 &(!grepl(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),unlist(x),fixed=T)))))
-    features[["Conjunction Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
+    features[["Conjunction.Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
 
-    features[["Please Start"]]<-textcounter("please-1",sets[["w.nums"]],words=T)
+    features[["Please.Start"]]<-textcounter("please-1",sets[["w.nums"]],words=T)
     features[["Please"]]<-textcounter("please",sets[["c.words"]],words=T)-features[["Please Start"]]
 
-    features[["First Person Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=T)
-    features[["First Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)-features[["First Person Start"]]
+    features[["First.Person.Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=T)
+    features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)-features[["First Person Start"]]
 
-    features[["Second Person Start"]]<-textcounter(paste0(c("you","your","yours","yourself"),"-1"),sets[["w.nums"]],words=T)
-    features[["Second Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["Second Person Start"]]
+    features[["Second.Person.Start"]]<-textcounter(paste0(c("you","your","yours","yourself"),"-1"),sets[["w.nums"]],words=T)
+    features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["Second Person Start"]]
   }
   if(binary){
     features<-mclapply(features, function(x) 1*(x>0))

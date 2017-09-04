@@ -11,7 +11,7 @@
 #' @return list of compiled POS-tagged items.
 #' @keywords internal
 spacyParser<-function(txt){
-  parsedtxt <- spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
+  parsedtxt <- spacyr::spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
   parsedtxt$head_token<-lapply(1:nrow(parsedtxt),headTokenGrab, data=parsedtxt)
   parsedtxt[parsedtxt$dep_rel=="ROOT",c("dep_rel","head_token","head_token_id")]<-c("root","ROOT",0)
