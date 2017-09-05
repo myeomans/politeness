@@ -6,7 +6,7 @@ Author: Mike Yeomans, Alejandro Kantor, Dustin Tingley
 Maintainer: Mike Yeomans <yeomans@fas.harvard.edu>
 Description: More about what it does (maybe more than one line)
     Use four spaces when indenting paragraphs within the Description.
-License: Enjoy!
+License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true
 Imports:
@@ -16,3 +16,6 @@ Imports:
     ggplot2,
     parallel
 RoxygenNote: 6.0.1
+Suggests: knitr,
+    rmarkdown
+VignetteBuilder: knitr
