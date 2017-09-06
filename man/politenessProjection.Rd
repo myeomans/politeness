@@ -22,7 +22,7 @@ politenessProjection(df_polite_train, df_covar = NULL,
 List of df_polite_train and df_polite_test with projection. See details.
 }
 \description{
-Projection of Multinomial Inverse Rextegression estimation for a politness matrix and covariates.
+Projection of Multinomial Inverse Regression estimation for a politness matrix and covariates.
 }
 \details{
 List:
