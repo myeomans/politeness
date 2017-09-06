@@ -1,6 +1,6 @@
 #' Politeness projection
 #'
-#' @description Projection of Multinomial Inverse Rextegression estimation for a politness matrix and covariates.
+#' @description Projection of Multinomial Inverse Regression estimation for a politness matrix and covariates.
 #' @param df_polite_train a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.
 #' @param df_covar a data.frame with covariates.
 #' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).
