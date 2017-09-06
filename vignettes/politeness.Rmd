@@ -1,0 +1,54 @@
+---
+title: "Politeness"
+subtitle: "Detecting Politeness Features in Text"
+date: "`r Sys.Date()`"
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{Politeness}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+Introduction and motivation for package
+
+## Data: phone_offers
+
+This data base includes 
+
+```{r setup}
+knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
+library(politeness)
+#library(parallel) # it shouldnt be necessary to call this
+
+data("phone_offers")
+head(phone_offers)
+```
+
+## Detecting politeness features
+
+The function `politeness()`
+
+```{r}
+df_politeness <- politeness(phone_offers$message, binary=TRUE)
+head(df_politeness[ , 1:5])
+```
+
+## Ploting politeness features
+
+Politeness `data.frames` can be plotted by `politenessPlot()` 
+
+```{r}
+
+```
+
+## Projecting politeness features
+
+`politenessProjection()` 
+
+## Getting more or least polite texts
+
+`findPoliteTexts()`
+
+
+
+
