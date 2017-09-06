@@ -13,7 +13,7 @@ source("R/posTools.R")
 source("R/politeness.R")
 source("R/math.R")
 
-spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
+#spacyr::spacy_initialize(python_executable = "/anaconda/bin/python")
 #spacyr::spacy_finalize()
 
 #load("R/polite_test.Rda")
