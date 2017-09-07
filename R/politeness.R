@@ -11,11 +11,11 @@
 #'
 #' data(phone_offers)
 #'
-#' politeness(phone_offers$message, parser="none",drop.blank=F)
+#' politeness(phone_offers$message, parser="none",drop.blank=FALSE)
 #'
 #' #install.packages("spacyr")
 #' #spacyr::spacy_initialize(python_executable = PYTHON_PATH)
-#' politeness(phone_offers$message, parser="spacy",drop.blank=F)
+#' politeness(phone_offers$message, parser="spacy",drop.blank=FALSE)
 #'
 
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
