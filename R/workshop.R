@@ -6,7 +6,7 @@
 # TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY TEMPORARY
 ############################################################
 
-load("data/polite_test.Rda")
+# load("data/polite_test.Rda")
 source("R/dictTools.R")
 source("R/textTools.R")
 source("R/posTools.R")
