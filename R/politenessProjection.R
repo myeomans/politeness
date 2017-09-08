@@ -36,7 +36,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     mnlm_fit <- textir::mnlm(mnlm_cluster,
                              covars = df_covar,
                              counts = m_polite_train, ...)
-    mnlm_coef = coef(mnlm_fit)
+    mnlm_coef = textir::coef(mnlm_fit)
 
     m_train_proj <- textir::srproj(mnlm_fit, m_polite_train )
 
