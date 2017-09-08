@@ -37,7 +37,7 @@ data("phone_offers")
 politeness::politeness(phone_offers$message)
 
 # install.packages("spacyr")
-spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
 politeness::politeness(phone_offers$message, parser="spacy")
 
 politeness::politenessPlot(politeness::politeness(phone_offers$message),

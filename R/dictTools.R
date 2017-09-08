@@ -11,7 +11,7 @@
 
 dictWrap<-function (text, dict = liwc.lists, binary = F, ...) {
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
-  WC <- 1 #qdap::word_count(text)
+  WC <- rep(1,length(text)) #qdap::word_count(text)
   wc1 <- (!is.na(qdap::word_count(text)))
   dic.try<-quanteda::dfm(text[wc1], dictionary = dict,verbose = F, ...)
   if(length(dic.try)==0){
