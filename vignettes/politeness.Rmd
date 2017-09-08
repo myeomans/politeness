@@ -8,59 +8,89 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-
+  
 ```{r setup, echo=F}
 knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
 library(politeness)
-
 data("phone_offers")
 data("feature_table") 
 ```
 
 ## Introduction 
 
-Politeness is a universal dimension of human communication (Brown & Levenson, 1987). In practically all communication, a speaker can choose to be more or less polite to their audience.In this package, we porivde tools to measure the markers and effects of politeness in natural language.
+Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levenson, 1987). In practically all settings, a speaker can choose to be more or less polite to their audience. In this package, we provide tools to measure the markers and effects of politeness in natural language.
 
 ## Motivation for package
 
+Politeness as a construct is universal. And research in many branches of social science might reasonable want to measure a construct like politeness in langauge and then compare it to some covariate of interest. For example, they might want to know whether some treatment caused people to speak more or less politely. Or they want to know whether speakers are more polite to some listeners than to others, perhaps based on the listeners' gender, or race, or status. 
+
+In these cases it would be helpful to have a model that could condense text into a single "politeness score" that could, say, be entered into a regression. However, the causes and consequences of politeness are often situationally specific. Furthermore, the particular set of linguistic markers that define politeness can also vary from context to context. Thus, it would be difficult (or misleading) to estimate a single model as some universal "politeness classifier" for all situations. 
+
+Instead, we offer tools for a workflow that we beleive will be useful to most researchers interested in linguistic politeness. First, we offer a tool, `politeness` that will calculate a set of linguistic features that have been identified in the past as relating to politeness. Second, we offer a tool, `politenessPlot` to visualize these counts, in comparison to a binary covariate of interest (e.g. high/low status). 
+
+If the researcher wants to generate a politeness classifier, they can do so using the `politenessProjection` function, which creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the researcher has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
 
 ## Politeness Features
 
-The main l We borrow from existing research on the computational linguistics of politeness.
+The main value of this package is in the `politeness` function, which counts the use of 36 different politeness features in natural language. Here, we borrow directly from existing research on the computational linguistics of politeness (Danescu-Niculescu-Mizil et al., 2013; Voigt et al., 2017). These features are summarized in the table below, along with examples of each.
 
 ```{r}
 knitr::kable(feature_table,align=rep("c",4),
-col.names = c("Feature Name",
-"POS Tags",
-"Description",
-"Example"))
+             col.names = c("Feature Name",
+                           "POS Tags",
+                           "Description",
+                           "Example"),
+             caption = "Table 1: Politeness Features")
 ```
+
+## Part of Speech Tagging
+
+Many of the politeness features containted in this package use some part-of-speech tagging. We have prioritized compatibility with the [SpaCy](https://spacy.io/) library. This software is simple to install through python and has a convenient wrapper function for use through R, [SpaCyR](https://github.com/kbenoit/spacyr). 
+
+Users must install SpaCy outside of R, and take note of their python directory (e.g. "/anaconda/bin/python"). When R (or Rstudio) is opened at first, you must *initialize* the SpaCy engine, so that it is ready for use during the session. That is done using the following code (make sure to sub in your python path name):
+
+```{r, eval=FALSE, echo=TRUE}
+# install.packages("spacyr")
+spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
+
+```
+
+Many of the politeness features can be run without using part-of-speech tagging by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python, so that they can get up and running without a lot of fixed startup costs. Finally, our tools also have (deprecated) compatibility with [coreNLP](https://stanfordnlp.github.io/CoreNLP/) for part-of-speech tagging - however we do not recommend this at present, because the system requirements can be quite onerous for new users.
 
 ## Data: phone_offers
 
-This data base includes 
+We have included an example dataset, `phone_offers`, for researchers to get a handle on the workflow. These data were collected from Mechanical Turk workers, who were given a Craigslist advertisement for a used iPhone and were told to write a message to the seller offering to buy it at a specific price that was less than what was posted. In essence, they were opening a negotiation over the sale price of the phone. Naturally, this is a domain where politeness might have effects on important outcomes. 
 
+Half the participants were told to use a "warm and friendly" communication style, while the other half were told to use a "tough and firm" communication style. In this research, the politeness detector was used to define the construct - that is, what were the linguistic differences between messages from these two conditions? This software served two goals for that research. First, it provided a simple description of the differences to understand the data better (i.e. "what are the features that differ?"). Second, it allowed for basic estimation of a politeness detector, that could be applied in-context to quantify politeness in other negotiations.
 
 ## Detecting politeness features
 
-The function `politeness()`
+The function `politeness()` takes in an n-length vector of texts, and returns an n-by-f data.frame, with columns corresponding to the number of calculated features. There are 36 features in total, but the user options affect the number of features that are returned. For one, the user may not be using a part-of-speect tagger by setting `parser = "none"` , in which case some features will not be calculated. 
 
-```{r}
-df_politeness <- politeness(phone_offers$message, binary=TRUE)
-head(df_politeness[ , 7:12])
+```{r, echo=TRUE}
+#df_politeness <- politeness(phone_offers$message, binary=TRUE)
+#head(df_politeness[ , 7:12], 10)
+df_politeness_count <- politeness(phone_offers$message, binary=FALSE, drop.blank=FALSE)
+head(df_politeness_count[ ,], 50)
+
 ```
 
-## Ploting politeness features
+## Plotting politeness features
 
 Politeness `data.frames` can be plotted by `politenessPlot()` 
 
-```{r}
-
+```{r, eval=FALSE}
+politeness::politenessPlot(df_politeness,
+                           split=phone_offers$condition,
+                           split_levels = c("Warm","Tough"),
+                           split_name = "Condition")
 ```
 
 ## Projecting politeness features
 
 `politenessProjection()` 
+
+If the researcher wants to generate a politeness classifier, they can do so using the `politenessProjection` function, which creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the researcher has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
 
 ## Getting more or least polite texts
 

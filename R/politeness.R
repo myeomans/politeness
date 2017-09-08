@@ -9,7 +9,7 @@
 #' @return a data.frame of politeness features. Posible columns are listed in LINK_TO_TABLE
 #' @examples
 #'
-#' data(phone_offers)
+#' data("phone_offers")
 #'
 #' politeness(phone_offers$message, parser="none",drop.blank=FALSE)
 #'
@@ -82,7 +82,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
     features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
     features[["In.Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)+
                                textcounter(c("in fact"),sets[["clean"]]))
-    features[["Please"]]<-grepl("please",sets[["c.words"]],fixed=T)
+    features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=T))
     features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)
     features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)
   } else {
