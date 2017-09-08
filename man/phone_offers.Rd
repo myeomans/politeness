@@ -10,13 +10,13 @@
   \item{condition}{character label indicating if message is warm or tough}
 }}
 \source{
-\url{http:/}
+\url{https://osf.io/t7sd6/}
 }
 \usage{
 phone_offers
 }
 \description{
-A dataset containing the purchase offer message and a labeling indicating if message
-is warm or tough
+A dataset containing the purchase offer message and a
+labeling indicating if message is warm or tough
 }
 \keyword{datasets}
