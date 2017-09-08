@@ -9,20 +9,37 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
 
-Introduction and motivation for package
+```{r setup, echo=F}
+knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
+library(politeness)
+
+data("phone_offers")
+data("feature_table") 
+```
+
+## Introduction 
+
+Politeness is a universal dimension of human communication (Brown & Levenson, 1987). In practically all communication, a speaker can choose to be more or less polite to their audience.In this package, we porivde tools to measure the markers and effects of politeness in natural language.
+
+## Motivation for package
+
+
+## Politeness Features
+
+The main l We borrow from existing research on the computational linguistics of politeness.
+
+```{r}
+knitr::kable(feature_table,align=rep("c",4),
+col.names = c("Feature Name",
+"POS Tags",
+"Description",
+"Example"))
+```
 
 ## Data: phone_offers
 
 This data base includes 
 
-```{r setup}
-knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
-library(politeness)
-#library(parallel) # it shouldnt be necessary to call this
-
-data("phone_offers")
-head(phone_offers)
-```
 
 ## Detecting politeness features
 
@@ -30,7 +47,7 @@ The function `politeness()`
 
 ```{r}
 df_politeness <- politeness(phone_offers$message, binary=TRUE)
-head(df_politeness[ , 1:5])
+head(df_politeness[ , 7:12])
 ```
 
 ## Ploting politeness features
