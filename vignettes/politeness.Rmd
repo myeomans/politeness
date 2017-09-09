@@ -7,10 +7,10 @@ vignette: >
   %\VignetteIndexEntry{Politeness}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
----
+  ---
   
-```{r setup, echo=F}
-knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
+  ```{r setup, echo=F}
+  knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
 library(politeness)
 data("phone_offers")
 data("feature_table") 
@@ -65,9 +65,9 @@ Half the participants were told to use a "warm and friendly" communication style
 
 ## Detecting politeness features
 
-The function `politeness()` takes in an n-length vector of texts, and returns an n-by-f data.frame, with columns corresponding to the number of calculated features. There are 36 features in total, but the user options affect the number of features that are returned. For one, you may not be using a part-of-speect tagger by setting `parser = "none"` , in which case some features will not be calculated. Additionally, you may use the default setting `drop.blank = TRUE` which will remove features that were not detected in any of the texts.
+The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speect tagger is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop.blank = TRUE` which will remove features that were not detected in any of the texts.
 
-The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words) whereas ).
+The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words).
 
 ```{r, echo=TRUE}
 df_politeness_count <- politeness(phone_offers$message, binary=FALSE)
@@ -79,7 +79,11 @@ df_politeness[20:30,1:6]
 
 ## Plotting politeness features
 
-Politeness `data.frames` can be plotted by `politenessPlot()` 
+The best way to inspect the results of the main `politeness` function is to plot the counts using `politenessPlot()`. This function produces a `ggplot2` object that compares how the counts of every politeness feature differ across a binary covariate of interest (e.g. how often each feature is used in the treatment condition versus the control). The covariate vector must itself be binary `(0/1)` but users can adjust the labels on the graph as necessary. 
+
+The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle either binary or count data, but that distinction must be made in the initial call to `politeness()`. 
+
+Often some features are too rare to be meaningful for further analysis, so users have an option to exclude them from the plot using the `drop.blank` parameter. This must be a number between 0 and 1, and determines a cut-off such that all features which appear in less than this proportion of texts are excluded from the plot. To include all features, simply set this value to `0`. 
 
 ```{r, eval=TRUE}
 politeness::politenessPlot(df_politeness,
@@ -92,10 +96,42 @@ politeness::politenessPlot(df_politeness,
 
 `politenessProjection()` 
 
-If the researcher wants to generate a politeness classifier, they can do so using the `politenessProjection` function, which creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the researcher has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
+Users can generate a politeness classifier with the `politenessProjection` function. This creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the user has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
 
-## Getting more or least polite texts
+This function is a wrapper around \code{texitr}, which implements a massively multinomial inverse regression. Intuitively, this model represents a more realistic causal structure to text-plus-covariate data - that is, the covariate typically has a causal effect on the words used by the speaker, rather than the other way around. Additioally, this package is computationally efficient, and this can be impvoed by registering a parallel back-end and supplying it to `mnlm_cluster` (see \code{texitr} documentation for details).
+
+In addition to the `phone_offers` dataset, we have also included a smaller `bowl_offers` dataset. Participants in this study were given similar instructions (i.e. communicate in a warm or tough style) but for a different negotiation exercise. We use the `phone_offers` dataset to define the construct of interest, and confirm that the treatment had similar effects in `bowl_offers` by using it as held-out data in `politenessProjection()`. The results confirm that the manipulation had similar consequences on the participants' politeness.
+
+```{r, eval=TRUE}
+
+df_polite_train <- politeness(phone_offers$message, drop.blank=FALSE)
+
+df_polite_holdout<-politeness(bowl_offers$message, drop.blank=FALSE)
+
+project<-politenessProjection(df_polite_train,
+                              phone_offers$condition,
+                              df_polite_holdout)
+
+mean(project[bowl_offers$condition==1,]$test_proj)
+
+mean(project[bowl_offers$condition==0,]$test_proj)
+
+
+```
+
+## Reading texts that are high or low in politeness
 
 `findPoliteTexts()`
+
+The projected quantities from the `politenessProjection` function can be used in other analyses, but users should first be curious about examples of texts that best represent the extremes of that projection (i.e. the most or least polite texts). The `findPoliteTexts` function replicates the analyses of `politenessProjection` but instead returns a selection of the texts that are the most extreme (i.e. high, or low, or both) along the projected dimension. The parameters `type` and `num_docs` allow users to specify the type and number of texts that are returned.
+
+```{r, eval=TRUE}
+findPoliteTexts(phone_offers$message,
+                df_polite,
+                phone_offers$condition)
+
+```
+
+## Conclusion
 
 That's it! Enjoy!

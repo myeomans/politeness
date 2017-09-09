@@ -42,13 +42,13 @@ findPoliteTexts <- function(text,
     stop( paste0("type must be one of the following ", paste0(valid_type, collapse = ", ")))
   }
 
-  l_proj <- politenessProjection(df_polite_train = df_polite,
+  l_proj <- suppressWarnings(politenessProjection(df_polite_train = df_polite,
                                  df_covar = df_covar,
                                  mnlm_cluster = mnlm_cluster,
-                                 ... )
+                                 ... ))
 
   m_train_proj <- l_proj$train_proj
-  df_docs_proj <- data.frame(text = text, projection = m_train_proj[ , 1])
+  df_docs_proj <- data.frame(text = text, projection = m_train_proj)
 
   if(type %in% c("most","least")){
     is_most <-  type == "most"

@@ -41,8 +41,11 @@ polite.data<-politeness(phone_offers$message, parser="none",drop.blank=FALSE)
 
 polite.holdout<-politeness(bowl_offers$message, parser="none",drop.blank=FALSE)
 
-politenessProjection(polite.data,
-                     phone_offers$condition,
-                     polite.holdout)
+project<-politenessProjection(polite.data,
+                              phone_offers$condition,
+                              polite.holdout)
+
+mean(project[bowl_offers$condition==1,]$test_proj)
+mean(project[bowl_offers$condition==0,]$test_proj)
 
 }

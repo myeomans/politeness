@@ -21,9 +21,12 @@
 #'
 #' polite.holdout<-politeness(bowl_offers$message, parser="none",drop.blank=FALSE)
 #'
-#' politenessProjection(polite.data,
-#'                      phone_offers$condition,
-#'                      polite.holdout)
+#' project<-politenessProjection(polite.data,
+#'                               phone_offers$condition,
+#'                               polite.holdout)
+#'
+#' mean(project[bowl_offers$condition==1,]$test_proj)
+#' mean(project[bowl_offers$condition==0,]$test_proj)
 #'
 #' @export
 
@@ -47,12 +50,12 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     }
 
     m_polite_train <- as.matrix(df_polite_train)
-    mnlm_fit <- textir::mnlm(mnlm_cluster,
-                             covars = df_covar,
-                             counts = m_polite_train)#,...)
-    mnlm_coef = stats::coef(mnlm_fit)
+    mnlm_fit <- suppressWarnings(textir::mnlm(mnlm_cluster,
+                                              covars = df_covar,
+                                              counts = m_polite_train))#,...)
+    mnlm_coef = suppressWarnings(stats::coef(mnlm_fit))
 
-    m_train_proj <- textir::srproj(mnlm_fit, m_polite_train )
+    m_train_proj <- suppressWarnings(textir::srproj(mnlm_fit, m_polite_train ))
 
     if(!is.null(df_polite_test)){
       m_polite_test <- as.matrix(df_polite_test)
@@ -61,7 +64,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
       m_test_proj <- NULL
     }
 
-    l_out <- list(train_proj = m_train_proj, test_proj = m_test_proj, train_coefs=mnlm_coef)
+    l_out <- list(train_proj = m_train_proj[,1], test_proj = m_test_proj[,1], train_coefs=mnlm_coef[2,])
 
   } else {
     stop("Function is not implemented for NULL df_covar")

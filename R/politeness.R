@@ -27,14 +27,14 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts)
   sets[["clean"]]<-lapply(text, cleantext, stop.words=FALSE)
   sets[["c.words"]]<-lapply(sets[["clean"]], strsplit, split=" ")
-  if(parser=="core"){
+  if(parser[1]=="core"){
     # c.p<-core.parser(text)
     # sets[["p.words"]]<-parallel::mclapply(c.p$parses,tolower)
     # sets[["p.nonum"]]<-parallel::mclapply(c.p$nonums,tolower)
     # sets[["pos.nums"]]<-parallel::mclapply(c.p$pos.nums,tolower)
     # sets[["w.nums"]]<-parallel::mclapply(c.p$w.nums,tolower)
     #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
-  } else if(parser=="spacy"){
+  } else if(parser[1]=="spacy"){
     s.p<-spacyParser(text)
     sets[["p.words"]]<-parallel::mclapply(s.p$parses,tolower)
     sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower)
@@ -78,12 +78,12 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   # opening up the conversation/engaging - “Let me know what you think”, “I look forward to your response”, “Please let me know”, etc.
   # Tag Question	Regular expression capturing cases like "..., right?" and "..., don't you?"
 
-  #if(parser=="none"){
-  if(parser!="spacy"){
+  #if(parser[1]=="none"){
+  if(parser[1]!="spacy"){
     features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
     features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
     features[["In.Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)+
-                               textcounter(c("in fact"),sets[["clean"]]))
+                              textcounter(c("in fact"),sets[["clean"]]))
     features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=T))
     features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=T)
     features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)
@@ -93,12 +93,12 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
     features[["Apology"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
                             +textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=T))
     features[["In.Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)
-                           +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=T))
+                            +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=T))
     features[["Affirmation"]]<-textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=T)
     features[["Adverb.Just"]]<-unlist(lapply(sets[["p.nonum"]] ,function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=T))))
 
     features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=T)&grepl("-vb)",unlist(x),fixed=T)
-                                                                                &(!grepl(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),unlist(x),fixed=T)))))
+                                                                                 &(!grepl(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),unlist(x),fixed=T)))))
     features[["Conjunction.Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=T)
 
     features[["Please.Start"]]<-textcounter("please-1",sets[["w.nums"]],words=T)
