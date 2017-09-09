@@ -14,9 +14,23 @@
 #' @md
 #' @examples
 #'
+#' data("phone_offers")
+#' data("bowl_offers")
 #'
+#' polite.data<-politeness(phone_offers$message, parser="none",drop.blank=FALSE)
+#'
+#' polite.holdout<-politeness(bowl_offers$message, parser="none",drop.blank=FALSE)
+#'
+#' politenessProjection(polite.data,
+#'                      phone_offers$condition,
+#'                      polite.holdout)
+#'
+#' @export
+
 
 politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_test = NULL, mnlm_cluster = NULL, ...){
+
+  mnlm_cluster = NULL
   if(!is.null(df_covar)){
     # check that all colums of df_covar are numeric or logical
     v_s_not_num_or_logical <- names(df_covar)[ ! sapply(df_covar, function(col) is.numeric(col) | is.logical(col)) ]
@@ -35,8 +49,8 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     m_polite_train <- as.matrix(df_polite_train)
     mnlm_fit <- textir::mnlm(mnlm_cluster,
                              covars = df_covar,
-                             counts = m_polite_train, ...)
-    mnlm_coef = textir::coef(mnlm_fit)
+                             counts = m_polite_train)#,...)
+    mnlm_coef = stats::coef(mnlm_fit)
 
     m_train_proj <- textir::srproj(mnlm_fit, m_polite_train )
 

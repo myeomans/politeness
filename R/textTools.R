@@ -11,7 +11,7 @@
 textcounter<-function (counted, texts, words=F, fixed = T) {
 
   if(words){
-    counts<-unlist(mclapply(texts,function(x) sum(unlist(x)%in%counted)))
+    counts<-unlist(parallel::mclapply(texts,function(x) sum(unlist(x)%in%counted)))
   }else {
     for (x in counted) {
       counts <- rep(0, length(texts))

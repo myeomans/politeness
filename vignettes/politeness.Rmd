@@ -65,21 +65,23 @@ Half the participants were told to use a "warm and friendly" communication style
 
 ## Detecting politeness features
 
-The function `politeness()` takes in an n-length vector of texts, and returns an n-by-f data.frame, with columns corresponding to the number of calculated features. There are 36 features in total, but the user options affect the number of features that are returned. For one, the user may not be using a part-of-speect tagger by setting `parser = "none"` , in which case some features will not be calculated. 
+The function `politeness()` takes in an n-length vector of texts, and returns an n-by-f data.frame, with columns corresponding to the number of calculated features. There are 36 features in total, but the user options affect the number of features that are returned. For one, you may not be using a part-of-speect tagger by setting `parser = "none"` , in which case some features will not be calculated. Additionally, you may use the default setting `drop.blank = TRUE` which will remove features that were not detected in any of the texts.
+
+The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words) whereas ).
 
 ```{r, echo=TRUE}
-#df_politeness <- politeness(phone_offers$message, binary=TRUE)
-#head(df_politeness[ , 7:12], 10)
-df_politeness_count <- politeness(phone_offers$message, binary=FALSE, drop.blank=FALSE)
-head(df_politeness_count[ ,], 50)
+df_politeness_count <- politeness(phone_offers$message, binary=FALSE)
+df_politeness_count[20:30,1:6]
 
+df_politeness <- politeness(phone_offers$message, binary=TRUE)
+df_politeness[20:30,1:6]
 ```
 
 ## Plotting politeness features
 
 Politeness `data.frames` can be plotted by `politenessPlot()` 
 
-```{r, eval=FALSE}
+```{r, eval=TRUE}
 politeness::politenessPlot(df_politeness,
                            split=phone_offers$condition,
                            split_levels = c("Warm","Tough"),
@@ -96,6 +98,4 @@ If the researcher wants to generate a politeness classifier, they can do so usin
 
 `findPoliteTexts()`
 
-
-
-
+That's it! Enjoy!

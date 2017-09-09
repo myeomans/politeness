@@ -4,7 +4,7 @@
 \alias{dictWrap}
 \title{Dictionary Wrapper}
 \usage{
-dictWrap(text, dict = liwc.lists, binary = F, ...)
+dictWrap(text, dict = NULL, binary = F, ...)
 }
 \arguments{
 \item{text}{a character vector of texts.}

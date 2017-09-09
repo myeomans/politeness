@@ -32,14 +32,27 @@
 #' Purchase offers for phone
 #'
 #' A dataset containing the purchase offer message and a
-#' labeling indicating if message is warm or tough
+#' label indicating if the writer was assigned to be warm (1) or tough (0)
 #' @format A data frame with 355 rows and 2 variables:
 #' \describe{
 #'   \item{message}{character of purchase offer message}
-#'   \item{condition}{character label indicating if message is warm or tough}
+#'   \item{condition}{binary label indicating if message is warm or tough}
 #' }
 #' @source \url{https://osf.io/t7sd6/}
 "phone_offers"
+
+
+#' Purchase offers for bowl
+#'
+#' A dataset containing the purchase offer message and a
+#' label indicating if the writer was assigned to be warm (1) or tough (0)
+#' @format A data frame with 70 rows and 2 variables:
+#' \describe{
+#'   \item{message}{character of purchase offer message}
+#'   \item{condition}{binary label indicating if message is warm or tough}
+#' }
+#' @source \url{https://osf.io/t7sd6/}
+"bowl_offers"
 
 
 #' Table of Politeness Features

@@ -9,7 +9,10 @@
 #' @keywords internal
 #'
 
-dictWrap<-function (text, dict = liwc.lists, binary = F, ...) {
+dictWrap<-function (text, dict = NULL, binary = F, ...) {
+  if(is.null(dict)){
+    stop("Dictionary Must Be Supplied")
+  }
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
   WC <- rep(1,length(text)) #qdap::word_count(text)
   wc1 <- (!is.na(qdap::word_count(text)))

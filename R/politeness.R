@@ -13,10 +13,12 @@
 #'
 #' politeness(phone_offers$message, parser="none",drop.blank=FALSE)
 #'
-#' #install.packages("spacyr")
-#' #spacyr::spacy_initialize(python_executable = PYTHON_PATH)
-#' politeness(phone_offers$message, parser="spacy",drop.blank=FALSE)
+#' # install.packages("spacyr")
+#' # spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+#' # politeness(phone_offers$message, parser="spacy",drop.blank=FALSE)
 #'
+#'@export
+
 
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
   ########################################################
@@ -26,11 +28,11 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
   sets[["clean"]]<-lapply(text, cleantext, stop.words=FALSE)
   sets[["c.words"]]<-lapply(sets[["clean"]], strsplit, split=" ")
   if(parser=="core"){
-    c.p<-core.parser(text)
-    sets[["p.words"]]<-parallel::mclapply(c.p$parses,tolower)
-    sets[["p.nonum"]]<-parallel::mclapply(c.p$nonums,tolower)
-    sets[["pos.nums"]]<-parallel::mclapply(c.p$pos.nums,tolower)
-    sets[["w.nums"]]<-parallel::mclapply(c.p$w.nums,tolower)
+    # c.p<-core.parser(text)
+    # sets[["p.words"]]<-parallel::mclapply(c.p$parses,tolower)
+    # sets[["p.nonum"]]<-parallel::mclapply(c.p$nonums,tolower)
+    # sets[["pos.nums"]]<-parallel::mclapply(c.p$pos.nums,tolower)
+    # sets[["w.nums"]]<-parallel::mclapply(c.p$w.nums,tolower)
     #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
   } else if(parser=="spacy"){
     s.p<-spacyParser(text)

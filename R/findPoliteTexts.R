@@ -17,7 +17,14 @@
 #' \code{df_polite} and \code{df_covar} must have the same number of rows as the \code{length(text)}.
 #' @examples
 #'
+#' data("phone_offers")
+#' polite.data<-politeness(phone_offers$message, parser="none",drop.blank=FALSE)
 #'
+#' findPoliteTexts(phone_offers$message,
+#'                 polite.data,
+#'                 phone_offers$condition)
+#'
+#'@export
 
 findPoliteTexts <- function(text,
                             df_polite,

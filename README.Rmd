@@ -9,12 +9,13 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
   fig.path = "README-"
+  library(politeness)
 )
 ```
 
 # Politeness
 
-Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levenson, 1987). In practically all communication, a speaker can choose to be more or less polite to their audience. In this package, we provide tools for researchers to measure the markers and effects of politeness in natural language.
+Politeness is a universal dimension of langauge (Lakoff, 1973; Brown & Levenson, 1987). In practically all communication, a speaker can choose to be more or less polite to their audience. In this package, we provide tools for researchers to measure the markers and effects of politeness in natural language.
 
 ## Installation
 
@@ -29,7 +30,7 @@ Many of the politeness features containted in this package use some part-of-spee
 
 ## Example
 
-In the package we have included a dataset, `phone_offers`, that was collected from an experiment in which participants were told to write offers asking to by a smartphone from a seller on Craigslist. We randomly manipulated their instructions so that their task was to write in a warm or tough style. The dataset includes the text of their messages, as well as the condition assignment.
+In the package we have included a dataset, `phone_offers`. It was collected from an experiment in which participants were told to write offers asking to by a smartphone from a seller on Craigslist. We randomly manipulated their instructions so that their task was to write in a warm or tough style. The dataset includes the text of their messages, as well as the condition assignment.
 
 ```{r example, eval=FALSE}
 data("phone_offers")
@@ -44,6 +45,5 @@ politeness::politenessPlot(politeness::politeness(phone_offers$message),
                            split=phone_offers$condition,
                            split_levels = c("Warm","Tough"),
                            split_name = "Condition")
-
 ```
 

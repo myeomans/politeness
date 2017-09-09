@@ -12,6 +12,16 @@
 #' @return a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
 #' @examples
 #'
+#' data("phone_offers")
+#'
+#' polite.data<-politeness(phone_offers$message, parser="none",drop.blank=FALSE)
+#'
+#' politeness::politenessPlot(polite.data,
+#'                            split=phone_offers$condition,
+#'                            split_levels = c("Warm","Tough"),
+#'                            split_name = "Condition")
+#'
+#'@export
 
 politenessPlot<-function(df_polite,
                          split=NULL,
@@ -54,26 +64,28 @@ politenessPlot<-function(df_polite,
   }
   split.data<-split.data[split.data$feature%in%selected,]
   ######################################################
-  wide<-reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
+  wide<-stats::reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
   wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
   wide$slogodds<-slogodds(wide[,paste0("count.",split_levels[1])],
                           wide[,paste0("count.",split_levels[2])])$slor
   f.order<-unique(wide$feature)[order(wide$slogodds)]
   split.data$feature<-factor(split.data$feature, ordered=T,levels=f.order)
   split.data$cond<-factor(split.data$cond,ordered=T,levels=rev(split_levels))
+  split.data$count_minus<-split.data$count-split.data$se
+  split.data$count_plus<-split.data$count+split.data$se
   ######################################################
-  ggplot(data=split.data,
-         aes(x=feature,y=count,fill=cond),width=2) +
-    geom_bar(position=position_dodge(width = 0.8),
+  ggplot2::ggplot(data=split.data,
+                 ggplot2::aes_string(x="feature",y="count",fill="cond"),width=2) +
+    ggplot2::geom_bar(position=ggplot2::position_dodge(width = 0.8),
              stat="identity") +
-    geom_errorbar(aes(ymin=count-se, ymax=count+se), width=0.3,
-                  position=position_dodge(width = 0.8)) +
-    coord_flip() +
-    scale_x_discrete(name="") +
-    scale_fill_manual(breaks = split_levels,values=split_cols, name=split_name) +
-    scale_y_continuous(name=map.type, breaks = seq(0,1,.25), labels=paste0(seq(0,100,25),"%")) +
-    theme_bw(base_size=14) +
-    ggtitle(top_title) +
-    theme(plot.title = element_text(hjust = 0.5),
-          text=element_text(family="Times"))
+    ggplot2::geom_errorbar(ggplot2::aes_string(ymin="count_minus", ymax="count_plus"), width=0.3,
+                  position=ggplot2::position_dodge(width = 0.8)) +
+    ggplot2::coord_flip() +
+    ggplot2::scale_x_discrete(name="") +
+    ggplot2::scale_fill_manual(breaks = split_levels,values=split_cols, name=split_name) +
+    ggplot2::scale_y_continuous(name=map.type, breaks = seq(0,1,.25), labels=paste0(seq(0,100,25),"%")) +
+    ggplot2::theme_bw(base_size=14) +
+    ggplot2::ggtitle(top_title) +
+    ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+          text=ggplot2::element_text(family="Times"))
 }

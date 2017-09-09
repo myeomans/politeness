@@ -34,4 +34,13 @@ Length of \code{split} must be the same as number of rows of \code{df_polite}.
 }
 \examples{
 
+data("phone_offers")
+
+polite.data<-politeness(phone_offers$message, parser="none",drop.blank=FALSE)
+
+politeness::politenessPlot(polite.data,
+                           split=phone_offers$condition,
+                           split_levels = c("Warm","Tough"),
+                           split_name = "Condition")
+
 }
