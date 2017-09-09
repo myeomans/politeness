@@ -7,10 +7,10 @@ vignette: >
   %\VignetteIndexEntry{Politeness}
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
-  ---
+---
   
-  ```{r setup, echo=F}
-  knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
+```{r setup, echo=F}
+knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
 library(politeness)
 data("phone_offers")
 data("feature_table") 
@@ -55,7 +55,9 @@ spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
 
 ```
 
-Many of the politeness features can be run without using part-of-speech tagging by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python, so that they can get up and running without a lot of fixed startup costs. Finally, our tools also have (deprecated) compatibility with [coreNLP](https://stanfordnlp.github.io/CoreNLP/) for part-of-speech tagging - however we do not recommend this at present, because the system requirements can be quite onerous for new users.
+Many of the politeness features can be run without using part-of-speech tagging by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python, so that they can get up and running without a lot of fixed startup costs. Without part-of-speech tags, some features are dropped entirely (e.g. Bare Commands are a specific verb class). However, some features are approximated. For example, tags allow users to differentiate between a mid-sentence "please" and a "please" to start a sentence, while the tagless version of the function will collapse them into a single feature. 
+
+Finally, our tools also have (deprecated) compatibility with [coreNLP](https://stanfordnlp.github.io/CoreNLP/) for part-of-speech tagging - however we do not recommend this at present, because the system requirements can be quite onerous for new users.
 
 ## Data: phone_offers
 
@@ -69,12 +71,14 @@ The function `politeness()` takes in an *n*-length vector of texts, and returns 
 
 The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words).
 
-```{r, echo=TRUE}
+```{r, echo=TRUE, eval=TRUE}
 df_politeness_count <- politeness(phone_offers$message, binary=FALSE)
-df_politeness_count[20:30,1:6]
+df_politeness_count[20:30,1:5]
+```
 
+```{r, echo=TRUE, eval=TRUE}
 df_politeness <- politeness(phone_offers$message, binary=TRUE)
-df_politeness[20:30,1:6]
+df_politeness[20:30,1:5]
 ```
 
 ## Plotting politeness features
@@ -85,10 +89,17 @@ The order of the features is determined by calculating the variance-weighted log
 
 Often some features are too rare to be meaningful for further analysis, so users have an option to exclude them from the plot using the `drop.blank` parameter. This must be a number between 0 and 1, and determines a cut-off such that all features which appear in less than this proportion of texts are excluded from the plot. To include all features, simply set this value to `0`. 
 
-```{r, eval=TRUE}
+```{r, echo=TRUE, eval=FALSE}
 politeness::politenessPlot(df_politeness,
                            split=phone_offers$condition,
-                           split_levels = c("Warm","Tough"),
+                           split_levels = c("Tough","Warm"),
+                           split_name = "Condition")
+```
+
+```{r, fig.width=6, fig.height=8, eval=TRUE}
+politeness::politenessPlot(df_politeness,
+                           split=phone_offers$condition,
+                           split_levels = c("Tough","Warm"),
                            split_name = "Condition")
 ```
 
@@ -102,7 +113,7 @@ This function is a wrapper around \code{texitr}, which implements a massively mu
 
 In addition to the `phone_offers` dataset, we have also included a smaller `bowl_offers` dataset. Participants in this study were given similar instructions (i.e. communicate in a warm or tough style) but for a different negotiation exercise. We use the `phone_offers` dataset to define the construct of interest, and confirm that the treatment had similar effects in `bowl_offers` by using it as held-out data in `politenessProjection()`. The results confirm that the manipulation had similar consequences on the participants' politeness.
 
-```{r, eval=TRUE}
+```{r, echo=TRUE, eval=TRUE}
 
 df_polite_train <- politeness(phone_offers$message, drop.blank=FALSE)
 
@@ -112,9 +123,9 @@ project<-politenessProjection(df_polite_train,
                               phone_offers$condition,
                               df_polite_holdout)
 
-mean(project[bowl_offers$condition==1,]$test_proj)
+mean(project$test_proj[bowl_offers$condition==1])
 
-mean(project[bowl_offers$condition==0,]$test_proj)
+mean(project$test_proj[bowl_offers$condition==0])
 
 
 ```
@@ -125,10 +136,16 @@ mean(project[bowl_offers$condition==0,]$test_proj)
 
 The projected quantities from the `politenessProjection` function can be used in other analyses, but users should first be curious about examples of texts that best represent the extremes of that projection (i.e. the most or least polite texts). The `findPoliteTexts` function replicates the analyses of `politenessProjection` but instead returns a selection of the texts that are the most extreme (i.e. high, or low, or both) along the projected dimension. The parameters `type` and `num_docs` allow users to specify the type and number of texts that are returned.
 
-```{r, eval=TRUE}
-findPoliteTexts(phone_offers$message,
-                df_polite,
-                phone_offers$condition)
+```{r, echo=TRUE, eval=TRUE}
+fpt<-findPoliteTexts(phone_offers$message,
+                     df_polite_train,
+                     phone_offers$condition)
+```
+
+```{r, echo=FALSE, eval=TRUE}
+for(x in 1:nrow(fpt)){
+  print(as.character(fpt[x,1]))
+}
 
 ```
 

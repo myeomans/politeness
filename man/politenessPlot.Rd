@@ -5,7 +5,7 @@
 \title{Politeness plot}
 \usage{
 politenessPlot(df_polite, split = NULL, split_levels = NULL,
-  split_name = NULL, split_cols = c("navy", "firebrick"), top_title = "",
+  split_name = NULL, split_cols = c("firebrick", "navy"), top_title = "",
   drop_blank = 0.05)
 }
 \arguments{
@@ -40,7 +40,7 @@ polite.data<-politeness(phone_offers$message, parser="none",drop.blank=FALSE)
 
 politeness::politenessPlot(polite.data,
                            split=phone_offers$condition,
-                           split_levels = c("Warm","Tough"),
+                           split_levels = c("Tough","Warm"),
                            split_name = "Condition")
 
 }

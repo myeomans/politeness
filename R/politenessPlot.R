@@ -18,7 +18,7 @@
 #'
 #' politeness::politenessPlot(polite.data,
 #'                            split=phone_offers$condition,
-#'                            split_levels = c("Warm","Tough"),
+#'                            split_levels = c("Tough","Warm"),
 #'                            split_name = "Condition")
 #'
 #'@export
@@ -27,7 +27,7 @@ politenessPlot<-function(df_polite,
                          split=NULL,
                          split_levels=NULL,
                          split_name=NULL,
-                         split_cols=c("navy","firebrick"),
+                         split_cols=c("firebrick","navy"),
                          top_title = "",
                          drop_blank=0.05){
 
