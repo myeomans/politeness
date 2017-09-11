@@ -5,7 +5,7 @@
 \title{Politeness Features}
 \usage{
 politeness(text, parser = c("none", "spacy"), binary = FALSE,
-  drop.blank = TRUE)
+  drop_blank = TRUE)
 }
 \arguments{
 \item{text}{character vector of texts.}
@@ -14,16 +14,18 @@ politeness(text, parser = c("none", "spacy"), binary = FALSE,
 
 \item{binary}{logical  Return feature counts from each text (default) or a binary indicator for the presence of a feature?}
 
-\item{drop.blank}{logical Should features that were not found in any text be removed from the data.frame? Default is TRUE}
+\item{drop_blank}{logical Should features that were not found in any text be removed from the data.frame? Default is TRUE}
 }
 \value{
-a data.frame of politeness features. Posible columns are listed in LINK_TO_TABLE
+a data.frame of politeness features, with one row for every item in `text`. Posible columns are listed in \code{\link{positive_list}}
 }
 \description{
-Detects politeness features in text
+Detects linguistic markers of politeness in natural language.
 }
 \details{
-We currently support SpaCy which must be installed separately and prior to running the detector (see example for implementation).
+Some politeness features depend on part-of-speech tagged sentences (e.g. "bare commands" are a particular verb class).
+    To include these features in the analysis, a POS tagger must be initialized beforehand - we currently support SpaCy which must
+    be installed separately in Python (see example for implementation).
 }
 \examples{
 
@@ -35,4 +37,11 @@ politeness(phone_offers$message, parser="none",drop.blank=FALSE)
 # spacyr::spacy_initialize(python_executable = PYTHON_PATH)
 # politeness(phone_offers$message, parser="spacy",drop.blank=FALSE)
 
+}
+\references{
+Brown, P., & Levinson, S. C. (1987). Politeness: Some universals in language usage (Vol. 4). Cambridge university press.
+
+Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J., & Potts, C. (2013). A computational approach to politeness with application to social factors. arXiv preprint arXiv:1306.6078.
+
+Voigt, R., Camp, N. P., Prabhakaran, V., Hamilton, W. L., Hetey, R. C., Griffiths, C. M., ... & Eberhardt, J. L. (2017). Language from police body camera footage shows racial disparities in officer respect. Proceedings of the National Academy of Sciences, 201702413.
 }

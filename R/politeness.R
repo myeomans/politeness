@@ -1,12 +1,21 @@
 #' Politeness Features
 #'
-#' @description Detects politeness features in text
-#' @param text character vector of texts.
+#' @description Detects linguistic markers of politeness in natural language.
+#' @param text character A vector of texts, each of which will be tallied for politeness features.
 #' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
 #' @param binary logical  Return feature counts from each text (default) or a binary indicator for the presence of a feature?
-#' @param drop.blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
-#' @details We currently support SpaCy which must be installed separately and prior to running the detector (see example for implementation).
-#' @return a data.frame of politeness features. Posible columns are listed in LINK_TO_TABLE
+#' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
+#' @details Some politeness features depend on part-of-speech tagged sentences (e.g. "bare commands" are a particular verb class).
+#'     To include these features in the analysis, a POS tagger must be initialized beforehand - we currently support SpaCy which must
+#'     be installed separately in Python (see example for implementation).
+#' @return a data.frame of politeness features, with one row for every item in `text`. Possible politeness features are listed in \code{\link{feature_table}}
+#' @references
+#' Brown, P., & Levinson, S. C. (1987). Politeness: Some universals in language usage (Vol. 4). Cambridge university press.
+#'
+#' Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J., & Potts, C. (2013). A computational approach to politeness with application to social factors. arXiv preprint arXiv:1306.6078.
+#'
+#' Voigt, R., Camp, N. P., Prabhakaran, V., Hamilton, W. L., Hetey, R. C., Griffiths, C. M., ... & Eberhardt, J. L. (2017). Language from police body camera footage shows racial disparities in officer respect. Proceedings of the National Academy of Sciences, 201702413.
+#'
 #' @examples
 #'
 #' data("phone_offers")
@@ -20,9 +29,10 @@
 #'@export
 
 
-politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TRUE){
+politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE){
   ########################################################
   text<-iconv(text,to="ASCII",sub=" ")
+  text[text==""]<-"   "
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts)
   sets[["clean"]]<-lapply(text, cleantext, stop.words=FALSE)
@@ -114,7 +124,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop.blank=TR
     features<-parallel::mclapply(features, function(x) 1*(x>0))
   }
   feature.data<-as.data.frame(features)
-  if(drop.blank){
+  if(drop_blank){
     feature.data<-feature.data[,colMeans(feature.data)!=0]
   }
   return(feature.data)
