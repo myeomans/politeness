@@ -17,9 +17,9 @@
 #' data("phone_offers")
 #' data("bowl_offers")
 #'
-#' polite.data<-politeness(phone_offers$message, parser="none",drop.blank=FALSE)
+#' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 #'
-#' polite.holdout<-politeness(bowl_offers$message, parser="none",drop.blank=FALSE)
+#' polite.holdout<-politeness(bowl_offers$message, parser="none",drop_blank=FALSE)
 #'
 #' project<-politenessProjection(polite.data,
 #'                               phone_offers$condition,

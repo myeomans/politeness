@@ -10,7 +10,11 @@
   \item{condition}{binary label indicating if message is warm or tough}
 }}
 \source{
-\url{https://osf.io/t7sd6/}
+Jeong, M., Minson, J., Yeomans, M. & Gino, F. (working paper).
+
+"Communicating Warmth in Distributed Negotiations is Surprisingly Ineffective." Study 3.
+
+Study 3. \url{https://osf.io/t7sd6/}
 }
 \usage{
 bowl_offers

@@ -67,7 +67,7 @@ Half the participants were told to use a "warm and friendly" communication style
 
 ## Detecting politeness features
 
-The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speect tagger is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop.blank = TRUE` which will remove features that were not detected in any of the texts.
+The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speect tagger is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
 
 The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words).
 
@@ -87,7 +87,7 @@ The best way to inspect the results of the main `politeness` function is to plot
 
 The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle either binary or count data, but that distinction must be made in the initial call to `politeness()`. 
 
-Often some features are too rare to be meaningful for further analysis, so users have an option to exclude them from the plot using the `drop.blank` parameter. This must be a number between 0 and 1, and determines a cut-off such that all features which appear in less than this proportion of texts are excluded from the plot. To include all features, simply set this value to `0`. 
+Often some features are too rare to be meaningful for further analysis, so users have an option to exclude them from the plot using the `drop_blank` parameter. This must be a number between 0 and 1, and determines a cut-off such that all features which appear in less than this proportion of texts are excluded from the plot. To include all features, simply set this value to `0`. 
 
 ```{r, echo=TRUE, eval=FALSE}
 politeness::politenessPlot(df_politeness,
@@ -115,9 +115,9 @@ In addition to the `phone_offers` dataset, we have also included a smaller `bowl
 
 ```{r, echo=TRUE, eval=TRUE}
 
-df_polite_train <- politeness(phone_offers$message, drop.blank=FALSE)
+df_polite_train <- politeness(phone_offers$message, drop_blank=FALSE)
 
-df_polite_holdout<-politeness(bowl_offers$message, drop.blank=FALSE)
+df_polite_holdout<-politeness(bowl_offers$message, drop_blank=FALSE)
 
 project<-politenessProjection(df_polite_train,
                               phone_offers$condition,

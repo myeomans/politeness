@@ -1,9 +1,10 @@
 #' Politeness Features
 #'
 #' @description Detects linguistic markers of politeness in natural language.
+#'     This function is the workhorse of the \code{politeness} package, taking an N-length vector of text documents and returning an N-row data.frame of feature counts.
 #' @param text character A vector of texts, each of which will be tallied for politeness features.
 #' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
-#' @param binary logical  Return feature counts from each text (default) or a binary indicator for the presence of a feature?
+#' @param binary logical Return a binary indicator for the presence of a feature instead of total counts? Default is TRUE
 #' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
 #' @details Some politeness features depend on part-of-speech tagged sentences (e.g. "bare commands" are a particular verb class).
 #'     To include these features in the analysis, a POS tagger must be initialized beforehand - we currently support SpaCy which must
@@ -14,17 +15,17 @@
 #'
 #' Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J., & Potts, C. (2013). A computational approach to politeness with application to social factors. arXiv preprint arXiv:1306.6078.
 #'
-#' Voigt, R., Camp, N. P., Prabhakaran, V., Hamilton, W. L., Hetey, R. C., Griffiths, C. M., ... & Eberhardt, J. L. (2017). Language from police body camera footage shows racial disparities in officer respect. Proceedings of the National Academy of Sciences, 201702413.
+#' Voigt, R., Camp, N. P., Prabhakaran, V., Hamilton, W. L., ... & Eberhardt, J. L. (2017). Language from police body camera footage shows racial disparities in officer respect. Proceedings of the National Academy of Sciences, 201702413.
 #'
 #' @examples
 #'
 #' data("phone_offers")
 #'
-#' politeness(phone_offers$message, parser="none",drop.blank=FALSE)
+#' politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 #'
 #' # install.packages("spacyr")
 #' # spacyr::spacy_initialize(python_executable = PYTHON_PATH)
-#' # politeness(phone_offers$message, parser="spacy",drop.blank=FALSE)
+#' # politeness(phone_offers$message, parser="spacy",drop_blank=FALSE)
 #'
 #'@export
 

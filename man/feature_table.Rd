@@ -4,12 +4,11 @@
 \name{feature_table}
 \alias{feature_table}
 \title{Table of Politeness Features}
-\format{An object of class \code{data.frame} with 36 rows and 4 columns.}
+\format{A data.frame with information about 36 politeness features.}
 \usage{
 feature_table
 }
 \description{
-This table describes all the text features extracted in this package.
-Meant for the vignette.
+This table describes all the text features extracted in this package. See vignette for details.
 }
 \keyword{datasets}

@@ -38,7 +38,11 @@
 #'   \item{message}{character of purchase offer message}
 #'   \item{condition}{binary label indicating if message is warm or tough}
 #' }
-#' @source \url{https://osf.io/t7sd6/}
+#' @source Jeong, M., Minson, J., Yeomans, M. & Gino, F. (working paper).
+#'
+#' "Communicating Warmth in Distributed Negotiations is Surprisingly Ineffective."
+#'
+#' Study 1. \url{https://osf.io/t7sd6/}
 "phone_offers"
 
 
@@ -51,13 +55,18 @@
 #'   \item{message}{character of purchase offer message}
 #'   \item{condition}{binary label indicating if message is warm or tough}
 #' }
-#' @source \url{https://osf.io/t7sd6/}
+#' @source Jeong, M., Minson, J., Yeomans, M. & Gino, F. (working paper).
+#'
+#' "Communicating Warmth in Distributed Negotiations is Surprisingly Ineffective." Study 3.
+#'
+#' Study 3. \url{https://osf.io/t7sd6/}
 "bowl_offers"
 
 
 #' Table of Politeness Features
 #'
-#' This table describes all the text features extracted in this package.
-#' Meant for the vignette.
+#' This table describes all the text features extracted in this package. See vignette for details.
+#'
+#' @format A data.frame with information about 36 politeness features.
 #'
 "feature_table"
