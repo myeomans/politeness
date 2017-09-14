@@ -1,3 +1,5 @@
+
+
 ################################################################
 # Workflow for SpaCy
 ################################################################
@@ -13,13 +15,13 @@
 spacyParser<-function(txt){
   parsedtxt <- spacyr::spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
-  parsedtxt$head_token<-lapply(1:nrow(parsedtxt),headTokenGrab, data=parsedtxt)
+  parsedtxt$head_token<-parallel::mclapply(1:nrow(parsedtxt),headTokenGrab, data=parsedtxt)
   parsedtxt[parsedtxt$dep_rel=="ROOT",c("dep_rel","head_token","head_token_id")]<-c("root","ROOT",0)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
   parsedtxt$parses<-paste0(parsedtxt$dep_rel, "(",parsedtxt$head_token,"-",parsedtxt$head_token_id,", ",parsedtxt$token,"-",parsedtxt$token_id,")")
   parsedtxt$w.nums<-paste0(parsedtxt$token,"-",parsedtxt$token_id)
   all.parses<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"parses"]))
-  all.pos.nums<-lapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"pos.nums"]))
+  all.pos.nums<-parallel::mclapply(unique(parsedtxt$doc_id),function(x) unlist(parsedtxt[parsedtxt$doc_id==x,"pos.nums"]))
   nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="")
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="")
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="")

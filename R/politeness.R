@@ -32,12 +32,17 @@
 
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE){
   ########################################################
+  text<-phone_offers$message[1:10]
+  parser=c("none","spacy")
+  binary=FALSE
+  drop_blank=TRUE
+
   text<-iconv(text,to="ASCII",sub=" ")
   text[text==""]<-"   "
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts)
-  sets[["clean"]]<-lapply(text, cleantext, stop.words=FALSE)
-  sets[["c.words"]]<-lapply(sets[["clean"]], strsplit, split=" ")
+  sets[["clean"]]<-parallel::mclapply(text, cleantext, stop.words=FALSE,mc.cores=parallel::detectCores())
+  sets[["c.words"]]<-parallel::mclapply(sets[["clean"]], strsplit, split=" ",mc.cores=parallel::detectCores())
   if(parser[1]=="core"){
     # c.p<-core.parser(text)
     # sets[["p.words"]]<-parallel::mclapply(c.p$parses,tolower)
@@ -47,14 +52,14 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
   } else if(parser[1]=="spacy"){
     s.p<-spacyParser(text)
-    sets[["p.words"]]<-parallel::mclapply(s.p$parses,tolower)
-    sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower)
-    sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower)
-    sets[["w.nums"]]<-parallel::mclapply(s.p$w.nums,tolower)
+    sets[["p.words"]]<-parallel::mclapply(s.p$parses,tolower,mc.cores=parallel::detectCores())
+    sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower,mc.cores=parallel::detectCores())
+    sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower,mc.cores=parallel::detectCores())
+    sets[["w.nums"]]<-parallel::mclapply(s.p$w.nums,tolower,mc.cores=parallel::detectCores())
 
   }
   ########################################################
-  features<-list()
+  #features<-lapply(1:36, function(i) rep(NA,length(text)))
   features[["Hedges"]]<-textcounter(hedge_list,sets[["c.words"]],words=T)
   features[["Positive.Emotion"]]<-textcounter(positive_list,sets[["c.words"]],words=T)
   features[["Negative.Emotion"]]<-textcounter(negative_list,sets[["c.words"]],words=T)
@@ -86,11 +91,12 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
   features[["Questions"]]<-textcounter(c("who","what","where","when","why","how","which"),sets[["c.words"]],words=T)
   #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)
 
-  # opening up the conversation/engaging - “Let me know what you think”, “I look forward to your response”, “Please let me know”, etc.
-  # Tag Question	Regular expression capturing cases like "..., right?" and "..., don't you?"
+  # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
+  # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
 
   #if(parser[1]=="none"){
   if(parser[1]!="spacy"){
+    cat("Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.")
     features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
     features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T)
     features[["In.Fact"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T)+
@@ -122,7 +128,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["Second.Person.Start"]]
   }
   if(binary){
-    features<-parallel::mclapply(features, function(x) 1*(x>0))
+    features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=parallel::detectCores())
   }
   feature.data<-as.data.frame(features)
   if(drop_blank){
