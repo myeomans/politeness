@@ -32,10 +32,6 @@
 
 politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE){
   ########################################################
-  text<-phone_offers$message[1:10]
-  parser=c("none","spacy")
-  binary=FALSE
-  drop_blank=TRUE
 
   text<-iconv(text,to="ASCII",sub=" ")
   text[text==""]<-"   "
@@ -56,10 +52,9 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower,mc.cores=parallel::detectCores())
     sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower,mc.cores=parallel::detectCores())
     sets[["w.nums"]]<-parallel::mclapply(s.p$w.nums,tolower,mc.cores=parallel::detectCores())
-
   }
   ########################################################
-  #features<-lapply(1:36, function(i) rep(NA,length(text)))
+  features<-list()
   features[["Hedges"]]<-textcounter(hedge_list,sets[["c.words"]],words=T)
   features[["Positive.Emotion"]]<-textcounter(positive_list,sets[["c.words"]],words=T)
   features[["Negative.Emotion"]]<-textcounter(negative_list,sets[["c.words"]],words=T)
@@ -135,6 +130,5 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     feature.data<-feature.data[,colMeans(feature.data)!=0]
   }
   return(feature.data)
-
 }
 ###############################################################
