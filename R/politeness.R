@@ -34,7 +34,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
   ########################################################
 
   text<-iconv(text,to="ASCII",sub=" ")
-  text[text==""]<-"   "
+  text[is.na(text) | text==""] <- "   "
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts)
   sets[["clean"]]<-parallel::mclapply(text, cleantext, stop.words=FALSE,mc.cores=parallel::detectCores())
