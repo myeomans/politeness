@@ -45,12 +45,14 @@ politenessPlot<-function(df_polite,
   if(is.null(split_levels)){
     split_levels <- names(l_polite_split)
   }
+  # this makes sure split colors correctly match split levels
+  names(split_cols) <- split_levels
 
   split.data<-data.frame(feature=rep(colnames(df_polite),2),
                          count=c(colMeans(l_polite_split[[1]],na.rm=T),
                                  colMeans(l_polite_split[[2]],na.rm=T)),
-                         cond=c(rep(split_levels[1],num_features),
-                                rep(split_levels[2],num_features)),
+                         cond=factor(c(rep(split_levels[1],num_features),
+                                rep(split_levels[2],num_features)), levels = split_levels),
                          se=rep(NA_real_,num_features*2))
 
   if( setequal(unique(unlist(df_polite)),0:1) ){
