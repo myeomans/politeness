@@ -6,7 +6,7 @@
 \usage{
 politenessPlot(df_polite, split = NULL, split_levels = NULL,
   split_name = NULL, split_cols = c("firebrick", "navy"), top_title = "",
-  drop_blank = 0.05)
+  drop_blank = 0.05, middle_out = 1)
 }
 \arguments{
 \item{df_polite}{a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.}
@@ -22,6 +22,8 @@ politenessPlot(df_polite, split = NULL, split_levels = NULL,
 \item{top_title}{character default "". Title of plot.}
 
 \item{drop_blank}{Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}}
+
+\item{middle_out}{Features less distinctive than this value (measured by p-value of t-test) are excluded. Defaults to 1 (i.e. include all).}
 }
 \value{
 a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
