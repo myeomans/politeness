@@ -32,7 +32,7 @@ politenessPlot<-function(df_polite,
                          split_cols = c("firebrick","navy"),
                          top_title = "",
                          drop_blank = 0.05,
-                         middle_out = 1){
+                         middle_out = 0.5){
 
   # confirm that split only has two values
   if( length(unique(split)) !=2){
@@ -41,6 +41,8 @@ politenessPlot<-function(df_polite,
   if( length(split) != nrow(df_polite)){
     stop("split must be same length as document set")
   }
+
+  binary <- setequal(unique(unlist(df_polite)),0:1)
 
   num_features <- ncol(df_polite)
   l_polite_split <- split(df_polite, split)
@@ -58,25 +60,29 @@ politenessPlot<-function(df_polite,
                                        rep(split_levels[2],num_features)), levels = split_levels),
                          se=rep(NA_real_,num_features*2))
   ######################################################
+  nonblanks <- colnames(df_polite)[colMeans(df_polite)>=drop_blank]
+
   split.enough<-names(df_polite)
   if(middle_out<1){
     split.p<-unlist(lapply(names(df_polite), function(x) stats::t.test(l_polite_split[[1]][,x],
                                                                        l_polite_split[[2]][,x])$p.value))
     split.enough<-names(df_polite)[(split.p<middle_out)&(!is.na(split.p))]
-
   }
+
+  split.data<-split.data[(split.data$feature%in%nonblanks)&(split.data$feature%in%split.enough),]
   ######################################################
-  if( setequal(unique(unlist(df_polite)),0:1) ){
+  if(binary){
     map.type<-"Percentage of Documents Using Feature"
-    split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(df_polite))
-    nonblanks<-colnames(df_polite)[colMeans(df_polite)>=drop_blank]
+    split.data$se <- sqrt(((split.data$count)*(1-split.data$count))/nrow(df_polite))
+    y.breaks <- seq(0,1,.25)
+    y.labels <- paste0(seq(0,100,25),"%")
+    y.trans <- "identity"
   } else {
     map.type<-"Average Feature Use per Document"
     split.data$se<-sqrt((split.data$count)/nrow(df_polite))
-    nonblanks<-colnames(df_polite)[colMeans(df_polite)>=drop_blank]
+    y.labels <- y.breaks <- c(.05,0.2,0.5,1,2,5,10,20,50,100,200,500,1000)
+    y.trans <- "sqrt"
   }
-  ######################################################
-  split.data<-split.data[(split.data$feature%in%nonblanks)&(split.data$feature%in%split.enough),]
   ######################################################
   wide<-stats::reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
   wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
@@ -97,7 +103,7 @@ politenessPlot<-function(df_polite,
     ggplot2::coord_flip() +
     ggplot2::scale_x_discrete(name="") +
     ggplot2::scale_fill_manual(breaks = split_levels,values=split_cols, name=split_name) +
-    ggplot2::scale_y_continuous(name=map.type, breaks = seq(0,1,.25), labels=paste0(seq(0,100,25),"%")) +
+    ggplot2::scale_y_continuous(name=map.type, breaks = y.breaks, labels=y.labels, trans = y.trans) +
     ggplot2::theme_bw(base_size=14) +
     ggplot2::ggtitle(top_title) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
