@@ -14,7 +14,7 @@
 #'
 #' data("phone_offers")
 #'
-#' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
+#' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE, num_mc_cores=2)
 #'
 #' politeness::politenessPlot(polite.data,
 #'                            split=phone_offers$condition,

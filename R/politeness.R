@@ -6,6 +6,7 @@
 #' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
 #' @param binary logical Return a binary indicator for the presence of a feature instead of total counts? Default is TRUE
 #' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
+#' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
 #' @details Some politeness features depend on part-of-speech tagged sentences (e.g. "bare commands" are a particular verb class).
 #'     To include these features in the analysis, a POS tagger must be initialized beforehand - we currently support SpaCy which must
 #'     be installed separately in Python (see example for implementation).
@@ -21,7 +22,7 @@
 #'
 #' data("phone_offers")
 #'
-#' politeness(phone_offers$message, parser="none",drop_blank=FALSE)
+#' politeness(phone_offers$message, parser="none",drop_blank=FALSE,num_mc_cores=2)
 #'
 #' # install.packages("spacyr")
 #' # spacyr::spacy_initialize(python_executable = PYTHON_PATH)
@@ -30,15 +31,15 @@
 #'@export
 
 
-politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE){
+politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE, num_mc_cores=parallel::detectCores()){
   ########################################################
 
   text<-iconv(text,to="ASCII",sub=" ")
   text[is.na(text) | text==""] <- "   "
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts)
-  sets[["clean"]]<-parallel::mclapply(text, cleantext, stop.words=FALSE,mc.cores=parallel::detectCores())
-  sets[["c.words"]]<-parallel::mclapply(sets[["clean"]], strsplit, split=" ",mc.cores=parallel::detectCores())
+  sets[["clean"]]<-parallel::mclapply(text, cleantext, stop.words=FALSE,mc.cores=num_mc_cores)
+  sets[["c.words"]]<-parallel::mclapply(sets[["clean"]], strsplit, split=" ",mc.cores=num_mc_cores)
   if(parser[1]=="core"){
     # c.p<-core.parser(text)
     # sets[["p.words"]]<-parallel::mclapply(c.p$parses,tolower)
@@ -48,10 +49,10 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     #   w.nums<-substr(p.words, sapply(p.words, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(p.words)-1)
   } else if(parser[1]=="spacy"){
     s.p<-spacyParser(text)
-    sets[["p.words"]]<-parallel::mclapply(s.p$parses,tolower,mc.cores=parallel::detectCores())
-    sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower,mc.cores=parallel::detectCores())
-    sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower,mc.cores=parallel::detectCores())
-    sets[["w.nums"]]<-parallel::mclapply(s.p$w.nums,tolower,mc.cores=parallel::detectCores())
+    sets[["p.words"]]<-parallel::mclapply(s.p$parses,tolower,mc.cores=num_mc_cores)
+    sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower,mc.cores=num_mc_cores)
+    sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower,mc.cores=num_mc_cores)
+    sets[["w.nums"]]<-parallel::mclapply(s.p$w.nums,tolower,mc.cores=num_mc_cores)
   }
   ########################################################
   features<-list()
@@ -123,7 +124,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=T)-features[["Second.Person.Start"]]
   }
   if(binary){
-    features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=parallel::detectCores())
+    features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
   }
   feature.data<-as.data.frame(features)
   if(drop_blank){

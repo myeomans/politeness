@@ -5,7 +5,7 @@
 \title{Politeness Features}
 \usage{
 politeness(text, parser = c("none", "spacy"), binary = FALSE,
-  drop_blank = TRUE)
+  drop_blank = TRUE, num_mc_cores = parallel::detectCores())
 }
 \arguments{
 \item{text}{character A vector of texts, each of which will be tallied for politeness features.}
@@ -15,6 +15,8 @@ politeness(text, parser = c("none", "spacy"), binary = FALSE,
 \item{binary}{logical Return a binary indicator for the presence of a feature instead of total counts? Default is TRUE}
 
 \item{drop_blank}{logical Should features that were not found in any text be removed from the data.frame? Default is TRUE}
+
+\item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
 }
 \value{
 a data.frame of politeness features, with one row for every item in `text`. Possible politeness features are listed in \code{\link{feature_table}}
@@ -32,7 +34,7 @@ Some politeness features depend on part-of-speech tagged sentences (e.g. "bare c
 
 data("phone_offers")
 
-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
+politeness(phone_offers$message, parser="none",drop_blank=FALSE,num_mc_cores=2)
 
 # install.packages("spacyr")
 # spacyr::spacy_initialize(python_executable = PYTHON_PATH)

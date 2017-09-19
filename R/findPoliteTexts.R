@@ -18,7 +18,7 @@
 #' @examples
 #'
 #' data("phone_offers")
-#' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
+#' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE, num_mc_cores=2)
 #'
 #' findPoliteTexts(phone_offers$message,
 #'                 polite.data,
