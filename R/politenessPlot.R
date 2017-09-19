@@ -54,19 +54,28 @@ politenessPlot<-function(df_polite,
                          count=c(colMeans(l_polite_split[[1]],na.rm=T),
                                  colMeans(l_polite_split[[2]],na.rm=T)),
                          cond=factor(c(rep(split_levels[1],num_features),
-                                rep(split_levels[2],num_features)), levels = split_levels),
+                                       rep(split_levels[2],num_features)), levels = split_levels),
                          se=rep(NA_real_,num_features*2))
+  ######################################################
+  split.enough<-names(df_polite)
+  if(middle_out<1){
+    split.p<-unlist(lapply(names(df_polite), function(x) stats::t.test(l_polite_split[[1]][,x],
+                                                                       l_polite_split[[2]][,x])$p.value))
+    split.enough<-names(df_polite)[(split.p<middle_out)&(!is.na(split.p))]
 
-  if( setequal(unique(unlist(df_polite)),0:1) ){
-    map.type<-"Percentage of Documents Using Strategy"
-    split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(df_polite))
-    selected<-colnames(df_polite)[colMeans(df_polite)>=drop_blank]
-  } else {
-    map.type<-"Average Strategy Use per Document"
-    split.data$se<-sqrt((split.data$count)/nrow(df_polite))
-    selected<-colnames(df_polite)[colMeans(df_polite)>=drop_blank]
   }
-  split.data<-split.data[split.data$feature%in%selected,]
+  ######################################################
+  if( setequal(unique(unlist(df_polite)),0:1) ){
+    map.type<-"Percentage of Documents Using Feature"
+    split.data$se<-sqrt(((split.data$count)*(1-split.data$count))/nrow(df_polite))
+    nonblanks<-colnames(df_polite)[colMeans(df_polite)>=drop_blank]
+  } else {
+    map.type<-"Average Feature Use per Document"
+    split.data$se<-sqrt((split.data$count)/nrow(df_polite))
+    nonblanks<-colnames(df_polite)[colMeans(df_polite)>=drop_blank]
+  }
+  ######################################################
+  split.data<-split.data[(split.data$feature%in%nonblanks)&(split.data$feature%in%split.enough),]
   ######################################################
   wide<-stats::reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
   wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
@@ -79,11 +88,11 @@ politenessPlot<-function(df_polite,
   split.data$count_plus<-split.data$count+split.data$se
   ######################################################
   ggplot2::ggplot(data=split.data,
-                 ggplot2::aes_string(x="feature",y="count",fill="cond"),width=2) +
+                  ggplot2::aes_string(x="feature",y="count",fill="cond"),width=2) +
     ggplot2::geom_bar(position=ggplot2::position_dodge(width = 0.8),
-             stat="identity") +
+                      stat="identity") +
     ggplot2::geom_errorbar(ggplot2::aes_string(ymin="count_minus", ymax="count_plus"), width=0.3,
-                  position=ggplot2::position_dodge(width = 0.8)) +
+                           position=ggplot2::position_dodge(width = 0.8)) +
     ggplot2::coord_flip() +
     ggplot2::scale_x_discrete(name="") +
     ggplot2::scale_fill_manual(breaks = split_levels,values=split_cols, name=split_name) +
@@ -91,5 +100,5 @@ politenessPlot<-function(df_polite,
     ggplot2::theme_bw(base_size=14) +
     ggplot2::ggtitle(top_title) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
-          text=ggplot2::element_text(family="Times"))
+                   text=ggplot2::element_text(family="Times"))
 }
