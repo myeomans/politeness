@@ -34,7 +34,7 @@ Some politeness features depend on part-of-speech tagged sentences (e.g. "bare c
 
 data("phone_offers")
 
-politeness(phone_offers$message, parser="none",drop_blank=FALSE,num_mc_cores=2)
+politeness(phone_offers$message, parser="none",drop_blank=FALSE,num_mc_cores=getOption("mc.cores", 2L))
 
 # install.packages("spacyr")
 # spacyr::spacy_initialize(python_executable = PYTHON_PATH)
