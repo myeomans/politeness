@@ -23,7 +23,16 @@
 #'                            split_levels = c("Tough","Warm"),
 #'                            split_name = "Condition")
 #'
-#'@export
+#' @export
+
+
+polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
+                        num_mc_cores=getOption("mc.cores", 2L))
+
+politeness::politenessPlot(polite.data,
+                           split=phone_offers$condition,
+                           split_levels = c("Tough","Warm"),
+                           split_name = "Condition")
 
 politenessPlot<-function(df_polite,
                          split = NULL,
@@ -33,6 +42,17 @@ politenessPlot<-function(df_polite,
                          top_title = "",
                          drop_blank = 0.05,
                          middle_out = 0.5){
+
+  polite.data
+  split=phone_offers$condition
+  split_levels = c("Tough","Warm")
+  split_name = "Condition"
+  split_cols = c("firebrick","navy")
+  top_title = ""
+  drop_blank = 0.05
+  middle_out = 0.5
+
+
 
   # confirm that split only has two values
   if( length(unique(split)) !=2){
@@ -107,5 +127,12 @@ politenessPlot<-function(df_polite,
     ggplot2::theme_bw(base_size=14) +
     ggplot2::ggtitle(top_title) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+                   axis.text = ggplot2::element_text(size=20),
+                   legend.title = ggplot2::element_text(size=18, face="bold"),
+                   legend.text = ggplot2::element_text(size=18),
+                   legend.position = "top",
+                   legend.background = ggplot2::element_rect(linetype = "solid", color="black"),
+                   plot.margin = ggplot2::unit(c(0,25,2,0),"points"),
+                   axis.title = ggplot2::element_text(size=16),
                    text=ggplot2::element_text(family="Times"))
 }
