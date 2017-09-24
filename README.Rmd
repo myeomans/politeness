@@ -26,7 +26,7 @@ You can install politeness from github using the devtools package, like so:
 devtools::install_github("myeomans/politeness")
 ```
 
-Many of the politeness features containted in this package use some part-of-speech tagging. We recommend [Spacy](https://spacy.io/), which is simple to install through python and which has a convenient wrapper function for use through R, [SpaCyR](https://github.com/kbenoit/spacyr). If you do not have SpaCy installed you must do it outside of R first - otherwise, a reduced set of features (i.e. those that do not require part-of-speech tags) is provided by the package.
+Many of the politeness features containted in this package use some part-of-speech tagging. We recommend [SpaCy](https://spacy.io/), which is simple to install through python and which has a convenient wrapper function for use through R, [SpaCyR](https://github.com/kbenoit/spacyr). If you do not have SpaCy installed you must do it outside of R first - otherwise, a reduced set of features (i.e. those that do not require part-of-speech tags) is provided by the package.
 
 ## Example
 
@@ -38,8 +38,8 @@ data("phone_offers")
 politeness::politeness(phone_offers$message)
 
 # install.packages("spacyr")
-spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
-politeness::politeness(phone_offers$message, parser="spacy")
+#spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
+#politeness::politeness(phone_offers$message, parser="spacy")
 
 politeness::politenessPlot(politeness::politeness(phone_offers$message),
                            split=phone_offers$condition,

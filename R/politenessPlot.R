@@ -25,15 +25,6 @@
 #'
 #' @export
 
-
-polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-                        num_mc_cores=getOption("mc.cores", 2L))
-
-politeness::politenessPlot(polite.data,
-                           split=phone_offers$condition,
-                           split_levels = c("Tough","Warm"),
-                           split_name = "Condition")
-
 politenessPlot<-function(df_polite,
                          split = NULL,
                          split_levels = NULL,
@@ -42,17 +33,6 @@ politenessPlot<-function(df_polite,
                          top_title = "",
                          drop_blank = 0.05,
                          middle_out = 0.5){
-
-  polite.data
-  split=phone_offers$condition
-  split_levels = c("Tough","Warm")
-  split_name = "Condition"
-  split_cols = c("firebrick","navy")
-  top_title = ""
-  drop_blank = 0.05
-  middle_out = 0.5
-
-
 
   # confirm that split only has two values
   if( length(unique(split)) !=2){
