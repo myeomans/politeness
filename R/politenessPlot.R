@@ -80,7 +80,12 @@ politenessPlot<-function(df_polite,
   } else {
     map.type<-"Average Feature Use per Document"
     split.data$se<-sqrt((split.data$count)/nrow(df_polite))
-    y.labels <- y.breaks <- c(.05,0.2,0.5,1,2,5,10,20,50,100,200,500,1000)
+    tick.set<-c(.05,0.2,0.5,1,2,5,10,20,50,100,200,500,1000)
+    if(max(split.data$count)>5){
+      tick.set<-tick.set[!(tick.set%in%c(.05,.5))]
+    }
+    y.labels <- y.breaks <- tick.set
+
     y.trans <- "sqrt"
   }
   ######################################################
