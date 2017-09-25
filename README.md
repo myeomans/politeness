@@ -3,7 +3,7 @@
 Politeness
 ==========
 
-Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levenson, 1987). In practically all communication, a speaker can choose to be more or less polite to their audience. In this package, we provide tools for researchers to measure the markers and effects of politeness in natural language.
+Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levinson, 1987). In practically all communication, a speaker can choose to be more or less polite to their audience. In this package, we provide tools for researchers to measure the markers and effects of politeness in natural language.
 
 Installation
 ------------
