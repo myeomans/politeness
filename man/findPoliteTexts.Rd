@@ -41,7 +41,7 @@ if \code{num_docs} is even, half will be most and half least polite else half + 
 
 data("phone_offers")
 polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-                        num_mc_cores=getOption("mc.cores", 2L))
+                        num_mc_cores=1)
 
 findPoliteTexts(phone_offers$message,
                 polite.data,
