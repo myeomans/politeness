@@ -1,8 +1,8 @@
-## ----setup, echo=F-------------------------------------------------------
+## ----setup, echo=FALSE-------------------------------------------------------
 knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
 library(politeness)
 data("phone_offers")
-data("feature_table") 
+data("feature_table")
 
 ## ------------------------------------------------------------------------
 knitr::kable(feature_table,align=rep("c",4),
@@ -15,7 +15,7 @@ knitr::kable(feature_table,align=rep("c",4),
 ## ---- eval=FALSE, echo=TRUE----------------------------------------------
 #  # install.packages("spacyr")
 #  spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
-#  
+#
 
 ## ---- echo=TRUE, eval=TRUE-----------------------------------------------
 df_politeness_count <- politeness(phone_offers$message, binary=FALSE, num_mc_cores=getOption("mc.cores", 2L))

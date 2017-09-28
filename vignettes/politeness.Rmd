@@ -9,16 +9,17 @@ vignette: >
   %\VignetteEncoding{UTF-8}
 ---
   
-```{r setup, echo=F}
+```{r, echo=FALSE}
 knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
-library(politeness)
-data("phone_offers")
-data("feature_table") 
 ```
 
 ## Introduction 
 
 Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levenson, 1987). In practically all settings, a speaker can choose to be more or less polite to their audience. In this package, we provide tools to measure the markers and effects of politeness in natural language.
+
+```{r, echo=T}
+library(politeness)
+```
 
 ## Motivation for package
 
@@ -35,6 +36,8 @@ If the researcher wants to generate a politeness classifier, they can do so usin
 The main value of this package is in the `politeness` function, which counts the use of 36 different politeness features in natural language. Here, we borrow directly from existing research on the computational linguistics of politeness (Danescu-Niculescu-Mizil et al., 2013; Voigt et al., 2017). These features are summarized in the table below, along with examples of each.
 
 ```{r}
+data("feature_table")
+
 knitr::kable(feature_table,align=rep("c",4),
              col.names = c("Feature Name",
                            "POS Tags",
@@ -61,23 +64,27 @@ Finally, our tools also have (deprecated) compatibility with [coreNLP](https://s
 
 ## Data: phone_offers
 
+```{r}
+data("phone_offers")
+```
+
 We have included an example dataset, `phone_offers`, for researchers to get a handle on the workflow. These data were collected from Mechanical Turk workers, who were given a Craigslist advertisement for a used iPhone and were told to write a message to the seller offering to buy it at a specific price that was less than what was posted. In essence, they were opening a negotiation over the sale price of the phone. Naturally, this is a domain where politeness might have effects on important outcomes. 
 
 Half the participants were told to use a "warm and friendly" communication style, while the other half were told to use a "tough and firm" communication style. In this research, the politeness detector was used to define the construct - that is, what were the linguistic differences between messages from these two conditions? This software served two goals for that research. First, it provided a simple description of the differences to understand the data better (i.e. "what are the features that differ?"). Second, it allowed for basic estimation of a politeness detector, that could be applied in-context to quantify politeness in other negotiations.
 
 ## Detecting politeness features
 
-The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speect tagger is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
+The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speech tagger is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
 
-The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words).
+The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words). 
 
 ```{r, echo=TRUE, eval=TRUE}
-df_politeness_count <- politeness(phone_offers$message, binary=FALSE, num_mc_cores=getOption("mc.cores", 2L))
+df_politeness_count <- politeness(phone_offers$message, binary=FALSE)
 df_politeness_count[20:30,1:5]
 ```
 
 ```{r, echo=TRUE, eval=TRUE}
-df_politeness <- politeness(phone_offers$message, binary=TRUE, num_mc_cores=getOption("mc.cores", 2L))
+df_politeness <- politeness(phone_offers$message, binary=TRUE)
 df_politeness[20:30,1:5]
 ```
 
