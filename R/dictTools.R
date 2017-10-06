@@ -9,10 +9,12 @@
 #' @keywords internal
 #'
 
-dictWrap<-function (text, dict = NULL, binary = F, ...) {
+dictWrap<-function (text, dict = NULL, binary = F,  num_mc_cores=parallel::detectCores(), ...) {
   if(is.null(dict)){
     stop("Dictionary Must Be Supplied")
   }
+  quanteda::quanteda_options(threads=num_mc_cores)
+  quanteda::quanteda_options("verbose" = FALSE)
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
   WC <- rep(1,length(text)) #qdap::word_count(text)
   wc1 <- (!is.na(qdap::word_count(text)))

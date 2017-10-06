@@ -15,13 +15,14 @@ utils::globalVariables(c("l_parses","parses",
 #' Spacy Parser
 #' @description Return POS tags from natural language.
 #' @param txt a character vector of texts.
+#' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
 #' @return list of compiled POS-tagged items.
 #' @keywords internal
 #' @import data.table
-spacyParser<-function(txt){
+spacyParser<-function(txt, num_mc_cores=parallel::detectCores()){
   parsedtxt <- spacyr::spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
-  parsedtxt$head_token<-parallel::mclapply(1:nrow(parsedtxt),headTokenGrab, data=parsedtxt)
+  parsedtxt$head_token<-parallel::mclapply(1:nrow(parsedtxt),headTokenGrab, data=parsedtxt, mc.cores=num_mc_cores)
   parsedtxt[parsedtxt$dep_rel=="ROOT",c("dep_rel","head_token","head_token_id")]<-c("root","ROOT",0)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
   parsedtxt$parses<-paste0(parsedtxt$dep_rel, "(",parsedtxt$head_token,"-",parsedtxt$head_token_id,", ",parsedtxt$token,"-",parsedtxt$token_id,")")
@@ -30,9 +31,9 @@ spacyParser<-function(txt){
   dt_parsedtxt <- data.table::data.table(parsedtxt)
   all.parses <- dt_parsedtxt[ , .(l_parses = list(parses)), by = "doc_id"][ , l_parses]
   all.pos.nums <- dt_parsedtxt[ , .(l_pos_nums = list(pos.nums)), by = "doc_id"][ , l_pos_nums]
-  nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="")
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="")
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="")
+  nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
+  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
+  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
   w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), by = "doc_id"][ , l_w_nums]
   return(list(parses=all.parses,
               pos.nums=all.pos.nums,
@@ -54,7 +55,7 @@ headTokenGrab <- function(x, data){
   head_token_id_local <- data$head_token_id[x]
   data <- data[(doc_id==doc_id_local)&
                  (sentence_id==sentence_id_local)&
-                 (token_id==head_token_id_local), token]
+                 (token_id==head_token_id_local), ]
   return(data[,token])
 }
 ################################################################
@@ -69,10 +70,11 @@ headTokenGrab <- function(x, data){
 #' Core Parser
 #' @description (deprecated) Part-Of-Speech tagging using Stanford CoreNLP.
 #' @param text a character vector of texts.
+#' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
 #' @return list of
 #' @keywords internal
 #'
-coreParser<-function(text){
+coreParser<-function(text, num_mc_cores=parallel::detectCores()){
   sentences<-as.list(qdap::sent_detect(text))
   parses<-list()
   pos.nums<-list()
@@ -90,9 +92,9 @@ coreParser<-function(text){
   }
   all.parses=do.call(c, parses)
   all.pos.nums=do.call(c, pos.nums)
-  nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="")
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="")
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="")
+  nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
+  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
+  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
   w.nums<-substr(all.parses, sapply(all.parses, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(all.parses)-1)
   return(list(parses=all.parses,
               pos.nums=all.pos.nums,

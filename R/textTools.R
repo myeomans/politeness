@@ -5,13 +5,14 @@
 #' @param texts character vector of to-be-searched text.
 #' @param words logical. Default FALSE. Does \code{counted} contain words, or sequences of chracters?
 #' @param fixed logical. Default TRUE. Use literal characters instead of regular expressions?
+#' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
 #' @return numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.
 #' @keywords internal
 #'
-textcounter<-function (counted, texts, words=F, fixed = T) {
+textcounter<-function (counted, texts, words=F, fixed = T, num_mc_cores = parallel::detectCores()) {
 
   if(words){
-    counts<-unlist(parallel::mclapply(texts,function(x) sum(unlist(x)%in%counted)))
+    counts<-unlist(parallel::mclapply(texts,function(x) sum(unlist(x)%in%counted), mc.cores=num_mc_cores))
   }else {
     for (x in counted) {
       counts <- rep(0, length(texts))

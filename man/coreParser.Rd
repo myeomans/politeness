@@ -4,10 +4,12 @@
 \alias{coreParser}
 \title{Core Parser}
 \usage{
-coreParser(text)
+coreParser(text, num_mc_cores = parallel::detectCores())
 }
 \arguments{
 \item{text}{a character vector of texts.}
+
+\item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
 }
 \value{
 list of
