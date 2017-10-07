@@ -4,7 +4,8 @@
 \alias{textcounter}
 \title{Text Counter}
 \usage{
-textcounter(counted, texts, words = F, fixed = T)
+textcounter(counted, texts, words = F, fixed = T,
+  num_mc_cores = parallel::detectCores())
 }
 \arguments{
 \item{counted}{character vector of items to search for in the texts.}
@@ -14,6 +15,8 @@ textcounter(counted, texts, words = F, fixed = T)
 \item{words}{logical. Default FALSE. Does \code{counted} contain words, or sequences of chracters?}
 
 \item{fixed}{logical. Default TRUE. Use literal characters instead of regular expressions?}
+
+\item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
 }
 \value{
 numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.

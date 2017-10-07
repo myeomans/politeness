@@ -4,10 +4,12 @@
 \alias{spacyParser}
 \title{Spacy Parser}
 \usage{
-spacyParser(txt)
+spacyParser(txt, num_mc_cores = parallel::detectCores())
 }
 \arguments{
 \item{txt}{a character vector of texts.}
+
+\item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
 }
 \value{
 list of compiled POS-tagged items.

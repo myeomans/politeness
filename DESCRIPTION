@@ -21,7 +21,9 @@ Imports:
     coreNLP,
     textir,
     glmnet,
-    ROCR
+    ROCR,
+    data.table,
+    stringr
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
