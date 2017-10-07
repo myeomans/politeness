@@ -15,7 +15,7 @@ knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE
 
 ## Introduction 
 
-Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levenson, 1987). In practically all settings, a speaker can choose to be more or less polite to their audience. In this package, we provide tools to measure the markers and effects of politeness in natural language.
+Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levinson, 1987). In practically all settings, a speaker can choose to be more or less polite to their audience. In this package, we provide tools to measure the markers and effects of politeness in natural language.
 
 ```{r, echo=T}
 library(politeness)
@@ -59,8 +59,6 @@ spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
 ```
 
 Many of the politeness features can be run without using part-of-speech tagging by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python, so that they can get up and running without a lot of fixed startup costs. Without part-of-speech tags, some features are dropped entirely (e.g. Bare Commands are a specific verb class). However, some features are approximated. For example, tags allow users to differentiate between a mid-sentence "please" and a "please" to start a sentence, while the tagless version of the function will collapse them into a single feature. 
-
-Finally, our tools also have (deprecated) compatibility with [coreNLP](https://stanfordnlp.github.io/CoreNLP/) for part-of-speech tagging - however we do not recommend this at present, because the system requirements can be quite onerous for new users.
 
 ## Data: phone_offers
 
