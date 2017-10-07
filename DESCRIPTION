@@ -22,7 +22,8 @@ Imports:
     textir,
     glmnet,
     ROCR,
-    data.table
+    data.table,
+    stringr
 RoxygenNote: 6.0.1
 Suggests: knitr,
     rmarkdown,
