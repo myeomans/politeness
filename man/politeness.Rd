@@ -5,7 +5,7 @@
 \title{Politeness Features}
 \usage{
 politeness(text, parser = c("none", "spacy"), binary = FALSE,
-  drop_blank = TRUE, num_mc_cores = parallel::detectCores())
+  drop_blank = TRUE, num_mc_cores = 2)
 }
 \arguments{
 \item{text}{character A vector of texts, each of which will be tallied for politeness features.}

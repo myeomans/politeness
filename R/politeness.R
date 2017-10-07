@@ -32,7 +32,7 @@
 #'@export
 
 
-politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE, num_mc_cores=parallel::detectCores()){
+politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE, num_mc_cores=2){
   ########################################################
 
   text<-iconv(text,to="ASCII",sub=" ")
@@ -105,7 +105,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
     features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=T,
                                        num_mc_cores=num_mc_cores)
-    features[["Claim.Truth"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T,
+    features[["Actually"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T,
                                             num_mc_cores=num_mc_cores)+
                                   textcounter(c("in fact"),sets[["clean"]],num_mc_cores=num_mc_cores))
     features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=T))
@@ -120,7 +120,7 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
                                         num_mc_cores=num_mc_cores)
                             +textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=T,
                                          num_mc_cores=num_mc_cores))
-    features[["Claim.Truth"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T,
+    features[["Actually"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=T,
                                             num_mc_cores=num_mc_cores)
                             +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=T,
                                          num_mc_cores=num_mc_cores))

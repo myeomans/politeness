@@ -8,12 +8,8 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
 ---
-  
-<<<<<<< HEAD
-```{r, echo=FALSE}
-=======
+
 ```{r setup, echo=FALSE}
->>>>>>> 0fcdd072acdc56e230eaab0a9a97efb7a8d5c959
 knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
 ```
 

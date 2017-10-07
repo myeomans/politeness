@@ -14,10 +14,10 @@ textcounter<-function (counted, texts, words=F, fixed = T, num_mc_cores = parall
   if(words){
     counts<-unlist(parallel::mclapply(texts,function(x) sum(unlist(x)%in%counted), mc.cores=num_mc_cores))
   }else {
+    counts <- rep(0, length(texts))
     for (x in counted) {
-      counts <- rep(0, length(texts))
-      counts <- counts + sapply(gregexpr(x, texts, fixed = fixed),
-                                function(z) ifelse(z[1] == (-1), 0, length(z)))
+      counts <- counts + unlist(sapply(gregexpr(x, texts, fixed = fixed),
+                                       function(z) ifelse(z[1] == (-1), 0, length(z))))
     }
   }
   return(counts)

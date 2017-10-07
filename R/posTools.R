@@ -74,46 +74,48 @@ headTokenGrab <- function(x, data){
 #' @return list of
 #' @keywords internal
 #'
-coreParser<-function(text, num_mc_cores=parallel::detectCores()){
-  sentences<-as.list(qdap::sent_detect(text))
-  parses<-list()
-  pos.nums<-list()
-  for (s in 1:length(sentences)){
-    a.s<-coreNLP::annotateString(sentences[[s]])
-    pos.table<-coreNLP::getToken(a.s)[,c("id","token","POS")]
-    dep.table<-coreNLP::getDependency(a.s, type="collapsed")
-    dep.table<-dep.table[dep.table$sentence==1,]
-    dep.char<-c()
-    for (x in 1:nrow(dep.table)){
-      dep.char<-c(dep.char,rowToChar(dep.table[dep.table$depIndex==x,]))
-    }
-    parses[[s]]<-dep.char
-    pos.nums[[s]]<-paste0("(",apply(pos.table,1,paste, collapse="-"),")")
-  }
-  all.parses=do.call(c, parses)
-  all.pos.nums=do.call(c, pos.nums)
-  nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
-  w.nums<-substr(all.parses, sapply(all.parses, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(all.parses)-1)
-  return(list(parses=all.parses,
-              pos.nums=all.pos.nums,
-              nonums=nonums,
-              w.nums=w.nums))
-}
 
-#' Row To Char
-#' @description constructs POS-tagged words from coreNLP parse table.
-#' @param deps row from coreNLP dependency table
-#' @param data a data.frame
-#' @return a character
-#' @keywords internal
-#'
-
-rowToChar<-function(deps){
-  return(paste0(deps$type,"(",
-                deps$governor,"-",
-                deps$governorIdx,", ",
-                deps$dependent,"-",
-                deps$depIndex,")"))
-}
+#
+# coreParser<-function(text, num_mc_cores=parallel::detectCores()){
+#   sentences<-as.list(qdap::sent_detect(text))
+#   parses<-list()
+#   pos.nums<-list()
+#   for (s in 1:length(sentences)){
+#     a.s<-coreNLP::annotateString(sentences[[s]])
+#     pos.table<-coreNLP::getToken(a.s)[,c("id","token","POS")]
+#     dep.table<-coreNLP::getDependency(a.s, type="collapsed")
+#     dep.table<-dep.table[dep.table$sentence==1,]
+#     dep.char<-c()
+#     for (x in 1:nrow(dep.table)){
+#       dep.char<-c(dep.char,rowToChar(dep.table[dep.table$depIndex==x,]))
+#     }
+#     parses[[s]]<-dep.char
+#     pos.nums[[s]]<-paste0("(",apply(pos.table,1,paste, collapse="-"),")")
+#   }
+#   all.parses=do.call(c, parses)
+#   all.pos.nums=do.call(c, pos.nums)
+#   nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
+#   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
+#   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
+#   w.nums<-substr(all.parses, sapply(all.parses, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(all.parses)-1)
+#   return(list(parses=all.parses,
+#               pos.nums=all.pos.nums,
+#               nonums=nonums,
+#               w.nums=w.nums))
+# }
+#
+# #' Row To Char
+# #' @description constructs POS-tagged words from coreNLP parse table.
+# #' @param deps row from coreNLP dependency table
+# #' @param data a data.frame
+# #' @return a character
+# #' @keywords internal
+# #'
+#
+# rowToChar<-function(deps){
+#   return(paste0(deps$type,"(",
+#                 deps$governor,"-",
+#                 deps$governorIdx,", ",
+#                 deps$dependent,"-",
+#                 deps$depIndex,")"))
+# }
