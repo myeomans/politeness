@@ -5,7 +5,7 @@
 \title{Find polite text}
 \usage{
 findPoliteTexts(text, df_polite, df_covar, type = c("most", "least", "both"),
-  num_docs = 5L, mnlm_cluster = NULL, ...)
+  num_docs = 5L, ...)
 }
 \arguments{
 \item{text}{a character vector of texts.}
@@ -18,9 +18,7 @@ findPoliteTexts(text, df_polite, df_covar, type = c("most", "least", "both"),
 
 \item{num_docs}{integer of number of documents to be returned. Default is 5.}
 
-\item{mnlm_cluster}{cluster to be used in \code{mnlm}. See  \code{mnlm} and \code{makeCluster}.}
-
-\item{...}{additional parameters to be passed to \code{mnlm}.}
+\item{...}{additional parameters to be passed to \code{politenessProjection}.}
 }
 \value{
 data.frame with texts ranked by (more or least) politeness. See details for more information.

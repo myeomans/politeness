@@ -114,7 +114,9 @@ politeness::politenessPlot(df_politeness,
 
 Users can generate a politeness classifier with the `politenessProjection` function. This creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the user has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
 
-This function is a wrapper around \code{texitr}, which implements a massively multinomial inverse regression. Intuitively, this model represents a more realistic causal structure to text-plus-covariate data - that is, the covariate typically has a causal effect on the words used by the speaker, rather than the other way around. Additioally, this package is computationally efficient, and this can be impvoed by registering a parallel back-end and supplying it to `mnlm_cluster` (see \code{texitr} documentation for details).
+This function is a wrapper around supervised learning algorithms. The default uses \code{glmnet}, the vanilla LASSO implementation in R. This should be familiar to most users already. We also allow users to use a different algorithm, \code{texitr}, which implements a massively multinomial inverse regression. Intuitively, this model represents a more realistic causal structure to text-plus-covariate data - that is, the covariate typically has a causal effect on the words used by the speaker, rather than the other way around. 
+
+Both packages have their merits, though for now we recommend using \code{glmnet} to start, especialy if it is familiar. Both algorithms are computationally efficient, and can be improved by registering a parallel back-end (see package details) and indicating in `cluster`.
 
 In addition to the `phone_offers` dataset, we have also included a smaller `bowl_offers` dataset. Participants in this study were given similar instructions (i.e. communicate in a warm or tough style) but for a different negotiation exercise. We use the `phone_offers` dataset to define the construct of interest, and confirm that the treatment had similar effects in `bowl_offers` by using it as held-out data in `politenessProjection()`. The results confirm that the manipulation had similar consequences on the participants' politeness.
 
@@ -142,18 +144,27 @@ mean(project$test_proj[bowl_offers$condition==0])
 The projected quantities from the `politenessProjection` function can be used in other analyses, but users should first be curious about examples of texts that best represent the extremes of that projection (i.e. the most or least polite texts). The `findPoliteTexts` function replicates the analyses of `politenessProjection` but instead returns a selection of the texts that are the most extreme (i.e. high, or low, or both) along the projected dimension. The parameters `type` and `num_docs` allow users to specify the type and number of texts that are returned.
 
 ```{r, echo=TRUE, eval=TRUE}
-fpt<-findPoliteTexts(phone_offers$message,
+fpt_most<-findPoliteTexts(phone_offers$message,
                      df_polite_train,
-                     phone_offers$condition)
+                     phone_offers$condition,
+                     type="most")
+fpt_least<-findPoliteTexts(phone_offers$message,
+                     df_polite_train,
+                     phone_offers$condition,
+                     type="least")
 ```
 
 ```{r, echo=FALSE, eval=TRUE}
-for(x in 1:nrow(fpt)){
-  print(as.character(fpt[x,1]))
+print("Most Polite")
+for(x in 1:nrow(fpt_most)){
+  print(as.character(fpt_most[x,1]))
 }
-
+print("Least Polite")
+for(x in 1:nrow(fpt_least)){
+  print(as.character(fpt_least[x,1]))
+}
 ```
 
 ## Conclusion
 
-That's it! Enjoy!
+That's it! Enjoy! And please reach out to us with any questions, concerns, bug reports, use cases, comments, or fun facts you might have.

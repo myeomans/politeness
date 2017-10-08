@@ -59,13 +59,22 @@ mean(project$test_proj[bowl_offers$condition==0])
 
 
 ## ---- echo=TRUE, eval=TRUE-----------------------------------------------
-fpt<-findPoliteTexts(phone_offers$message,
+fpt_most<-findPoliteTexts(phone_offers$message,
                      df_polite_train,
-                     phone_offers$condition)
+                     phone_offers$condition,
+                     type="most")
+fpt_least<-findPoliteTexts(phone_offers$message,
+                     df_polite_train,
+                     phone_offers$condition,
+                     type="least")
 
 ## ---- echo=FALSE, eval=TRUE----------------------------------------------
-for(x in 1:nrow(fpt)){
-  print(as.character(fpt[x,1]))
+print("Most Polite")
+for(x in 1:nrow(fpt_most)){
+  print(as.character(fpt_most[x,1]))
 }
-
+print("Least Polite")
+for(x in 1:nrow(fpt_least)){
+  print(as.character(fpt_least[x,1]))
+}
 

@@ -5,8 +5,7 @@
 #' @param df_covar a data.frame with covariates.
 #' @param type a string indicating if function should return the most or least polite texts or both. If \code{length > 1} only first value is used.
 #' @param num_docs integer of number of documents to be returned. Default is 5.
-#' @param mnlm_cluster cluster to be used in \code{mnlm}. See  \code{mnlm} and \code{makeCluster}.
-#' @param ... additional parameters to be passed to \code{mnlm}.
+#' @param ... additional parameters to be passed to \code{politenessProjection}.
 #' @return data.frame with texts ranked by (more or least) politeness. See details for more information.
 #' @details Function returns a data.frame ranked by (more or least) politeness.
 #' If \code{type == 'most'}, the \code{num_docs} most polite texts will be returned.
@@ -32,8 +31,8 @@ findPoliteTexts <- function(text,
                             df_covar,
                             type = c("most","least","both"),
                             num_docs = 5L,
-                            mnlm_cluster = NULL,
                             ...){
+
   # check that df_polite, df_covar, and text have same number of 'rows'
 
   # check type
@@ -44,11 +43,9 @@ findPoliteTexts <- function(text,
   }
 
   l_proj <- suppressWarnings(politenessProjection(df_polite_train = df_polite,
-                                 df_covar = df_covar,
-                                 mnlm_cluster = mnlm_cluster,
-                                 ... ))
+                                 df_covar = df_covar, ... ))
 
-  m_train_proj <- l_proj$train_proj
+  m_train_proj <- as.vector(l_proj$train_proj)
   df_docs_proj <- data.frame(text = text, projection = m_train_proj)
 
   if(type %in% c("most","least")){
