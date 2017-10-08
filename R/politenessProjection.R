@@ -76,8 +76,8 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
       polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=df_covar, family="binomial", ...)
       polite_fit<-predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
 
-      polite_coefs<-drop(coef(polite_model, s="lambda.min"))
-      polite_coefs<-polite_coefs[polite_coefs!=0]
+      p_coefs<-as.matrix(coef(polite_model, s="lambda.min"))
+      polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
 
       if(!is.null(df_polite_test)){
         m_polite_test <- as.matrix(df_polite_test)
@@ -87,7 +87,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
       }
       l_out <- list(train_proj = polite_fit,
                     test_proj = polite_predict,
-                    train_coefs=polite_coefs)
+                    train_coefs = polite_coefs)
 
     }
   } else {

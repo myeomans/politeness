@@ -5,7 +5,7 @@
 \title{Politeness projection}
 \usage{
 politenessProjection(df_polite_train, df_covar = NULL,
-  df_polite_test = NULL, classifier = c("mnir", "glmnet"), cluster = NULL,
+  df_polite_test = NULL, classifier = c("glmnet", "mnir"), cluster = NULL,
   ...)
 }
 \arguments{
