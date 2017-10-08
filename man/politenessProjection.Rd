@@ -19,7 +19,7 @@ politenessProjection(df_polite_train, df_covar = NULL,
 
 \item{cluster}{cluster to be used in classifier function. See  \code{mnlm}, \code{cv.glmnet} and \code{makeCluster}.}
 
-\item{...}{additional parameters to be passed to \code{mnlm}.}
+\item{...}{additional parameters to be passed to the classifier function.}
 }
 \value{
 List of df_polite_train and df_polite_test with projection. See details.

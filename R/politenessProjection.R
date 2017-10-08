@@ -6,7 +6,7 @@
 #' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).
 #' @param classifier name of classification algorithm. Defaults to "mnir" (see \code{mnlm}) but "glmnet" (see \code{glmnet}) is also available.
 #' @param cluster cluster to be used in classifier function. See  \code{mnlm}, \code{cv.glmnet} and \code{makeCluster}.
-#' @param ... additional parameters to be passed to \code{mnlm}.
+#' @param ... additional parameters to be passed to the classifier function.
 #' @return List of df_polite_train and df_polite_test with projection. See details.
 #' @details List:
 #' * train_proj matrix of projection of mlmn using df_covar and df_polite_train.
@@ -35,7 +35,7 @@
 #' @export
 
 
-politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_test = NULL, classifier = c("mnir","glmnet"), cluster = NULL, ...){
+politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_test = NULL, classifier = c("glmnet","mnir"), cluster = NULL, ...){
 
   cluster = NULL
   if(!is.null(df_covar)){
@@ -52,7 +52,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
         stop("There must be the same variables in df_polite_train and df_polite_test")
       }
     }
-    if (classifier == "mnir"){
+    if (classifier[1] == "mnir"){
       m_polite_train <- as.matrix(df_polite_train)
       mnlm_fit <- suppressWarnings(textir::mnlm(cluster,
                                                 covars = df_covar,
@@ -71,26 +71,24 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
 
       l_out <- list(train_proj = m_train_proj[,1], test_proj = m_test_proj[,1], train_coefs=mnlm_coef[2,])
     }
-    if (classifier == "glmnet"){
-      stop("Function is not implemented for glmnet... yet")
-      # m_polite_train <- as.matrix(df_polite_train)
-      # glmnet_fit <- glmnet::cv.glmnet(
-      #                                           covars = df_covar,
-      #                                           counts = m_polite_train))
-      # mnlm_coef = suppressWarnings(stats::coef(mnlm_fit))
-      #
-      # m_train_proj <- suppressWarnings(textir::srproj(mnlm_fit, m_polite_train ))
-      #
-      # if(!is.null(df_polite_test)){
-      #   m_polite_test <- as.matrix(df_polite_test)
-      #   m_test_proj <- textir::srproj(mnlm_fit, m_polite_test )
-      # } else{
-      #   m_test_proj <- NULL
-      # }
-      #
-      # l_out <- list(train_proj = m_train_proj[,1],
-      #               test_proj = m_test_proj[,1],
-      #               train_coefs=mnlm_coef[2,])
+    if (classifier[1] == "glmnet"){
+      m_polite_train <- as.matrix(df_polite_train)
+      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=df_covar, family="binomial", ...)
+      polite_fit<-predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
+
+      polite_coefs<-drop(coef(polite_model, s="lambda.min"))
+      polite_coefs<-polite_coefs[polite_coefs!=0]
+
+      if(!is.null(df_polite_test)){
+        m_polite_test <- as.matrix(df_polite_test)
+        polite_predict<-predict(polite_model, newx=m_polite_test, s="lambda.min", type="response")
+      } else {
+        polite_predict <- NULL
+      }
+      l_out <- list(train_proj = polite_fit,
+                    test_proj = polite_predict,
+                    train_coefs=polite_coefs)
+
     }
   } else {
     stop("Function is not implemented for NULL df_covar")
