@@ -5,8 +5,7 @@
 \title{Politeness projection}
 \usage{
 politenessProjection(df_polite_train, df_covar = NULL,
-  df_polite_test = NULL, classifier = c("glmnet", "mnir"), cluster = NULL,
-  ...)
+  df_polite_test = NULL, classifier = c("glmnet", "mnir"), ...)
 }
 \arguments{
 \item{df_polite_train}{a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.}
@@ -16,8 +15,6 @@ politenessProjection(df_polite_train, df_covar = NULL,
 \item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).}
 
 \item{classifier}{name of classification algorithm. Defaults to "mnir" (see \code{mnlm}) but "glmnet" (see \code{glmnet}) is also available.}
-
-\item{cluster}{cluster to be used in classifier function. See  \code{mnlm}, \code{cv.glmnet} and \code{makeCluster}.}
 
 \item{...}{additional parameters to be passed to the classifier function.}
 }
@@ -41,10 +38,10 @@ data("phone_offers")
 data("bowl_offers")
 
 polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-                        num_mc_cores=getOption("mc.cores", 2L))
+                        num_mc_cores=1)
 
 polite.holdout<-politeness(bowl_offers$message, parser="none",drop_blank=FALSE,
-                           num_mc_cores=getOption("mc.cores", 2L))
+                           num_mc_cores=1)
 
 project<-politenessProjection(polite.data,
                               phone_offers$condition,

@@ -1,5 +1,5 @@
 data("phone_offers")
-polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE, num_mc_cores=2)
+polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE, num_mc_cores=1)
 
 df_most <- suppressWarnings(findPoliteTexts(phone_offers$message,
                                             polite.data,

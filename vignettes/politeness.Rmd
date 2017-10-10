@@ -77,12 +77,12 @@ The function `politeness()` takes in an *n*-length vector of texts, and returns 
 The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words). 
 
 ```{r, echo=TRUE, eval=TRUE}
-df_politeness_count <- politeness(phone_offers$message, binary=FALSE)
+df_politeness_count <- politeness(phone_offers$message, binary=FALSE, num_mc_cores=1)
 df_politeness_count[20:30,1:5]
 ```
 
 ```{r, echo=TRUE, eval=TRUE}
-df_politeness <- politeness(phone_offers$message, binary=TRUE)
+df_politeness <- politeness(phone_offers$message, binary=TRUE, num_mc_cores=1)
 df_politeness[20:30,1:5]
 ```
 
@@ -122,9 +122,9 @@ In addition to the `phone_offers` dataset, we have also included a smaller `bowl
 
 ```{r, echo=TRUE, eval=TRUE}
 
-df_polite_train <- politeness(phone_offers$message, drop_blank=FALSE, num_mc_cores=getOption("mc.cores", 2L))
+df_polite_train <- politeness(phone_offers$message, drop_blank=FALSE, num_mc_cores=1)
 
-df_polite_holdout<-politeness(bowl_offers$message, drop_blank=FALSE, num_mc_cores=getOption("mc.cores", 2L))
+df_polite_holdout<-politeness(bowl_offers$message, drop_blank=FALSE, num_mc_cores=1)
 
 project<-politenessProjection(df_polite_train,
                               phone_offers$condition,

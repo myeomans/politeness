@@ -18,7 +18,7 @@
 #'
 #' data("phone_offers")
 #' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-#'                         num_mc_cores=getOption("mc.cores", 2L))
+#'                         num_mc_cores=1)
 #'
 #' findPoliteTexts(phone_offers$message,
 #'                 polite.data,
@@ -33,7 +33,6 @@ findPoliteTexts <- function(text,
                             num_docs = 5L,
                             ...){
 
-  # check that df_polite, df_covar, and text have same number of 'rows'
 
   # check type
   valid_type <- c("most","least","both")
