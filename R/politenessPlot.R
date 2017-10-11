@@ -54,8 +54,8 @@ politenessPlot<-function(df_polite,
   names(split_cols) <- split_levels
 
   split.data<-data.frame(feature=rep(colnames(df_polite),2),
-                         count=c(colMeans(l_polite_split[[1]],na.rm=T),
-                                 colMeans(l_polite_split[[2]],na.rm=T)),
+                         count=c(colMeans(l_polite_split[[1]],na.rm=TRUE),
+                                 colMeans(l_polite_split[[2]],na.rm=TRUE)),
                          cond=factor(c(rep(split_levels[1],num_features),
                                        rep(split_levels[2],num_features)), levels = split_levels),
                          se=rep(NA_real_,num_features*2))
@@ -91,8 +91,8 @@ politenessPlot<-function(df_polite,
   wide$slogodds<-slogodds(wide[,paste0("count.",split_levels[1])],
                           wide[,paste0("count.",split_levels[2])])$slor
   f.order<-unique(wide$feature)[order(wide$slogodds)]
-  split.data$feature<-factor(split.data$feature, ordered=T,levels=f.order)
-  split.data$cond<-factor(split.data$cond,ordered=T,levels=rev(split_levels))
+  split.data$feature<-factor(split.data$feature, ordered=TRUE,levels=f.order)
+  split.data$cond<-factor(split.data$cond,ordered=TRUE,levels=rev(split_levels))
   split.data$count_minus<-split.data$count-split.data$se
   split.data$count_plus<-split.data$count+split.data$se
   ######################################################

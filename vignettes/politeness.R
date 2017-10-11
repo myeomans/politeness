@@ -1,7 +1,7 @@
 ## ----setup, echo=FALSE---------------------------------------------------
 knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
 
-## ---- echo=T-------------------------------------------------------------
+## ---- echo=TRUE-------------------------------------------------------------
 library(politeness)
 
 ## ------------------------------------------------------------------------
@@ -17,7 +17,7 @@ knitr::kable(feature_table,align=rep("c",4),
 ## ---- eval=FALSE, echo=TRUE----------------------------------------------
 #  # install.packages("spacyr")
 #  spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
-#  
+#
 
 ## ------------------------------------------------------------------------
 data("phone_offers")

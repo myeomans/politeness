@@ -9,7 +9,7 @@
 #' @keywords internal
 #'
 
-dictWrap<-function (text, dict = NULL, binary = F,  num_mc_cores=parallel::detectCores(), ...) {
+dictWrap<-function (text, dict = NULL, binary = FALSE,  num_mc_cores=parallel::detectCores(), ...) {
   if(is.null(dict)){
     stop("Dictionary Must Be Supplied")
   }
@@ -18,7 +18,7 @@ dictWrap<-function (text, dict = NULL, binary = F,  num_mc_cores=parallel::detec
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
   WC <- rep(1,length(text))
   wc1 <- (!is.na(stringr::str_count(text, "[[:alpha:]]+")))
-  dic.try<-quanteda::dfm(text[wc1], dictionary = dict,verbose = F, ...)
+  dic.try<-quanteda::dfm(text[wc1], dictionary = dict,verbose = FALSE, ...)
   if(length(dic.try)==0){
     emptyct<-matrix(0,nrow=length(text),ncol=length(dict))
     colnames(emptyct)<-names(dict)

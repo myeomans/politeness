@@ -20,7 +20,7 @@ utils::globalVariables(c("l_parses","parses",
 #' @keywords internal
 #' @import data.table
 spacyParser<-function(txt, num_mc_cores=parallel::detectCores()){
-  parsedtxt <- spacyr::spacy_parse(txt, dependency=T,lemma=F,pos=T,tag=T,entity=T)
+  parsedtxt <- spacyr::spacy_parse(txt, dependency=TRUE,lemma=FALSE,pos=TRUE,tag=TRUE,entity=TRUE)
   parsedtxt$pos.nums<-paste0("(",parsedtxt$token_id,"-",parsedtxt$token,"-",parsedtxt$tag,")")
   parsedtxt$head_token<-parallel::mclapply(1:nrow(parsedtxt),headTokenGrab, data=parsedtxt, mc.cores=num_mc_cores)
   parsedtxt[parsedtxt$dep_rel=="ROOT",c("dep_rel","head_token","head_token_id")]<-c("root","ROOT",0)
@@ -97,7 +97,7 @@ headTokenGrab <- function(x, data){
 #   nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
 #   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
 #   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
-#   w.nums<-substr(all.parses, sapply(all.parses, function(x) gregexpr(",",x,fixed=T)[[1]][1])+2, nchar(all.parses)-1)
+#   w.nums<-substr(all.parses, sapply(all.parses, function(x) gregexpr(",",x,fixed=TRUE)[[1]][1])+2, nchar(all.parses)-1)
 #   return(list(parses=all.parses,
 #               pos.nums=all.pos.nums,
 #               nonums=nonums,

@@ -17,7 +17,7 @@ knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE
 
 Politeness is a universal dimension of human communication (Lakoff, 1973; Brown & Levinson, 1987). In practically all settings, a speaker can choose to be more or less polite to their audience. In this package, we provide tools to measure the markers and effects of politeness in natural language.
 
-```{r, echo=T}
+```{r, echo=TRUE}
 library(politeness)
 ```
 

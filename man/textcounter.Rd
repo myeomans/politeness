@@ -4,7 +4,7 @@
 \alias{textcounter}
 \title{Text Counter}
 \usage{
-textcounter(counted, texts, words = F, fixed = T,
+textcounter(counted, texts, words = FALSE, fixed = TRUE,
   num_mc_cores = parallel::detectCores())
 }
 \arguments{

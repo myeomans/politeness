@@ -9,7 +9,7 @@
 #' @return numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.
 #' @keywords internal
 #'
-textcounter<-function (counted, texts, words=F, fixed = T, num_mc_cores = parallel::detectCores()) {
+textcounter<-function (counted, texts, words=FALSE, fixed = TRUE, num_mc_cores = parallel::detectCores()) {
 
   if(words){
     counts<-unlist(parallel::mclapply(texts,function(x) sum(unlist(x)%in%counted), mc.cores=num_mc_cores))
@@ -54,21 +54,21 @@ cleantext<-function (text, language = "english", stop.words = TRUE) {
 #' @return a character vector
 #' @keywords internal
 ctxpand<-function(text){
-  text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=T))
-  text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=T))
-  text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("can't", "cannot", x, fixed=T))
-  text<-sapply(text, function(x) gsub("shan't", "shall not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'d", " would", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'ve", " have", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'s", " is", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'ll", " will", x, fixed=T))
-  text<-sapply(text, function(x) gsub("'re", " are", x, fixed=T))
-  text<-sapply(text, function(x) gsub("n't", " not", x, fixed=T))
-  text<-sapply(text, function(x) gsub("u.s.a.", "usa", x, fixed=T))
-  text<-sapply(text, function(x) gsub("u.s.", "usa", x, fixed=T))
-  text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=T))
-  text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=T))
+  text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("can't", "cannot", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("shan't", "shall not", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("'d", " would", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("'ve", " have", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("'s", " is", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("'ll", " will", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("'re", " are", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("n't", " not", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("u.s.a.", "usa", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("u.s.", "usa", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=TRUE))
   return(text)
 }
 

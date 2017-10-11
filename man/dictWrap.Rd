@@ -4,7 +4,7 @@
 \alias{dictWrap}
 \title{Dictionary Wrapper}
 \usage{
-dictWrap(text, dict = NULL, binary = F,
+dictWrap(text, dict = NULL, binary = FALSE,
   num_mc_cores = parallel::detectCores(), ...)
 }
 \arguments{
