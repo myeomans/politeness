@@ -5,7 +5,7 @@
 #' @param df_covar a data.frame with covariates.
 #' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).
 #' @param classifier name of classification algorithm. Defaults to "mnir" (see \code{mnlm}) but "glmnet" (see \code{glmnet}) is also available.
-#' @param ... additional parameters to be passed to the classifier function.
+#' @param ... additional parameters to be passed to the classification algorithm.
 #' @return List of df_polite_train and df_polite_test with projection. See details.
 #' @details List:
 #' * train_proj matrix of projection of mlmn using df_covar and df_polite_train.
@@ -17,19 +17,18 @@
 #' data("phone_offers")
 #' data("bowl_offers")
 #'
-#' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-#'                         num_mc_cores=1)
+#' polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 #'
-#' polite.holdout<-politeness(bowl_offers$message, parser="none",drop_blank=FALSE,
-#'                            num_mc_cores=1)
+#' polite.holdout<-politeness(bowl_offers$message, parser="none",drop_blank=FALSE)
 #'
 #' project<-politenessProjection(polite.data,
 #'                               phone_offers$condition,
 #'                               polite.holdout)
 #'
-#'mean(project$test_proj[bowl_offers$condition==1])
+#' # Difference in average politeness across conditions in the new sample.
 #'
-#'mean(project$test_proj[bowl_offers$condition==0])
+#' mean(project$test_proj[bowl_offers$condition==1])
+#' mean(project$test_proj[bowl_offers$condition==0])
 #'
 #' @export
 

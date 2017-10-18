@@ -30,7 +30,7 @@ Finds examples of most or least polite text in a corpus
 Function returns a data.frame ranked by (more or least) politeness.
 If \code{type == 'most'}, the \code{num_docs} most polite texts will be returned.
 If \code{type == 'least'}, the \code{num_docs} least polite texts will be returned.
-If \code{type == 'both'}, both most and least polite text will be returned;
+If \code{type == 'both'}, both most and least polite text will be returned.
 if \code{num_docs} is even, half will be most and half least polite else half + 1 will be most polite.
 
 \code{df_polite} and \code{df_covar} must have the same number of rows as the \code{length(text)}.
@@ -38,11 +38,18 @@ if \code{num_docs} is even, half will be most and half least polite else half + 
 \examples{
 
 data("phone_offers")
-polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-                        num_mc_cores=1)
+polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 
 findPoliteTexts(phone_offers$message,
                 polite.data,
-                phone_offers$condition)
+                phone_offers$condition,
+                type = "most",
+                num_docs = 5)
+
+findPoliteTexts(phone_offers$message,
+                polite.data,
+                phone_offers$condition,
+                type = "least",
+                num_docs = 10)
 
 }

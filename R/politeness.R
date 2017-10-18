@@ -22,17 +22,32 @@
 #'
 #' data("phone_offers")
 #'
-#' politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-#'            num_mc_cores=1)
+#' politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 #'
-#' # install.packages("spacyr")
-#' # spacyr::spacy_initialize(python_executable = PYTHON_PATH)
-#' # politeness(phone_offers$message, parser="spacy",drop_blank=FALSE)
+#' colMeans(politeness(phone_offers$message, parser="none", binary=TRUE, drop_blank=FALSE))
+#' colMeans(politeness(phone_offers$message, parser="none", binary=FALSE, drop_blank=FALSE))
+#'
+#' dim(politeness(phone_offers$message, parser="none",drop_blank=FALSE))
+#' dim(politeness(phone_offers$message, parser="none",drop_blank=TRUE))
+#'
+#'\dontrun{
+#' # Detect multiple cores automatically for parallel processing
+#' politeness(phone_offers$message, num_mc_cores=parallel::detectCores())
+#'
+#' # Connect to SpaCy installation for part-of-speech features
+#' install.packages("spacyr")
+#' spacyr::spacy_initialize(python_executable = PYTHON_PATH)
+#' politeness(phone_offers$message, parser="spacy",drop_blank=FALSE)
+#'
+#'}
+#'
+#'
+#'
 #'
 #'@export
 
 
-politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE, num_mc_cores=2){
+politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE, num_mc_cores=1){
   ########################################################
 
   text<-iconv(text,to="ASCII",sub=" ")

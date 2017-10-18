@@ -1,7 +1,7 @@
 ## ----setup, echo=FALSE---------------------------------------------------
 knitr::opts_chunk$set(comment = NA, echo=FALSE, message = FALSE, warning = FALSE)
 
-## ---- echo=TRUE-------------------------------------------------------------
+## ---- echo=TRUE----------------------------------------------------------
 library(politeness)
 
 ## ------------------------------------------------------------------------
@@ -17,7 +17,7 @@ knitr::kable(feature_table,align=rep("c",4),
 ## ---- eval=FALSE, echo=TRUE----------------------------------------------
 #  # install.packages("spacyr")
 #  spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
-#
+#  
 
 ## ------------------------------------------------------------------------
 data("phone_offers")
@@ -44,9 +44,9 @@ politeness::politenessPlot(df_politeness,
 
 ## ---- echo=TRUE, eval=TRUE-----------------------------------------------
 
-df_polite_train <- politeness(phone_offers$message, drop_blank=FALSE, num_mc_cores=getOption("mc.cores", 2L))
+df_polite_train <- politeness(phone_offers$message, drop_blank=FALSE)
 
-df_polite_holdout<-politeness(bowl_offers$message, drop_blank=FALSE, num_mc_cores=getOption("mc.cores", 2L))
+df_polite_holdout<-politeness(bowl_offers$message, drop_blank=FALSE)
 
 project<-politenessProjection(df_polite_train,
                               phone_offers$condition,

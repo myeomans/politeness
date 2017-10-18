@@ -16,7 +16,7 @@ politenessProjection(df_polite_train, df_covar = NULL,
 
 \item{classifier}{name of classification algorithm. Defaults to "mnir" (see \code{mnlm}) but "glmnet" (see \code{glmnet}) is also available.}
 
-\item{...}{additional parameters to be passed to the classifier function.}
+\item{...}{additional parameters to be passed to the classification algorithm.}
 }
 \value{
 List of df_polite_train and df_polite_test with projection. See details.
@@ -37,18 +37,17 @@ List:
 data("phone_offers")
 data("bowl_offers")
 
-polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE,
-                        num_mc_cores=1)
+polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 
-polite.holdout<-politeness(bowl_offers$message, parser="none",drop_blank=FALSE,
-                           num_mc_cores=1)
+polite.holdout<-politeness(bowl_offers$message, parser="none",drop_blank=FALSE)
 
 project<-politenessProjection(polite.data,
                               phone_offers$condition,
                               polite.holdout)
 
-mean(project$test_proj[bowl_offers$condition==1])
+# Difference in average politeness across conditions in the new sample.
 
+mean(project$test_proj[bowl_offers$condition==1])
 mean(project$test_proj[bowl_offers$condition==0])
 
 }
