@@ -1,3 +1,15 @@
+## Resubmission
+
+This is a third resubmission. Our second resubmission received the following comment:
+
+"The Description field contains
+   <[http://psycnet.apa.org/record/1987-97641-000]Politeness: Some
+Please enclose URLs in angle brackets (<...>).
+
+Please also add a space ater the final > of the URL.
+"
+
+We have fixed the description file - there does not seem to be any clean way to include these links in the description, and since this previous work is referenced extensively in the rest of the package we have decided to simplify our description file. Our work draws on many existing methods, so it would be misleading to imply that our package is a vanilla implementation of any pre-existing work. Please let us know if there are any remaining issues. 
 
 ## Resubmission
 
