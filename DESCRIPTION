@@ -4,10 +4,7 @@ Title: Detecting Politeness Features in Text
 Version: 0.1.1
 Author: Mike Yeomans, Alejandro Kantor, Dustin Tingley
 Maintainer: Mike Yeomans <yeomans@fas.harvard.edu>
-Description: Detecting markers of politeness in English natural language. This 
-    package allows researchers to easily visualize and quantify politeness
-    between groups of documents. This package combines prior research on the 
-    linguistic markers of politeness (Brown & Levinson, 1987; Danescu-Niculescu-Mizil et al., 2013; Voigt et al., 2017). We thank the Spencer Foundation, the Hewlett Foundation, and Harvard's Institute for Quantitative Social Science for support.
+Description: Detecting markers of politeness in English natural language. This package allows researchers to easily visualize and quantify politeness between groups of documents. This package combines prior research on the linguistic markers of politeness (Brown & Levinson, 1987 <http://psycnet.apa.org/record/1987-97641-000>; Danescu-Niculescu-Mizil et al., 2013 <arXiv:1306.6078>; Voigt et al., 2017 <doi:10.1073/pnas.1702413114>). We thank the Spencer Foundation, the Hewlett Foundation, and Harvard's Institute for Quantitative Social Science for support.
 License: MIT + file LICENSE
 Encoding: UTF-8
 LazyData: true

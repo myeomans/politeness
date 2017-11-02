@@ -1,5 +1,17 @@
 ## Resubmission
 
+This is a fourth resubmission. The last three reviewer comments have all concerned a single line in the description file. The most recent reads as follows:
+
+"Thanks, please write the refenreces in the form:
+
+Brown & Levinson, 1987 <http://psycnet.apa.org/record/1987-97641-000>; 
+Danescu-Niculescu-Mizil et al., 2013 <arXiv:1306.6078>; Voigt et al., 
+2017 <doi:10.1073/pnas.1702413114>"
+
+We appreciate the help and have pasted these lines exctly into our description file. We hope this is enough to satisfy the reviewers. 
+
+## Resubmission
+
 This is a third resubmission. Our second resubmission received the following comment:
 
 "The Description field contains
