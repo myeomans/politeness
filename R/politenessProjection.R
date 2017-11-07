@@ -51,7 +51,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     }
     if (classifier[1] == "mnir"){
       m_polite_train <- as.matrix(df_polite_train)
-      mnlm_fit <- suppressWarnings(textir::mnlm(cluster=NULL,
+      mnlm_fit <- suppressWarnings(textir::mnlm(cl=NULL,
                                                 covars = df_covar,
                                                 counts = m_polite_train,
                                                 ...))
@@ -70,7 +70,17 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     }
     if (classifier[1] == "glmnet"){
       m_polite_train <- as.matrix(df_polite_train)
-      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=df_covar, family="binomial", ...)
+
+      if( is.data.frame(df_covar)){
+        #take first variable
+        df_covar <- df_covar[[1]]
+      }
+
+      # chose family based on df_covar
+      is_binary <- length(unique(df_covar)) == 2
+      model_family <- ifelse(is_binary, "binomial", "gaussian")
+
+      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=df_covar, family=model_family, ...)
       polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
 
       p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
