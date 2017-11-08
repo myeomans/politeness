@@ -2,15 +2,15 @@
 #'
 #' @description Projection of Multinomial Inverse Regression estimation for a politness matrix and covariates.
 #' @param df_polite_train a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.
-#' @param df_covar a data.frame with covariates.
+#' @param covar a vector of politeness labels, or other covariate.
 #' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).
-#' @param classifier name of classification algorithm. Defaults to "mnir" (see \code{mnlm}) but "glmnet" (see \code{glmnet}) is also available.
+#' @param classifier name of classification algorithm. Defaults to "glmnet" (see \code{glmnet}) but "mnir" (see \code{mnlm}) is also available.
 #' @param ... additional parameters to be passed to the classification algorithm.
 #' @return List of df_polite_train and df_polite_test with projection. See details.
 #' @details List:
-#' * train_proj matrix of projection of mlmn using df_covar and df_polite_train.
-#' * test_proj matrix of projection of mlmn using df_covar and df_polite_train on df_polite_test data.
-#' * train_coef coefficients of mnlm model using df_covar and df_polite_train.
+#' * train_proj matrix of projection of mlmn using covar and df_polite_train.
+#' * test_proj matrix of projection of mlmn using covar and df_polite_train on df_polite_test data.
+#' * train_coef coefficients of mnlm model using covar and df_polite_train.
 #' @md
 #' @examples
 #'
@@ -33,14 +33,13 @@
 #' @export
 
 
-politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_test = NULL, classifier = c("glmnet","mnir"),  ...){
+politenessProjection <- function(df_polite_train, covar = NULL, df_polite_test = NULL, classifier = c("glmnet","mnir"),  ...){
 
-  if(!is.null(df_covar)){
-    # check that all colums of df_covar are numeric or logical
-    v_s_not_num_or_logical <- names(df_covar)[ ! sapply(df_covar, function(col) is.numeric(col) | is.logical(col)) ]
-    if(length(v_s_not_num_or_logical)>0 ){
-      stop( paste0("All variables in df_covar must be logical or numeric. \n See following variables ",
-                   paste0(v_s_not_num_or_logical, collapse = ", ")) )
+  if(!is.null(covar)){
+    # check that all elements of covar are numeric or logical
+    v_s_not_num_or_logical <- unlist(sapply(covar, function(col) !(is.numeric(col) | is.logical(col))))
+    if(sum(v_s_not_num_or_logical)>0 ){
+      stop( paste0("covar must be logical or numeric.") )
     }
 
     if(!is.null(df_polite_test)){
@@ -52,7 +51,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     if (classifier[1] == "mnir"){
       m_polite_train <- as.matrix(df_polite_train)
       mnlm_fit <- suppressWarnings(textir::mnlm(cl=NULL,
-                                                covars = df_covar,
+                                                covars = covar,
                                                 counts = m_polite_train,
                                                 ...))
       mnlm_coef = suppressWarnings(stats::coef(mnlm_fit))
@@ -71,16 +70,16 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
     if (classifier[1] == "glmnet"){
       m_polite_train <- as.matrix(df_polite_train)
 
-      if( is.data.frame(df_covar)){
+      if( is.data.frame(covar)){
         #take first variable
-        df_covar <- df_covar[[1]]
+        covar <- covar[[1]]
       }
 
-      # chose family based on df_covar
-      is_binary <- length(unique(df_covar)) == 2
+      # chose family based on covar
+      is_binary <- length(unique(covar)) == 2
       model_family <- ifelse(is_binary, "binomial", "gaussian")
 
-      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=df_covar, family=model_family, ...)
+      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
       polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
 
       p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
@@ -98,7 +97,7 @@ politenessProjection <- function(df_polite_train, df_covar = NULL, df_polite_tes
 
     }
   } else {
-    stop("Function is not implemented for NULL df_covar")
+    stop("Function is not implemented for NULL covar")
   }
 
   return(l_out)

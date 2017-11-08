@@ -4,7 +4,7 @@
 \alias{findPoliteTexts}
 \title{Find polite text}
 \usage{
-findPoliteTexts(text, df_polite, df_covar, type = c("most", "least", "both"),
+findPoliteTexts(text, df_polite, covar, type = c("most", "least", "both"),
   num_docs = 5L, ...)
 }
 \arguments{
@@ -12,7 +12,7 @@ findPoliteTexts(text, df_polite, df_covar, type = c("most", "least", "both"),
 
 \item{df_polite}{a data.frame with politeness features, as outputed by \code{\link{politeness}}, used to train model.}
 
-\item{df_covar}{a data.frame with covariates.}
+\item{covar}{a vector of politeness labels, or other covariate.}
 
 \item{type}{a string indicating if function should return the most or least polite texts or both. If \code{length > 1} only first value is used.}
 
@@ -33,7 +33,7 @@ If \code{type == 'least'}, the \code{num_docs} least polite texts will be return
 If \code{type == 'both'}, both most and least polite text will be returned.
 if \code{num_docs} is even, half will be most and half least polite else half + 1 will be most polite.
 
-\code{df_polite} and \code{df_covar} must have the same number of rows as the \code{length(text)}.
+\code{df_polite} must have the same number of rows as the \code{length(text)} and \code{length(covar)}.
 }
 \examples{
 

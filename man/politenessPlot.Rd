@@ -11,7 +11,7 @@ politenessPlot(df_polite, split = NULL, split_levels = NULL,
 \arguments{
 \item{df_polite}{a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.}
 
-\item{split}{a vector with exactly two unique values. must have a length equal to the number of documents included in \code{df_polite}.}
+\item{split}{a vector of covariate values. must have a length equal to the number of documents included in \code{df_polite}.}
 
 \item{split_levels}{character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.}
 
@@ -32,7 +32,7 @@ a ggplot of the prevalence of politeness features, conditional on \code{split}. 
 Plots the prevalence of politeness features in documents, divided by a binary covariate.
 }
 \details{
-Length of \code{split} must be the same as number of rows of \code{df_polite}.
+Length of \code{split} must be the same as number of rows of \code{df_polite}. Typically \code{split} should be a two-category variable. However, if a continuous covariate is given, then the top and bottom terciles of that distribution are treated as the two categories (while dropping data from the middle tercile).
 }
 \examples{
 

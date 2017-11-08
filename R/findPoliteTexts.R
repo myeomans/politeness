@@ -2,7 +2,7 @@
 #' @description Finds examples of most or least polite text in a corpus
 #' @param text a character vector of texts.
 #' @param df_polite a data.frame with politeness features, as outputed by \code{\link{politeness}}, used to train model.
-#' @param df_covar a data.frame with covariates.
+#' @param covar a vector of politeness labels, or other covariate.
 #' @param type a string indicating if function should return the most or least polite texts or both. If \code{length > 1} only first value is used.
 #' @param num_docs integer of number of documents to be returned. Default is 5.
 #' @param ... additional parameters to be passed to \code{politenessProjection}.
@@ -13,7 +13,7 @@
 #' If \code{type == 'both'}, both most and least polite text will be returned.
 #' if \code{num_docs} is even, half will be most and half least polite else half + 1 will be most polite.
 #'
-#' \code{df_polite} and \code{df_covar} must have the same number of rows as the \code{length(text)}.
+#' \code{df_polite} must have the same number of rows as the \code{length(text)} and \code{length(covar)}.
 #' @examples
 #'
 #' data("phone_offers")
@@ -35,7 +35,7 @@
 
 findPoliteTexts <- function(text,
                             df_polite,
-                            df_covar,
+                            covar,
                             type = c("most","least","both"),
                             num_docs = 5L,
                             ...){
@@ -49,7 +49,7 @@ findPoliteTexts <- function(text,
   }
 
   l_proj <- suppressWarnings(politenessProjection(df_polite_train = df_polite,
-                                 df_covar = df_covar, ... ))
+                                 covar = covar, ... ))
 
   m_train_proj <- as.vector(l_proj$train_proj)
   df_docs_proj <- data.frame(text = text, projection = m_train_proj)

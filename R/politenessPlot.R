@@ -2,14 +2,14 @@
 #'
 #' @description Plots the prevalence of politeness features in documents, divided by a binary covariate.
 #' @param df_polite a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.
-#' @param split a vector with exactly two unique values. must have a length equal to the number of documents included in \code{df_polite}.
+#' @param split a vector of covariate values. must have a length equal to the number of documents included in \code{df_polite}.
 #' @param split_levels character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.
 #' @param split_name character default NULL. Name of the covariate for legend.
 #' @param split_cols character vector of length 2. Name of colors to use.
 #' @param top_title character default "". Title of plot.
 #' @param drop_blank Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}
 #' @param middle_out Features less distinctive than this value (measured by p-value of t-test) are excluded. Defaults to 1 (i.e. include all).
-#' @details Length of \code{split} must be the same as number of rows of \code{df_polite}.
+#' @details Length of \code{split} must be the same as number of rows of \code{df_polite}. Typically \code{split} should be a two-category variable. However, if a continuous covariate is given, then the top and bottom terciles of that distribution are treated as the two categories (while dropping data from the middle tercile).
 #' @return a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
 #' @examples
 #'

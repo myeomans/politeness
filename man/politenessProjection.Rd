@@ -4,17 +4,17 @@
 \alias{politenessProjection}
 \title{Politeness projection}
 \usage{
-politenessProjection(df_polite_train, df_covar = NULL,
-  df_polite_test = NULL, classifier = c("glmnet", "mnir"), ...)
+politenessProjection(df_polite_train, covar = NULL, df_polite_test = NULL,
+  classifier = c("glmnet", "mnir"), ...)
 }
 \arguments{
 \item{df_polite_train}{a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.}
 
-\item{df_covar}{a data.frame with covariates.}
+\item{covar}{a vector of politeness labels, or other covariate.}
 
 \item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).}
 
-\item{classifier}{name of classification algorithm. Defaults to "mnir" (see \code{mnlm}) but "glmnet" (see \code{glmnet}) is also available.}
+\item{classifier}{name of classification algorithm. Defaults to "glmnet" (see \code{glmnet}) but "mnir" (see \code{mnlm}) is also available.}
 
 \item{...}{additional parameters to be passed to the classification algorithm.}
 }
@@ -27,9 +27,9 @@ Projection of Multinomial Inverse Regression estimation for a politness matrix a
 \details{
 List:
 \itemize{
-\item train_proj matrix of projection of mlmn using df_covar and df_polite_train.
-\item test_proj matrix of projection of mlmn using df_covar and df_polite_train on df_polite_test data.
-\item train_coef coefficients of mnlm model using df_covar and df_polite_train.
+\item train_proj matrix of projection of mlmn using covar and df_polite_train.
+\item test_proj matrix of projection of mlmn using covar and df_polite_train on df_polite_test data.
+\item train_coef coefficients of mnlm model using covar and df_polite_train.
 }
 }
 \examples{
