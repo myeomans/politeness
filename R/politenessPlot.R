@@ -44,8 +44,25 @@ politenessPlot<-function(df_polite,
                          middle_out = 0.5){
 
   # confirm that split only has two values
-  if( length(unique(split)) !=2){
-    stop("split must have exactly 2 unique values")
+  if( length(unique(split)) > 2){
+    # if split has more than 2 values transform it into a binary variable by taking the top 33% and top 33%
+    # if the cut at 33% and 67% is the same we through an error
+    cuts <- stats::quantile(split, c(1/3, 2/3))
+    cut_low <- cuts[1]
+    cut_high <- cuts[2]
+
+    if(cut_low == cut_high){
+      stop("Cannot convert split into binary variable 33% and 67% percentiles are some value")
+    }
+
+    split <- ifelse(split <= cut_low,0,
+                    ifelse(split>=cut_high,1, NA_integer_))
+
+    df_polite <- df_polite[!is.na(split),]
+    split <- split[!is.na(split)]
+    warning("Converting split into binary variable by taking bottom and top 33% of values
+            removing middle 33% of values in df_polite and split.")
+
   }
   if( length(split) != nrow(df_polite)){
     stop("split must be same length as document set")
