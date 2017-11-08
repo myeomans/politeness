@@ -26,6 +26,14 @@ phone_offers$condition_character <- as.character(phone_offers$condition_factor)
 phone_offers$condition_integer <- as.integer(phone_offers$condition)
 phone_offers$condition_logical <- as.logical(phone_offers$condition)
 phone_offers$condition_logical_rev <- !phone_offers$condition_logical
+
+num_obs <- nrow(phone_offers)
+set.seed(100)
+phone_offers$condition_continous <- ifelse(phone_offers$condition_logical,
+                                           stats::rnorm(num_obs,mean = 0),
+                                           stats::rnorm(num_obs, mean = 100))
+
+
 # test logical
 test_that("plot with different split variable" , {
   expect_that({
@@ -82,6 +90,22 @@ test_that("plot with different split variable" , {
     )
   }, is_a("ggplot"))
 
+
+  expect_that({
+    suppressWarnings(politenessPlot(df_polite,
+                   split = phone_offers[["condition_continous"]],
+                   split_levels = c("not polite","polite"),
+                   split_name =NULL,
+                   top_title = ""
+    ))
+  }, is_a("ggplot"))
+
+  expect_warning(politenessPlot(df_polite,
+                                split = phone_offers[["condition_continous"]],
+                                split_levels = c("not polite","polite"),
+                                split_name =NULL,
+                                top_title = ""
+  ))
 })
 
 
