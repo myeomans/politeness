@@ -144,7 +144,8 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     features[["Adverb.Just"]]<-unlist(lapply(sets[["p.nonum"]] ,function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=TRUE))))
 
     features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=TRUE)&grepl("-vb)",unlist(x),fixed=TRUE)
-                                                                                 &(!grepl(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),unlist(x),fixed=T)))))
+                                                                                 &(textcounter(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),
+                                                                                                unlist(x),fixed=T)==0))))
     features[["Conjunction.Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=TRUE,
                                                  num_mc_cores=num_mc_cores)
 
