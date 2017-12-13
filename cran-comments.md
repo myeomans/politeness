@@ -1,5 +1,19 @@
 ## Resubmission
 
+This is a resubmission of our first update below. We mistakenly did not advance the version number, so now we have incremented the version number.
+
+## Version Update
+
+This is our first version update. Based on initial user reports, we have made the following modifications:
+
+1. We have added support for a continuous outcome in the main politeness functions.
+
+2. We have corrected a bug in the calculation of bare commands.
+
+3. We have modified some of the documentation to accomodate feedback.
+
+## Resubmission
+
 This is a fourth resubmission. The last three reviewer comments have all concerned a single line in the description file. The most recent reads as follows:
 
 "Thanks, please write the refenreces in the form:

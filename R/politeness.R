@@ -107,16 +107,11 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
                                    num_mc_cores=num_mc_cores)  # "good morning", "good evening", "good afternoon",
   features[["Group.Identity"]]<-textcounter(c("we", "our", "ours", "us", "ourselves"),sets[["c.words"]],words=TRUE,
                                             num_mc_cores=num_mc_cores)
-  features[["Questions"]]<-textcounter(c("who","what","where","when","why","how","which"),sets[["c.words"]],words=TRUE,
-                                       num_mc_cores=num_mc_cores)
-  #for(q in c("who","what","where","when","why","how","which")) features[[q]]<-sum(q%in%c.words) #getleftpos(p) in (1,2)
-
-  # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
-  # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
 
   #if(parser[1]=="none"){
   if(parser[1]!="spacy"){
     cat("Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.")
+    features[["Questions"]]<-textcounter("?",text, num_mc_cores=num_mc_cores)
     features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
     features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=TRUE,
                                        num_mc_cores=num_mc_cores)
@@ -129,6 +124,11 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=TRUE,
                                              num_mc_cores=num_mc_cores)
   } else {
+    q.words<-c("who","what","where","when","why","how","which")
+    features[["Questions"]]<-textcounter(c(paste0(q.words,"-1"),paste0(q.words,"-2")),sets[["w.nums"]],words=TRUE,num_mc_cores=num_mc_cores)
+      # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
+      # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
+
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
     features[["Apology"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=TRUE,
