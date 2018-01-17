@@ -25,13 +25,12 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   dt_parsedtxt <- data.table(parsedtxt)
   unique_doc_ids <- dt_parsedtxt[ , unique(doc_id)]
   dt_parsedtxt[ , doc_id := factor(doc_id, levels = unique_doc_ids)]
-  system.time({dt_head_token <- dt_parsedtxt[ , .(doc_id, sentence_id, token_id,token)]
+  dt_head_token <- dt_parsedtxt[ , .(doc_id, sentence_id, token_id,token)]
   setnames(dt_head_token, c("token_id","token"), c("head_token_id","head_token"))
   v_s_keys <-  c("doc_id", "sentence_id", "head_token_id" )
   setkeyv(dt_head_token, v_s_keys)
   setkeyv(dt_parsedtxt, v_s_keys)
   dt_parsedtxt <- dt_head_token[dt_parsedtxt] # left merge on dt_parsedtxt
-  })
   dt_parsedtxt[dep_rel=="ROOT" , head_token := "ROOT" ]
   dt_parsedtxt[dep_rel=="ROOT" , head_token_id := 0 ]
   dt_parsedtxt[dep_rel=="ROOT" , dep_rel := "root" ]
