@@ -1,3 +1,12 @@
+## Version Update
+
+This is our second version update. In addition to some minor typo corrections,
+we have made two substantial changes:
+
+1. Reworked the part-of-speech tagging functions to use data.table, and replaced a superfluous subordinate function. These steps greatly improve the speed of execution, especially for larger datasets.
+
+2. Added a short discussion (with figures) on expected execution time to the vignette, so that users are not flummoxed by long run times.
+
 ## Resubmission
 
 This is a resubmission of our first update below. We mistakenly did not advance the version number, so now we have incremented the version number.

@@ -78,3 +78,6 @@ for(x in 1:nrow(fpt_least)){
   print(as.character(fpt_least[x,1]))
 }
 
+## ----  out.width = "650px"-----------------------------------------------
+knitr::include_graphics("executionTime.png")
+
