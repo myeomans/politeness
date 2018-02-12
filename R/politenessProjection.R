@@ -1,16 +1,16 @@
 #' Politeness projection
 #'
-#' @description Projection of Multinomial Inverse Regression estimation for a politness matrix and covariates.
+#' @description Training and projecting a regression model of politeness.
 #' @param df_polite_train a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.
 #' @param covar a vector of politeness labels, or other covariate.
-#' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for model testing. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both call to \code{politeness}).
+#' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for out-of-sample fitting. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both calls to \code{politeness}).
 #' @param classifier name of classification algorithm. Defaults to "glmnet" (see \code{glmnet}) but "mnir" (see \code{mnlm}) is also available.
 #' @param ... additional parameters to be passed to the classification algorithm.
 #' @return List of df_polite_train and df_polite_test with projection. See details.
 #' @details List:
-#' * train_proj matrix of projection of mlmn using covar and df_polite_train.
-#' * test_proj matrix of projection of mlmn using covar and df_polite_train on df_polite_test data.
-#' * train_coef coefficients of mnlm model using covar and df_polite_train.
+#' * train_proj projection of politeness model within training set.
+#' * test_proj projection of politeness model onto test set (i.e. out-of-sample).
+#' * train_coef coefficients from the trained model.
 #' @md
 #' @examples
 #'
