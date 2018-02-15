@@ -1,5 +1,9 @@
 ## Version Update
 
+This is a small update, to reflect some concerns relayed to us by the CRAN team. One of our dependencies was failing a few of our tests, so we removed it as a default (relying on a more stable package instead), and dropped the problematic tests.
+
+## Version Update
+
 This is our second version update. In addition to some minor typo corrections,
 we have made two substantial changes:
 
