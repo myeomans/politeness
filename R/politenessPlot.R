@@ -1,3 +1,4 @@
+
 #' Politeness plot
 #'
 #' @description Plots the prevalence of politeness features in documents, divided by a binary covariate.
@@ -42,6 +43,19 @@ politenessPlot<-function(df_polite,
                          top_title = "",
                          drop_blank = 0.05,
                          middle_out = 0.5){
+
+  sellers<-read.csv(file="/DATA/sellerstyle.csv",stringsAsFactors = F)
+  sellers<-sellers[sellers$cond!="control",]
+
+  library(politeness)
+  df_polite<-politeness(sellers$text, parser="spacy")
+  split = sellers$cond=="warm"
+  split_levels = NULL
+  split_name = NULL
+  split_cols = c("firebrick","navy")
+  top_title = ""
+  drop_blank = 0.05
+  middle_out = 0.5
 
   # confirm that split only has two values
   if( length(unique(split)) > 2){
@@ -95,6 +109,9 @@ politenessPlot<-function(df_polite,
     split.enough<-names(df_polite)[(split.p<middle_out)&(!is.na(split.p))]
   }
 
+  if(sum((split.data$feature%in%nonblanks)&(split.data$feature%in%split.enough))==0){
+    stop("All features were excluded. Adjust exclusion settings.")
+  }
   split.data<-split.data[(split.data$feature%in%nonblanks)&(split.data$feature%in%split.enough),]
   ######################################################
   if(binary){
