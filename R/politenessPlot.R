@@ -44,19 +44,6 @@ politenessPlot<-function(df_polite,
                          drop_blank = 0.05,
                          middle_out = 0.5){
 
-  sellers<-read.csv(file="/DATA/sellerstyle.csv",stringsAsFactors = F)
-  sellers<-sellers[sellers$cond!="control",]
-
-  library(politeness)
-  df_polite<-politeness(sellers$text, parser="spacy")
-  split = sellers$cond=="warm"
-  split_levels = NULL
-  split_name = NULL
-  split_cols = c("firebrick","navy")
-  top_title = ""
-  drop_blank = 0.05
-  middle_out = 0.5
-
   # confirm that split only has two values
   if( length(unique(split)) > 2){
     # if split has more than 2 values transform it into a binary variable by taking the top 33% and top 33%
