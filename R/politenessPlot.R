@@ -44,10 +44,6 @@ politenessPlot<-function(df_polite,
                          drop_blank = 0.05,
                          middle_out = 0.5){
 
-  narr<-read.csv("narr.csv",stringsAsFactors = F)
-  df_polite<-politeness::politeness(narr$text,
-                                    parser="spacy",num_mc_cores=8)
-  split<-(narr$pers>median(narr$pers))
   # confirm that split only has two values
   if( length(unique(split)) > 2){
     # if split has more than 2 values transform it into a binary variable by taking the top 33% and top 33%
