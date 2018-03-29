@@ -23,11 +23,11 @@ knitr::kable(feature_table,align=rep("c",4),
 data("phone_offers")
 
 ## ---- echo=TRUE, eval=TRUE-----------------------------------------------
-df_politeness_count <- politeness(phone_offers$message, binary=FALSE)
+df_politeness_count <- politeness(phone_offers$message, metric="count")
 df_politeness_count[20:30,1:5]
 
 ## ---- echo=TRUE, eval=TRUE-----------------------------------------------
-df_politeness <- politeness(phone_offers$message, binary=TRUE)
+df_politeness <- politeness(phone_offers$message, metric="binary")
 df_politeness[20:30,1:5]
 
 ## ---- echo=TRUE, eval=FALSE----------------------------------------------

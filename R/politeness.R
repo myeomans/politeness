@@ -4,9 +4,10 @@
 #'     This function is the workhorse of the \code{politeness} package, taking an N-length vector of text documents and returning an N-row data.frame of feature counts.
 #' @param text character A vector of texts, each of which will be tallied for politeness features.
 #' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
-#' @param binary logical Return a binary indicator for the presence of a feature instead of total counts? Default is TRUE
+#' @param metric character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per word  Default is "count".
 #' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
 #' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
+#' @param binary logical Deprecated! Do not use (see metric parameter).
 #' @details Some politeness features depend on part-of-speech tagged sentences (e.g. "bare commands" are a particular verb class).
 #'     To include these features in the analysis, a POS tagger must be initialized beforehand - we currently support SpaCy which must
 #'     be installed separately in Python (see example for implementation).
@@ -24,8 +25,8 @@
 #'
 #' politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 #'
-#' colMeans(politeness(phone_offers$message, parser="none", binary=TRUE, drop_blank=FALSE))
-#' colMeans(politeness(phone_offers$message, parser="none", binary=FALSE, drop_blank=FALSE))
+#' colMeans(politeness(phone_offers$message, parser="none", metric="binary", drop_blank=FALSE))
+#' colMeans(politeness(phone_offers$message, parser="none", metric="count", drop_blank=FALSE))
 #'
 #' dim(politeness(phone_offers$message, parser="none",drop_blank=FALSE))
 #' dim(politeness(phone_offers$message, parser="none",drop_blank=TRUE))
@@ -46,8 +47,11 @@
 #'
 #'@export
 
+politeness<-function(text, parser=c("none","spacy"), metric=c("count","metric","average"), drop_blank=TRUE, num_mc_cores=1, binary=FALSE){
 
-politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TRUE, num_mc_cores=1){
+  if(binary){ #Handling deprecated input
+    metric<-"binary"
+  }
   ########################################################
 
   text<-iconv(text,to="ASCII",sub=" ")
@@ -162,8 +166,12 @@ politeness<-function(text, parser=c("none","spacy"), binary=FALSE, drop_blank=TR
     features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=TRUE,
                                              num_mc_cores=num_mc_cores)-features[["Second.Person.Start"]]
   }
-  if(binary){
+
+  if(metric[1]=="binary"){
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
+  } else if (metric[1]=="average"){
+    word_counts <- stringr::str_count(text, "[[:alpha:]]+")
+    features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
   }
   feature.data<-as.data.frame(features)
   if(drop_blank){

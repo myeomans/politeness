@@ -11,7 +11,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 
 
-<meta name="date" content="2018-01-23" />
+<meta name="date" content="2018-03-29" />
 
 <title>Politeness</title>
 
@@ -69,7 +69,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <h1 class="title toc-ignore">Politeness</h1>
 <h3 class="subtitle"><em>Detecting Politeness Features in Text</em></h3>
-<h4 class="date"><em>2018-01-23</em></h4>
+<h4 class="date"><em>2018-03-29</em></h4>
 
 
 
@@ -334,8 +334,8 @@ spacyr<span class="op">::</span><span class="kw">spacy_initialize</span>(<span c
 <div id="detecting-politeness-features" class="section level2">
 <h2>Detecting politeness features</h2>
 <p>The function <code>politeness()</code> takes in an <em>n</em>-length vector of texts, and returns an <em>n</em>-by-<em>f</em> data.frame, with <em>f</em> columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speech tagger is not used (by setting <code>parser = &quot;none&quot;</code>) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting <code>drop_blank = TRUE</code> which will remove features that were not detected in any of the texts.</p>
-<p>The cells are calculated in one of two ways. Setting <code>binary = FALSE</code> will populate each cell with the raw count of each feature in the text. Alternatively, <code>binary = TRUE</code> will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. “hello”, “goodbye”). However, other features can be used many times in a single communication (e.g. positive words).</p>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_politeness_count &lt;-<span class="st"> </span><span class="kw">politeness</span>(phone_offers<span class="op">$</span>message, <span class="dt">binary=</span><span class="ot">FALSE</span>)</code></pre></div>
+<p>The cells are calculated in one of three ways. Setting <code>metric = &quot;count&quot;</code> will populate each cell with the raw count of each feature in the text. Alternatively, <code>metric = &quot;binary&quot;</code> will return a binary indicator of the presence or absence of features. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. “hello”, “goodbye”). However, other features can be used many times in a single communication (e.g. positive words). An additional concern researchers may have is if their documents have a lot of variance on length - in that case, controlling for length with <code>metric = &quot;average&quot;</code> will generate the presence of each feature as a percentage of the total words in each document. We do not recommend this option as a default because length is often intrinsically correlated with politeness (e.g. “being short” with someone is synonymous with rudeness) so this may ony be desirable when the variance in length is large, and confounded by other factors besides politeness (e.g. a dataset with news )</p>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_politeness_count &lt;-<span class="st"> </span><span class="kw">politeness</span>(phone_offers<span class="op">$</span>message, <span class="dt">metric=</span><span class="st">&quot;count&quot;</span>)</code></pre></div>
 <pre><code>Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_politeness_count[<span class="dv">20</span><span class="op">:</span><span class="dv">30</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
 <pre><code>   Hedges Positive.Emotion Negative.Emotion Impersonal.Pronoun Negation
@@ -350,7 +350,7 @@ spacyr<span class="op">::</span><span class="kw">spacy_initialize</span>(<span c
 28      0                0                0                  0        0
 29      0                4                0                  1        0
 30      0                2                0                  2        1</code></pre>
-<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_politeness &lt;-<span class="st"> </span><span class="kw">politeness</span>(phone_offers<span class="op">$</span>message, <span class="dt">binary=</span><span class="ot">TRUE</span>)</code></pre></div>
+<div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_politeness &lt;-<span class="st"> </span><span class="kw">politeness</span>(phone_offers<span class="op">$</span>message, <span class="dt">metric=</span><span class="st">&quot;binary&quot;</span>)</code></pre></div>
 <pre><code>Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">df_politeness[<span class="dv">20</span><span class="op">:</span><span class="dv">30</span>,<span class="dv">1</span><span class="op">:</span><span class="dv">5</span>]</code></pre></div>
 <pre><code>   Hedges Positive.Emotion Negative.Emotion Impersonal.Pronoun Negation
@@ -369,7 +369,7 @@ spacyr<span class="op">::</span><span class="kw">spacy_initialize</span>(<span c
 <div id="plotting-politeness-features" class="section level2">
 <h2>Plotting politeness features</h2>
 <p>The best way to inspect the results of the main <code>politeness</code> function is to plot the counts using <code>politenessPlot()</code>. This function produces a <code>ggplot2</code> object that compares how the counts of every politeness feature differ across a binary covariate of interest (e.g. how often each feature is used in the treatment condition versus the control). The covariate vector must itself be binary <code>(0/1)</code> but users can adjust the labels on the graph as necessary.</p>
-<p>The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle either binary or count data, but that distinction must be made in the initial call to <code>politeness()</code>.</p>
+<p>The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle data of any metric - binary, count or average - but that distinction must be made in the initial call to <code>politeness()</code>.</p>
 <p>Often some features are not meaningful for further analysis - either because they are too rare in the data, or else because they do not meaningfully covary with the covariate of interest. Users have two options to exclude these from the plot. First, the <code>drop_blank</code> parameter can remove rare features - it takes a number between 0 and 1, which determines a cut-off based on prevalence. Specifically, all features which appear in less than this proportion of texts are excluded from the plot. To include all features, leave this value at <code>0</code>. Second, the <code>middle_out</code> parameter can remove features which do not vary meaningfully across the covariate - it takes a number between 0 and 1, which determines a cut-off based on distinctiveness. Each feature is evaluated using a t.test, and features are removed when the p-value of this test lies above the user’s cut-off. To include all features, simply set this value at <code>1</code>.</p>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r">politeness<span class="op">::</span><span class="kw">politenessPlot</span>(df_politeness,
                            <span class="dt">split=</span>phone_offers<span class="op">$</span>condition,
@@ -393,9 +393,9 @@ spacyr<span class="op">::</span><span class="kw">spacy_initialize</span>(<span c
                               df_polite_holdout)
 
 <span class="kw">mean</span>(project<span class="op">$</span>test_proj[bowl_offers<span class="op">$</span>condition<span class="op">==</span><span class="dv">1</span>])</code></pre></div>
-<pre><code>[1] 0.546043</code></pre>
+<pre><code>[1] 0.5469434</code></pre>
 <div class="sourceCode"><pre class="sourceCode r"><code class="sourceCode r"><span class="kw">mean</span>(project<span class="op">$</span>test_proj[bowl_offers<span class="op">$</span>condition<span class="op">==</span><span class="dv">0</span>])</code></pre></div>
-<pre><code>[1] 0.2187304</code></pre>
+<pre><code>[1] 0.216073</code></pre>
 </div>
 <div id="reading-texts-that-are-high-or-low-in-politeness" class="section level2">
 <h2>Reading texts that are high or low in politeness</h2>
@@ -413,11 +413,11 @@ fpt_least&lt;-<span class="kw">findPoliteTexts</span>(phone_offers<span class="o
 <pre><code>[1] &quot;Hello,   Oh my goodness, I'm so excited to see your listing. The phone is EXACTLY what I have been searching for! And I can tell from your description and the photo that it's just perfect, too. I can almost hear it ringing in my pocket right now! What's that? Hello? So, happy to hear from you. Sorry, sorry. I'm getting ahead of myself. Soooo, I was wondering if there was any way that you might consider taking a little bit less for this phone? It's absolutely everything I've been looking for but my bosses &amp;lt;grrrrr!!!&amp;gt; will only give us $115 to get this phone. I know! Can you believe it? Is there any way you could absolutely make my day and say \&quot;\&quot;yes\&quot;\&quot; to $115? I'd be so, so grateful. Just let me know when you can. Thanks so much. :) &quot;
 [1] &quot;Hello,  I am glad your selling this phone. Is it still available? I would love to purchase it. Would you consider $115 for it? I can buy it today if that price works. Thank you.&quot;
 [1] &quot;Hey, is the phone still available? If so, are you willing to take $115 for it? I am available for pick up as soon as the next hour if you agree to the price. I really need this for work, any deal you can make would be greatly appreciated. &quot;
-[1] &quot;Hello.  I'm very interested in your phone.  Is it still available?  I have $115 to offer, would you be willing to accept that offer?  I'm shopping for a work phone and I've only been given a budget of $115 to spend.  Hopefully you will consider my offer.  Thank you. &quot;
-[1] &quot;Hi. I saw the IPhone 6 Plus you have for sale. It sounds like you took really great care of it. It is just the phone I've been looking for for a long time. I would love to offer your full asking price, but I have a $115 budget limit to work with. When you have a moment, let me know if that will be enough to purchase this great phone. And, of course, let me know if you have any questions for me. Thank you, and have a great day!&quot;</code></pre>
+[1] &quot;Hi. I saw the IPhone 6 Plus you have for sale. It sounds like you took really great care of it. It is just the phone I've been looking for for a long time. I would love to offer your full asking price, but I have a $115 budget limit to work with. When you have a moment, let me know if that will be enough to purchase this great phone. And, of course, let me know if you have any questions for me. Thank you, and have a great day!&quot;
+[1] &quot;Hi there - really great offer for the phone. I have been looking everywhere for this phone and came across your great post. I wanted to buy the for $115 - I promise to take great care of this and am super reliable in getting your money to you efficiently. Please let me know if you can come down to this pricing for this item. Would mean the world to me. Thank you~~&quot;</code></pre>
 <pre><code>[1] &quot;Least Polite&quot;</code></pre>
-<pre><code>[1] &quot;I am inquiring about your Iphone 6 plus that you had posted.  I am wanting to buy and I have cash in hand.  The max amount I can offer is $115.  No more, no less.  Let me know. &quot;
-[1] &quot;Come on. The price you are offering on a product that ISN'T NEW is unreasonable. Now, I for one am very interested in getting this item. BUT, I will only pay $115. I am not paying a penny more. &quot;
+<pre><code>[1] &quot;Come on. The price you are offering on a product that ISN'T NEW is unreasonable. Now, I for one am very interested in getting this item. BUT, I will only pay $115. I am not paying a penny more. &quot;
+[1] &quot;I am inquiring about your Iphone 6 plus that you had posted.  I am wanting to buy and I have cash in hand.  The max amount I can offer is $115.  No more, no less.  Let me know. &quot;
 [1] &quot;I will buy the phone as is for $115. I don't want to pay more than the amount that I stated. If you accept my price please contact me within 24 hours. If I don't hear from you in the next 24 hours I will take it that you will accept my price.&quot;
 [1] &quot;I am interested in your phone but at the price of exactly $115, and not a penny more, as it is used and I am not convinced it will work with my network. It is used and it may or may not work.&quot;
 [1] &quot;This is the phone I am looking around for. I am currently without a phone and I need this IPhone. You seem you can't get a deal for your initial offer and I know you want to get rid of it so, I want to relieve you and offer you 115 dollars.&quot;</code></pre>

@@ -74,15 +74,15 @@ Half the participants were told to use a "warm and friendly" communication style
 
 The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speech tagger is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
 
-The cells are calculated in one of two ways. Setting `binary = FALSE` will populate each cell with the raw count of each feature in the text. Alternatively, `binary = TRUE` will return a binary indicator. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words). 
+The cells are calculated in one of three ways. Setting `metric = "count"` will populate each cell with the raw count of each feature in the text. Alternatively, `metric = "binary" ` will return a binary indicator of the presence or absence of features. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words). An additional concern researchers may have is if their documents have a lot of variance on length - in that case, controlling for length with `metric = "average"` will generate the presence of each feature as a percentage of the total words in each document. We do not recommend this option as a default because length is often intrinsically correlated with politeness (e.g. "being short" with someone is synonymous with rudeness) so this may ony be desirable when the variance in length is large, and confounded by other factors besides politeness (e.g. a dataset with news )
 
 ```{r, echo=TRUE, eval=TRUE}
-df_politeness_count <- politeness(phone_offers$message, binary=FALSE)
+df_politeness_count <- politeness(phone_offers$message, metric="count")
 df_politeness_count[20:30,1:5]
 ```
 
 ```{r, echo=TRUE, eval=TRUE}
-df_politeness <- politeness(phone_offers$message, binary=TRUE)
+df_politeness <- politeness(phone_offers$message, metric="binary")
 df_politeness[20:30,1:5]
 ```
 
@@ -90,7 +90,7 @@ df_politeness[20:30,1:5]
 
 The best way to inspect the results of the main `politeness` function is to plot the counts using `politenessPlot()`. This function produces a `ggplot2` object that compares how the counts of every politeness feature differ across a binary covariate of interest (e.g. how often each feature is used in the treatment condition versus the control). The covariate vector must itself be binary `(0/1)` but users can adjust the labels on the graph as necessary. 
 
-The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle either binary or count data, but that distinction must be made in the initial call to `politeness()`. 
+The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle data of any metric - binary, count or average - but that distinction must be made in the initial call to `politeness()`. 
 
 Often some features are not meaningful for further analysis - either because they are too rare in the data, or else because they do not meaningfully covary with the covariate of interest. Users have two options to exclude these from the plot. First, the `drop_blank` parameter can remove rare features - it takes a number between 0 and 1, which determines a cut-off based on prevalence. Specifically, all features which appear in less than this proportion of texts are excluded from the plot. To include all features, leave this value at `0`. Second, the `middle_out` parameter can remove features which do not vary meaningfully across the covariate - it takes a number between 0 and 1, which determines a cut-off based on distinctiveness. Each feature is evaluated using a t.test, and features are removed when the p-value of this test lies above the user's cut-off. To include all features, simply set this value at `1`.
 

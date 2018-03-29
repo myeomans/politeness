@@ -4,19 +4,21 @@
 \alias{politeness}
 \title{Politeness Features}
 \usage{
-politeness(text, parser = c("none", "spacy"), binary = FALSE,
-  drop_blank = TRUE, num_mc_cores = 1)
+politeness(text, parser = c("none", "spacy"), metric = c("count", "metric",
+  "average"), drop_blank = TRUE, num_mc_cores = 1, binary = FALSE)
 }
 \arguments{
 \item{text}{character A vector of texts, each of which will be tallied for politeness features.}
 
 \item{parser}{character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.}
 
-\item{binary}{logical Return a binary indicator for the presence of a feature instead of total counts? Default is TRUE}
+\item{metric}{character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per word  Default is "count".}
 
 \item{drop_blank}{logical Should features that were not found in any text be removed from the data.frame? Default is TRUE}
 
 \item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
+
+\item{binary}{logical Deprecated! Do not use (see metric parameter).}
 }
 \value{
 a data.frame of politeness features, with one row for every item in `text`. Possible politeness features are listed in \code{\link{feature_table}}
@@ -36,8 +38,8 @@ data("phone_offers")
 
 politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 
-colMeans(politeness(phone_offers$message, parser="none", binary=TRUE, drop_blank=FALSE))
-colMeans(politeness(phone_offers$message, parser="none", binary=FALSE, drop_blank=FALSE))
+colMeans(politeness(phone_offers$message, parser="none", metric="binary", drop_blank=FALSE))
+colMeans(politeness(phone_offers$message, parser="none", metric="count", drop_blank=FALSE))
 
 dim(politeness(phone_offers$message, parser="none",drop_blank=FALSE))
 dim(politeness(phone_offers$message, parser="none",drop_blank=TRUE))
