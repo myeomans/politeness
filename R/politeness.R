@@ -175,7 +175,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","metric","
   }
   feature.data<-as.data.frame(features)
   if(drop_blank){
-    feature.data<-feature.data[,colMeans(feature.data)!=0]
+    feature.data<-feature.data[,colMeans(feature.data,na.rm=T)!=0]
   }
   return(feature.data)
 }
