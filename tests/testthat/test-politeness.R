@@ -78,6 +78,10 @@ test_that("text of length 0", {
 })
 
 
+test_that("text single feature", {
+  df_polite <- politeness(text = "hello",num_mc_cores=1)
+  expect_true(is.data.frame(df_polite))
+})
 
 
 

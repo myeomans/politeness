@@ -179,7 +179,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   }
   feature.data<-as.data.frame(features)
   if(drop_blank){
-    feature.data<-feature.data[,colMeans(feature.data,na.rm=T)!=0]
+    feature.data<-feature.data[,colMeans(feature.data,na.rm=T)!=0, drop=FALSE]
   }
   return(feature.data)
 }
