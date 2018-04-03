@@ -4,7 +4,7 @@
 \alias{politeness}
 \title{Politeness Features}
 \usage{
-politeness(text, parser = c("none", "spacy"), metric = c("count", "metric",
+politeness(text, parser = c("none", "spacy"), metric = c("count", "binary",
   "average"), drop_blank = TRUE, num_mc_cores = 1, binary = FALSE)
 }
 \arguments{

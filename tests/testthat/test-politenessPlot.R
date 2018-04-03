@@ -17,7 +17,7 @@
 data("phone_offers")
 
 # make politness data frames
-df_polite <- politeness(text = phone_offers$message, parser = "none", binary = TRUE, num_mc_cores=1)
+df_polite <- politeness(text = phone_offers$message, parser = "none", metric = "binary", num_mc_cores=1)
 
 phone_offers$condition_factor <- factor(phone_offers$condition)
 levels(phone_offers$condition_factor) <- c("bbbb","aaaa")
