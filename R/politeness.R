@@ -47,11 +47,15 @@
 #'
 #'@export
 
-politeness<-function(text, parser=c("none","spacy"), metric=c("count","metric","average"), drop_blank=TRUE, num_mc_cores=1, binary=FALSE){
-
-  if(binary){ #Handling deprecated input
-    metric<-"binary"
+politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=TRUE, num_mc_cores=1, binary=FALSE){
+  if (!missing(binary)) {
+    warning("argument binary is deprecated; please use metric instead.",
+            call. = FALSE)
+    metric <- ifelse(binary, "binary", "count")
   }
+  #if(binary){ #Handling deprecated input
+  #  metric<-"binary"
+  #}
   ########################################################
 
   text<-iconv(text,to="ASCII",sub=" ")
