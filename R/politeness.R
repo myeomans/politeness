@@ -120,12 +120,14 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   if(parser[1]!="spacy"){
     cat("Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.")
     features[["Questions"]]<-textcounter("?",text, num_mc_cores=num_mc_cores)
-    features[["Gratitude"]]<-unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))
+    features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
+                                unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="grateful"))))+
+                                unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="gratitude")))))
     features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=TRUE,
                                        num_mc_cores=num_mc_cores)
     features[["Actually"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
-                                            num_mc_cores=num_mc_cores)+
-                                  textcounter(c("in fact"),sets[["clean"]],num_mc_cores=num_mc_cores))
+                                         num_mc_cores=num_mc_cores)+
+                               textcounter(c("in fact"),sets[["clean"]],num_mc_cores=num_mc_cores))
     features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=TRUE))
     features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,
                                             num_mc_cores=num_mc_cores)
@@ -134,26 +136,29 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   } else {
     q.words<-c("who","what","where","when","why","how","which")
     features[["Questions"]]<-textcounter(c(paste0(q.words,"-1"),paste0(q.words,"-2")),sets[["w.nums"]],words=TRUE,num_mc_cores=num_mc_cores)
-      # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
-      # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
+    # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
+    # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
 
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
+                                unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="grateful"))))+
+                                unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="gratitude"))))+
+                                unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, we)",x,fixed=TRUE))))+
                                 unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
     features[["Apology"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=TRUE,
                                         num_mc_cores=num_mc_cores)
                             +textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=TRUE,
                                          num_mc_cores=num_mc_cores))
     features[["Actually"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
-                                            num_mc_cores=num_mc_cores)
-                            +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=TRUE,
-                                         num_mc_cores=num_mc_cores))
+                                         num_mc_cores=num_mc_cores)
+                             +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=TRUE,
+                                          num_mc_cores=num_mc_cores))
     features[["Affirmation"]]<-textcounter(paste0(c("great","good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=TRUE,
                                            num_mc_cores=num_mc_cores)
     features[["Adverb.Just"]]<-unlist(lapply(sets[["p.nonum"]] ,function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=TRUE))))
 
     features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=TRUE)&grepl("-vb)",unlist(x),fixed=TRUE)
                                                                                  &(textcounter(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),
-                                                                                                unlist(x),fixed=T)==0))))
+                                                                                               unlist(x),fixed=T)==0))))
     features[["Conjunction.Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=TRUE,
                                                  num_mc_cores=num_mc_cores)
 

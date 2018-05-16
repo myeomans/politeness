@@ -70,3 +70,18 @@
 #' @format A data.frame with information about 36 politeness features.
 #'
 "feature_table"
+
+#' SpeedDate Politeness
+#'
+#' Turn-by-turn politeness feature counts (the original text is not shared for privacy reasons).
+#'
+#' @format a data.frame with person & group IDs, and politeness feature counts
+#'
+"speedDateTurns"
+
+#' SpeedDate Meta-Data
+#' Metadata from Ranganath, Jurafsky & McFarland (2009)
+#'
+#' @format a data.frame with person & group IDs, and other meta-data
+#'
+"speedDateDates"
