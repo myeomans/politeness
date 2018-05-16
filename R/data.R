@@ -71,6 +71,7 @@
 #'
 "feature_table"
 
+
 #' SpeedDate Politeness
 #'
 #' Turn-by-turn politeness feature counts (the original text is not shared for privacy reasons).
@@ -79,9 +80,11 @@
 #'
 "speedDateTurns"
 
-#' SpeedDate Meta-Data
+
+#' SpeedDate Meta Data
 #' Metadata from Ranganath, Jurafsky & McFarland (2009)
 #'
 #' @format a data.frame with person & group IDs, and other meta-data
 #'
 "speedDateDates"
+
