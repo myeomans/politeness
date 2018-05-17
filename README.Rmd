@@ -30,7 +30,7 @@ Many of the politeness features containted in this package use some part-of-spee
 
 ## Example
 
-In the package we have included a dataset, `phone_offers`. It was collected from an experiment in which participants were told to write offers asking to by a smartphone from a seller on Craigslist. We randomly manipulated their instructions so that their task was to write in a warm or tough style. The dataset includes the text of their messages, as well as the condition assignment.
+In the package we have included a dataset, `phone_offers`. It was collected from an experiment in which participants were told to write offers asking to buy a smartphone from a seller on Craigslist. We randomly manipulated their instructions so that their task was to write in a warm or tough style. The dataset includes the text of their messages, as well as the condition assignment.
 
 ```{r example, eval=FALSE}
 data("phone_offers")
