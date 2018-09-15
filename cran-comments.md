@@ -1,8 +1,12 @@
-## Version Update
+## Version Update (0.2.4)
+
+We have added several small updates. We have changed some of the arguments in the main function (maintaining backward compatibility with the previous "binary" argument). We have also updated some of the documentation, and revised the definition of "gratitude", one of the features extracted in the main function.
+
+## Version Update (0.2.2)
 
 This is a small update, to reflect some concerns relayed to us by the CRAN team. One of our dependencies was failing a few of our tests, so we removed it as a default (relying on a more stable package instead), and dropped the problematic tests.
 
-## Version Update
+## Version Update (0.2.1)
 
 This is our second version update. In addition to some minor typo corrections,
 we have made two substantial changes:

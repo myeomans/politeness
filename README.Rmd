@@ -8,7 +8,7 @@ output: github_document
 knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>",
-  fig.path = "README-"
+  fig.path = "README-",
   library(politeness)
 )
 ```
@@ -19,11 +19,10 @@ Politeness is a universal dimension of langauge (Lakoff, 1973; Brown & Levinson,
 
 ## Installation
 
-You can install politeness from github using the devtools package, like so:
+You can install politeness directly, like so:
 
 ```{r gh-installation, eval = FALSE}
-# install.packages("devtools")
-devtools::install_github("myeomans/politeness")
+ install.packages("politeness")
 ```
 
 Many of the politeness features containted in this package use some part-of-speech tagging. We recommend [SpaCy](https://spacy.io/), which is simple to install through python and which has a convenient wrapper function for use through R, [SpaCyR](https://github.com/kbenoit/spacyr). If you do not have SpaCy installed you must do it outside of R first - otherwise, a reduced set of features (i.e. those that do not require part-of-speech tags) is provided by the package.
