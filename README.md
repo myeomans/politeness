@@ -1,7 +1,5 @@
 
 <!-- README.md is generated from README.Rmd. Please edit that file -->
-    ## politeness v0.2.4 successfully loaded. See ?politeness for help.
-
 Politeness
 ==========
 
