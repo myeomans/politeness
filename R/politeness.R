@@ -113,7 +113,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
 
   features[["Hello"]]<-textcounter(c("hi","hello","hey"),sets[["c.words"]],words=TRUE,
                                    num_mc_cores=num_mc_cores)  # "good morning", "good evening", "good afternoon",
-  features[["1st.Person.Plural"]]<-textcounter(c("we", "our", "ours", "us", "ourselves"),sets[["c.words"]],words=TRUE,
+  features[["First.Person.Plural"]]<-textcounter(c("we", "our", "ours", "us", "ourselves"),sets[["c.words"]],words=TRUE,
                                             num_mc_cores=num_mc_cores)
 
   #if(parser[1]=="none"){
@@ -129,9 +129,9 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                          num_mc_cores=num_mc_cores)+
                                textcounter(c("in fact"),sets[["clean"]],num_mc_cores=num_mc_cores))
     features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=TRUE))
-    features[["1st.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,
+    features[["First.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,
                                             num_mc_cores=num_mc_cores)
-    features[["2nd.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=TRUE,
+    features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=TRUE,
                                              num_mc_cores=num_mc_cores)
   } else {
     q.words<-c("who","what","where","when","why","how","which")
@@ -166,13 +166,13 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                             num_mc_cores=num_mc_cores)
     features[["Please"]]<-textcounter("please",sets[["c.words"]],words=TRUE,num_mc_cores=num_mc_cores)-features[["Please.Start"]]
 
-    features[["1st.Person.Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=TRUE,
+    features[["First.Person.Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=TRUE,
                                                   num_mc_cores=num_mc_cores)
-    features[["1st.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,num_mc_cores=num_mc_cores)-features[["First.Person.Start"]]
+    features[["First.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,num_mc_cores=num_mc_cores)-features[["First.Person.Start"]]
 
-    features[["2nd.Person.Start"]]<-textcounter(paste0(c("you","your","yours","yourself"),"-1"),sets[["w.nums"]],words=TRUE,
+    features[["Second.Person.Start"]]<-textcounter(paste0(c("you","your","yours","yourself"),"-1"),sets[["w.nums"]],words=TRUE,
                                                    num_mc_cores=num_mc_cores)
-    features[["2nd.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=TRUE,
+    features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=TRUE,
                                              num_mc_cores=num_mc_cores)-features[["Second.Person.Start"]]
   }
 

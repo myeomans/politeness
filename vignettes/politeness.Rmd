@@ -50,7 +50,7 @@ knitr::kable(feature_table,align=rep("c",4),
 
 Many of the politeness features containted in this package use some part-of-speech tagging. We have prioritized compatibility with the [SpaCy](https://spacy.io/) library. This software is simple to install through python and has a convenient wrapper function for use through R, [SpaCyR](https://github.com/kbenoit/spacyr). 
 
-Users must install SpaCy outside of R, and take note of their python directory (e.g. "/anaconda/bin/python"). When R (or Rstudio) is opened at first, you must *initialize* the SpaCy engine, so that it is ready for use during the session. That is done using the following code (make sure to sub in your python path name):
+Users must first install SpaCy outside of R. When R (or Rstudio) is opened at first, the SpaCy engine must be initialized, so that it is ready for use during the session. SpaCyR has recently included tools to initialize automatically from R - however, if that does not work on your system, you may have to initialize it manually, using the location of their python initialization (e.g. "/anaconda/bin/python"):
 
 ```{r, eval=FALSE, echo=TRUE}
 # install.packages("spacyr")

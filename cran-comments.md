@@ -1,3 +1,11 @@
+## Version Update (0.2.6)
+
+Sadly, the labels we updated in the previous version disrupted some functionality (which we discovered from a collaborator soon after the previous push). We've gone in and fixed the issue 
+
+## Version Update (0.2.5)
+
+We have added several small updates, in particular clarifying the labels on some of our features, and updating our vignette based on improvements in one of our package dependencies (SpaCyR).
+
 ## Version Update (0.2.4)
 
 We have added several small updates. We have changed some of the arguments in the main function (maintaining backward compatibility with the previous "binary" argument). We have also updated some of the documentation, and revised the definition of "gratitude", one of the features extracted in the main function.

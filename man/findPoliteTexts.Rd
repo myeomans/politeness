@@ -4,8 +4,8 @@
 \alias{findPoliteTexts}
 \title{Find polite text}
 \usage{
-findPoliteTexts(text, df_polite, covar, type = c("most", "least", "both"),
-  num_docs = 5L, ...)
+findPoliteTexts(text, df_polite, covar, type = c("most", "least",
+  "both"), num_docs = 5L, ...)
 }
 \arguments{
 \item{text}{a character vector of texts.}

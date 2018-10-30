@@ -4,8 +4,8 @@
 \alias{politenessProjection}
 \title{Politeness projection}
 \usage{
-politenessProjection(df_polite_train, covar = NULL, df_polite_test = NULL,
-  classifier = c("glmnet", "mnir"), ...)
+politenessProjection(df_polite_train, covar = NULL,
+  df_polite_test = NULL, classifier = c("glmnet", "mnir"), ...)
 }
 \arguments{
 \item{df_polite_train}{a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.}
