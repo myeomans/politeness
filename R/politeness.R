@@ -178,10 +178,11 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
 
   if(metric[1]=="binary"){
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
-  } else if (metric[1]=="average"){
-    word_counts <- stringr::str_count(text, "[[:alpha:]]+")
-    features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
   }
+# else if (metric[1]=="average"){
+#    word_counts <- stringr::str_count(text, "[[:alpha:]]+")
+#    features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
+#  }
   feature.data<-as.data.frame(features)
   if(drop_blank){
     feature.data<-feature.data[,colMeans(feature.data,na.rm=T)!=0, drop=FALSE]
