@@ -139,7 +139,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features[["WH.Questions"]]<-unlist(lapply(sets[["ques.pos.nums"]],
                                               function(x) sum(textcounter(c(paste0(q.words,"-wrb")),x))))
 
-    features[["YN.Questions"]]<-unlist(lapply(sets[["ques.pos.nums"]],
+    features[["YesNo.Questions"]]<-unlist(lapply(sets[["ques.pos.nums"]],
                                               function(x) sum(textcounter("-?-",x,num_mc_cores=num_mc_cores))))-features[["WH.Questions"]]
     # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
     # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"

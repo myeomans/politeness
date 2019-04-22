@@ -21,10 +21,9 @@ utils::globalVariables(c("l_parses","parses",
 #' @keywords internal
 #' @import data.table
 spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
-  parsedtxt <- spacyr::spacy_parse(txt, dependency=TRUE,lemma=FALSE,pos=TRUE,tag=TRUE,entity=TRUE)%>%
-    group_by(doc_id,sentence_id) %>%
-    mutate(question=1*(sum(token=="?")>0)) %>%
-    ungroup
+  parsedtxt <- spacyr::spacy_parse(txt, dependency=TRUE,lemma=FALSE,pos=TRUE,tag=TRUE,entity=TRUE)
+  .ds<-paste0(parsedtxt$sentence_id,parsedtxt$doc_id)
+  parsedtxt$question<-1*(.ds%in%(.ds[parsedtxt$token=="?"]))
   dt_parsedtxt <- data.table::data.table(parsedtxt)
   unique_doc_ids <- dt_parsedtxt[ , unique(doc_id)]
   dt_parsedtxt[ , doc_id := factor(doc_id, levels = unique_doc_ids)]
