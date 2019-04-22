@@ -1,6 +1,6 @@
 ## Version Update (0.2.6)
 
-Sadly, the labels we updated in the previous version disrupted some functionality (which we discovered from a collaborator soon after the previous push). We've gone in and fixed the issue 
+Sadly, the labels we updated in the previous version disrupted some functionality (which we discovered from a collaborator soon after the previous push). We've gone in and fixed the issue, and we apologize for the error.
 
 ## Version Update (0.2.5)
 

@@ -21,8 +21,11 @@ utils::globalVariables(c("l_parses","parses",
 #' @keywords internal
 #' @import data.table
 spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
-  parsedtxt <- spacyr::spacy_parse(txt, dependency=TRUE,lemma=FALSE,pos=TRUE,tag=TRUE,entity=TRUE)
-  dt_parsedtxt <- data.table(parsedtxt)
+  parsedtxt <- spacyr::spacy_parse(txt, dependency=TRUE,lemma=FALSE,pos=TRUE,tag=TRUE,entity=TRUE)%>%
+    group_by(doc_id,sentence_id) %>%
+    mutate(question=1*(sum(token=="?")>0)) %>%
+    ungroup
+  dt_parsedtxt <- data.table::data.table(parsedtxt)
   unique_doc_ids <- dt_parsedtxt[ , unique(doc_id)]
   dt_parsedtxt[ , doc_id := factor(doc_id, levels = unique_doc_ids)]
   dt_head_token <- dt_parsedtxt[ , .(doc_id, sentence_id, token_id,token)]
@@ -39,12 +42,18 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   dt_parsedtxt[ , w.nums := paste0(token,"-",token_id)]
 
   all.parses <- dt_parsedtxt[ , .(l_parses = list(parses)), keyby = "doc_id"][ , l_parses]
+  all.parses <- dt_parsedtxt[ , .(l_parses = list(parses)), keyby = "doc_id"][ , l_parses]
   all.pos.nums <- dt_parsedtxt[ , .(l_pos_nums = list(pos.nums)), keyby = "doc_id"][ , l_pos_nums]
   nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
   w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), keyby = "doc_id"][ , l_w_nums]
+
+  ques.pos.nums <- parallel::mclapply(unique(dt_parsedtxt$doc_id),
+                        function(x) as.character(unlist(dt_parsedtxt[question==1 & doc_id==x, .(l_w_nums = list(pos.nums))])),
+                        mc.cores=num_mc_cores)
   return(list(parses=all.parses,
+              ques.pos.nums=ques.pos.nums,
               pos.nums=all.pos.nums,
               nonums=nonums,
               w.nums=w.nums))

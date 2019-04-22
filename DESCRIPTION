@@ -17,6 +17,7 @@ Imports:
     spacyr,
     textir,
     glmnet,
+    dplyr,
     data.table,
     stringr
 RoxygenNote: 6.1.0
