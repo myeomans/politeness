@@ -45,8 +45,8 @@ dictWrap<-function (text, dict = NULL, binary = FALSE,  num_mc_cores=parallel::d
 # positive_list<-readLines("modeldata/positive-words.txt")
 # negative_list<-readLines("modeldata/negative-words.txt")
 # ################################################################
-load("modeldata/polite_dicts.RDa")
-load("R/sysdata.RDa")
+# load("modeldata/polite_dicts.RDa")
+# load("R/sysdata.RDa")
 # polite_dicts[["FilledPause"]]<-c("er","sigh","hm*","uh","uh*","um","um*")
 # polite_dicts[["InformalTitle"]]<-c("dude*", "bro*", "boss", "bud", "buddy", "champ", "man", "guy*", "guy", "brotha", "sista", "son", "sonny", "chief")
 # polite_dicts[["FormalTitle"]]<-c("sir", "ma'am", "maam", "mister", "mr*", "ms*", "madam", "miss", "gentleman", "lady")
