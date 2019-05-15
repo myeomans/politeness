@@ -147,6 +147,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features[["Agreement"]]<-(unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
                                                                                             "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
                                                                                           num_mc_cores=num_mc_cores)-
+
                                                                                 textcounter(c("neg(agree","neg(concur"),x,words=TRUE,
                                                                                               num_mc_cores=num_mc_cores))))+
                                 textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
