@@ -140,24 +140,24 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                               function(x) sum(textcounter(c(paste0(q.words,"-wrb")),x))))
 
     features[["YesNo.Questions"]]<-unlist(lapply(sets[["ques.pos.nums"]],
-                                              function(x) sum(textcounter("-?-",x,num_mc_cores=num_mc_cores))))-features[["WH.Questions"]]
+                                                 function(x) sum(textcounter("-?-",x,num_mc_cores=num_mc_cores))))-features[["WH.Questions"]]
     # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
     # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
-#
-    features[["Agreement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
-                                                                                                 "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
-                                                                                               num_mc_cores=num_mc_cores)-
-                                                                                     textcounter(c("neg(agree","neg(concur",x,words=TRUE,
-                                                                                                 num_mc_cores=num_mc_cores)))))+
-      textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores)
+
+    features[["Agreement"]]<-(unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
+                                                                                            "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
+                                                                                          num_mc_cores=num_mc_cores)-
+                                                                                textcounter(c("neg(agree","neg(concur"),x,words=TRUE,
+                                                                                              num_mc_cores=num_mc_cores))))+
+                                textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
 
     features[["Acknowledgement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)",
-                                                                                              "nsubj(hear, i)","nsubj(get, i)"),x, words=TRUE,
-                                                                                            num_mc_cores=num_mc_cores)-
-                                                                                  textcounter(c("neg(understand","neg(see",
-                                                                                                "acomp(get,","neg(get", # not mutually exclusive... fix!
-                                                                                                "neg(hear"),x,num_mc_cores=num_mc_cores))))
-                                                                                  #min(sum(grepl("acomp(get,",x,fixed=T),sum(grepl("neg(get",x,fixed=T))))))
+                                                                                                 "nsubj(hear, i)","nsubj(get, i)"),x, words=TRUE,
+                                                                                               num_mc_cores=num_mc_cores)-
+                                                                                     textcounter(c("neg(understand","neg(see",
+                                                                                                   "acomp(get,","neg(get", # not mutually exclusive... fix!
+                                                                                                   "neg(hear"),x,num_mc_cores=num_mc_cores))))
+    #min(sum(grepl("acomp(get,",x,fixed=T),sum(grepl("neg(get",x,fixed=T))))))
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="grateful"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="gratitude"))))+
@@ -198,10 +198,10 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   if(metric[1]=="binary"){
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
   }
-# else if (metric[1]=="average"){
-#    word_counts <- stringr::str_count(text, "[[:alpha:]]+")
-#    features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
-#  }
+  # else if (metric[1]=="average"){
+  #    word_counts <- stringr::str_count(text, "[[:alpha:]]+")
+  #    features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
+  #  }
   feature.data<-as.data.frame(features)
   feature.data[feature.data<0]<-0
   if(drop_blank){
