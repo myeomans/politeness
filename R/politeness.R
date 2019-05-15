@@ -145,17 +145,18 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
 
     features[["Agreement"]]<-(unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
+                                                                                            "nsubj(agree, we)","nsubj(concur, we)",
                                                                                             "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
                                                                                           num_mc_cores=num_mc_cores)-
-
                                                                                 textcounter(c("neg(agree","neg(concur"),x,words=TRUE,
-                                                                                              num_mc_cores=num_mc_cores))))+
+                                                                                            num_mc_cores=num_mc_cores))))+
                                 textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
-
-    features[["Acknowledgement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)",
-                                                                                                 "nsubj(hear, i)","nsubj(get, i)"),x, words=TRUE,
+    features[["Acknowledgement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)","nsubj(acknowledge, i)",
+                                                                                                 "nsubj(hear, i)","nsubj(get, i)",
+                                                                                                 "nsubj(understand, we)","nsubj(see, we)","nsubj(acknowledge, we)",
+                                                                                                 "nsubj(hear, we)","nsubj(get, we)"),x, words=TRUE,
                                                                                                num_mc_cores=num_mc_cores)-
-                                                                                     textcounter(c("neg(understand","neg(see",
+                                                                                     textcounter(c("neg(understand","neg(see","neg(acknowledge",
                                                                                                    "acomp(get,","neg(get", # not mutually exclusive... fix!
                                                                                                    "neg(hear"),x,num_mc_cores=num_mc_cores))))
     #min(sum(grepl("acomp(get,",x,fixed=T),sum(grepl("neg(get",x,fixed=T))))))
