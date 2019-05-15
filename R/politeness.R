@@ -144,12 +144,13 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
     # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
 #
-#     features[["Agreement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(, i)",
-#                                                                                                  "nsubj(hear, i)","nsubj(get, i)"),x, words=TRUE,
-#                                                                                                num_mc_cores=num_mc_cores)-
-#                                                                                      textcounter(c("neg(agree","neg(see",
-#                                                                                                    "neg(get"),"neg(hear",x,
-#                                                                                                  num_mc_cores=num_mc_cores))))
+    features[["Agreement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
+                                                                                                 "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
+                                                                                               num_mc_cores=num_mc_cores)-
+                                                                                     textcounter(c("neg(agree","neg(concur",x,words=TRUE,
+                                                                                                 num_mc_cores=num_mc_cores)))))+
+      textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores)
+
     features[["Acknowledgement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)",
                                                                                               "nsubj(hear, i)","nsubj(get, i)"),x, words=TRUE,
                                                                                             num_mc_cores=num_mc_cores)-
