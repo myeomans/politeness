@@ -1,3 +1,7 @@
+## Version Update (0.3.1)
+
+We have updated three of the included features (question types and affirmation), and added two new ones (agreement, acknowledgement). We have also updated the documentation to reflect these changes, as well as changes in one of our dependencies (spacyr).
+
 ## Version Update (0.2.6)
 
 Sadly, the labels we updated in the previous version disrupted some functionality (which we discovered from a collaborator soon after the previous push). We've gone in and fixed the issue, and we apologize for the error.

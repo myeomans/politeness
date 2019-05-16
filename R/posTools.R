@@ -47,7 +47,7 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
   w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), keyby = "doc_id"][ , l_w_nums]
-
+  question<-NULL
   ques.pos.nums <- parallel::mclapply(unique(dt_parsedtxt$doc_id),
                         function(x) as.character(unlist(dt_parsedtxt[question==1 & doc_id==x, .(l_w_nums = list(pos.nums))])),
                         mc.cores=num_mc_cores)

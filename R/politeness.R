@@ -54,9 +54,6 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
             call. = FALSE)
     metric <- ifelse(binary, "binary", "count")
   }
-  #if(binary){ #Handling deprecated input
-  #  metric<-"binary"
-  #}
   ########################################################
 
   text<-iconv(text,to="ASCII",sub=" ")
@@ -173,7 +170,8 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                          num_mc_cores=num_mc_cores)
                              +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=TRUE,
                                           num_mc_cores=num_mc_cores))
-    features[["Affirmation"]]<-textcounter(paste0(c("wow","great","good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=TRUE,
+    features[["Affirmation"]]<-textcounter(paste0(c("yeah","yes","ok","okay","perfect","fine","wow","great",
+                                                    "good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=TRUE,
                                            num_mc_cores=num_mc_cores)
     features[["Adverb.Just"]]<-unlist(lapply(sets[["p.nonum"]] ,function(x) sum(grepl("advmod",unlist(x))&grepl("just)",unlist(x),fixed=TRUE))))
 
@@ -200,10 +198,10 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   if(metric[1]=="binary"){
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
   }
-  # else if (metric[1]=="average"){
-  #    word_counts <- stringr::str_count(text, "[[:alpha:]]+")
-  #    features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
-  #  }
+  else if (metric[1]=="average"){
+     word_counts <- stringr::str_count(text, "[[:alpha:]]+")
+     features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
+   }
   feature.data<-as.data.frame(features)
   feature.data[feature.data<0]<-0
   if(drop_blank){

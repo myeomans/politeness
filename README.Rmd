@@ -24,7 +24,7 @@ You can install politeness directly, like so:
  install.packages("politeness")
 ```
 
-Many of the politeness features containted in this package use some part-of-speech tagging. We recommend [SpaCy](https://spacy.io/), which is simple to install through python and which has a convenient wrapper function for use through R, [SpaCyR](https://github.com/kbenoit/spacyr). If you do not have SpaCy installed you must do it outside of R first - otherwise, a reduced set of features (i.e. those that do not require part-of-speech tags) is provided by the package.
+Many of the politeness features containted in this package use some part-of-speech tagging. We recommend [SpaCy](https://spacy.io/), which is simple to install through python and which has a convenient wrapper function for use through R, including some simple intallation tools [SpaCyR](https://github.com/kbenoit/spacyr). If you do not have SpaCy installed, a reduced set of features (i.e. those that do not require part-of-speech tags) is provided by the package.
 
 ## Example
 
