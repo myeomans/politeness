@@ -1,3 +1,8 @@
+
+## Version Update (0.3.2)
+
+Some of the new features were redundant with older ones, so we removed three early features that are now redundant. 
+
 ## Version Update (0.3.1)
 
 We have updated three of the included features (question types and affirmation), and added two new ones (agreement, acknowledgement). We have also updated the documentation to reflect these changes, as well as changes in one of our dependencies (spacyr).
