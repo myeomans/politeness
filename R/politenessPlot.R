@@ -3,7 +3,7 @@
 #'
 #' @description Plots the prevalence of politeness features in documents, divided by a binary covariate.
 #' @param df_polite a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.
-#' @param split a vector of covariate values. must have a length equal to the number of documents included in \code{df_polite}.
+#' @param split a vector of covariate values. must have a length equal to the number of documents included in \code{df_polite}. No NA values allowed.
 #' @param split_levels character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.
 #' @param split_name character default NULL. Name of the covariate for legend.
 #' @param split_cols character vector of length 2. Name of colors to use.
@@ -44,10 +44,20 @@ politenessPlot<-function(df_polite,
                          drop_blank = 0.05,
                          middle_out = 0.5){
 
+  # confirm that split is the right type
+  if(sum(is.na(split))>0){
+    stop("split must not have NAs")
+  }
+  if(is.factor(split)){
+    split<-as.character(split)
+  }
   # confirm that split only has two values
   if( length(unique(split)) > 2){
+    if(is.character(split)){
+      stop("split must not have more than two values")
+    }
     # if split has more than 2 values transform it into a binary variable by taking the top 33% and top 33%
-    # if the cut at 33% and 67% is the same we through an error
+    # if the cut at 33% and 67% is the same we throw an error
     cuts <- stats::quantile(split, c(1/3, 2/3))
     cut_low <- cuts[1]
     cut_high <- cuts[2]
@@ -108,7 +118,7 @@ politenessPlot<-function(df_polite,
     y.labels <- paste0(seq(0,100,25),"%")
     y.trans <- "identity"
   } else {
-    map.type<-"Average Feature Use per Document"
+    map.type<-"Feature Count per Document"
     split.data$se<-sqrt((split.data$count)/nrow(df_polite))
     tick.set<-c(0.1,0.5,1,2,5,10,20,50,100,200,500,1000)
     y.labels <- y.breaks <- tick.set
@@ -133,12 +143,15 @@ politenessPlot<-function(df_polite,
     ggplot2::geom_errorbar(ggplot2::aes_string(ymin="count_minus", ymax="count_plus"), width=0.3,
                            position=ggplot2::position_dodge(width = 0.8)) +
     ggplot2::coord_flip() +
-    ggplot2::scale_x_discrete(name="") +
+    ggplot2::scale_x_discrete(name="", breaks=colnames(df_polite),
+                              labels=gsub("."," ",colnames(df_polite),fixed=T)) +
     ggplot2::scale_fill_manual(breaks = split_levels,values=split_cols, name=split_name) +
     ggplot2::scale_y_continuous(name=map.type, breaks = y.breaks, labels=y.labels, trans = y.trans) +
     ggplot2::theme_bw(base_size=14) +
     ggplot2::ggtitle(top_title) +
     ggplot2::theme(plot.title = ggplot2::element_text(hjust = 0.5),
+                   panel.grid.minor.x = ggplot2::element_blank(),
+                   panel.grid.major.y = ggplot2::element_blank(),
                    axis.text = ggplot2::element_text(size=20),
                    legend.title = ggplot2::element_text(size=18, face="bold"),
                    legend.text = ggplot2::element_text(size=18),

@@ -11,7 +11,7 @@ politenessPlot(df_polite, split = NULL, split_levels = NULL,
 \arguments{
 \item{df_polite}{a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.}
 
-\item{split}{a vector of covariate values. must have a length equal to the number of documents included in \code{df_polite}.}
+\item{split}{a vector of covariate values. must have a length equal to the number of documents included in \code{df_polite}. No NA values allowed.}
 
 \item{split_levels}{character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.}
 

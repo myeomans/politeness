@@ -1,4 +1,9 @@
 
+
+## Version Update (0.3.3)
+
+Based on some user testing we have clarified some common error messages. We also have added more documentation regarding the plot options. 
+
 ## Version Update (0.3.2)
 
 Some of the new features were redundant with older ones, so we removed three early features that are now redundant. 

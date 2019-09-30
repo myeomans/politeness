@@ -35,69 +35,72 @@
 
 politenessProjection <- function(df_polite_train, covar = NULL, df_polite_test = NULL, classifier = c("glmnet","mnir"),  ...){
 
-  if(!is.null(covar)){
-    # check that all elements of covar are numeric or logical
-    v_s_not_num_or_logical <- unlist(sapply(covar, function(col) !(is.numeric(col) | is.logical(col))))
-    if(sum(v_s_not_num_or_logical)>0 ){
-      stop( paste0("covar must be logical or numeric.") )
+  if(is.null(covar)){
+    stop("Must supply covariate to train model")
+  }
+  if(sum(is.na(covar))>0){
+    stop("Covariate may not have NA values")
+  }
+
+  # check that all elements of covar are numeric or logical
+  v_s_not_num_or_logical <- unlist(sapply(covar, function(col) !(is.numeric(col) | is.logical(col))))
+  if(sum(v_s_not_num_or_logical)>0 ){
+    stop( paste0("covar must be logical or numeric.") )
+  }
+
+  if(!is.null(df_polite_test)){
+    # check that df_polite_train and df_polite_test have the same columns
+    if( !setequal(names(df_polite_train), names(df_polite_test)) ){
+      stop("There must be the same variables in df_polite_train and df_polite_test")
     }
+  }
+  if (classifier[1] == "mnir"){
+    m_polite_train <- as.matrix(df_polite_train)
+    mnlm_fit <- suppressWarnings(textir::mnlm(cl=NULL,
+                                              covars = covar,
+                                              counts = m_polite_train,
+                                              ...))
+    mnlm_coef = suppressWarnings(stats::coef(mnlm_fit))
+
+    m_train_proj <- suppressWarnings(textir::srproj(mnlm_fit, m_polite_train ))
 
     if(!is.null(df_polite_test)){
-      # check that df_polite_train and df_polite_test have the same columns
-      if( !setequal(names(df_polite_train), names(df_polite_test)) ){
-        stop("There must be the same variables in df_polite_train and df_polite_test")
-      }
+      m_polite_test <- as.matrix(df_polite_test)
+      m_test_proj <- textir::srproj(mnlm_fit, m_polite_test )
+    } else{
+      m_test_proj <- NULL
     }
-    if (classifier[1] == "mnir"){
-      m_polite_train <- as.matrix(df_polite_train)
-      mnlm_fit <- suppressWarnings(textir::mnlm(cl=NULL,
-                                                covars = covar,
-                                                counts = m_polite_train,
-                                                ...))
-      mnlm_coef = suppressWarnings(stats::coef(mnlm_fit))
 
-      m_train_proj <- suppressWarnings(textir::srproj(mnlm_fit, m_polite_train ))
+    l_out <- list(train_proj = m_train_proj[,1], test_proj = m_test_proj[,1], train_coefs=mnlm_coef[2,])
+  }
+  if (classifier[1] == "glmnet"){
+    m_polite_train <- as.matrix(df_polite_train)
 
-      if(!is.null(df_polite_test)){
-        m_polite_test <- as.matrix(df_polite_test)
-        m_test_proj <- textir::srproj(mnlm_fit, m_polite_test )
-      } else{
-        m_test_proj <- NULL
-      }
-
-      l_out <- list(train_proj = m_train_proj[,1], test_proj = m_test_proj[,1], train_coefs=mnlm_coef[2,])
+    if( is.data.frame(covar)){
+      #take first variable
+      covar <- covar[[1]]
     }
-    if (classifier[1] == "glmnet"){
-      m_polite_train <- as.matrix(df_polite_train)
 
-      if( is.data.frame(covar)){
-        #take first variable
-        covar <- covar[[1]]
-      }
+    # chose family based on covar
+    is_binary <- length(unique(covar)) == 2
+    model_family <- ifelse(is_binary, "binomial", "gaussian")
 
-      # chose family based on covar
-      is_binary <- length(unique(covar)) == 2
-      model_family <- ifelse(is_binary, "binomial", "gaussian")
+    polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
+    polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
 
-      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
-      polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
+    p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
+    polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
 
-      p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
-      polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
-
-      if(!is.null(df_polite_test)){
-        m_polite_test <- as.matrix(df_polite_test)
-        polite_predict<-stats::predict(polite_model, newx=m_polite_test, s="lambda.min", type="response")
-      } else {
-        polite_predict <- NULL
-      }
-      l_out <- list(train_proj = polite_fit,
-                    test_proj = polite_predict,
-                    train_coefs = polite_coefs)
-
+    if(!is.null(df_polite_test)){
+      m_polite_test <- as.matrix(df_polite_test)
+      polite_predict<-stats::predict(polite_model, newx=m_polite_test, s="lambda.min", type="response")
+    } else {
+      polite_predict <- NULL
     }
-  } else {
-    stop("Function is not implemented for NULL covar")
+    l_out <- list(train_proj = polite_fit,
+                  test_proj = polite_predict,
+                  train_coefs = polite_coefs)
+
   }
 
   return(l_out)
