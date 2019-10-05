@@ -17,7 +17,7 @@ politeness(text, parser = c("none", "spacy"), metric = c("count",
 
 \item{drop_blank}{logical Should features that were not found in any text be removed from the data.frame? Default is TRUE}
 
-\item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
+\item{num_mc_cores}{integer Number of cores for parallelization. Default is 1, but we encourage users to try parallel::detectCores() if possible.}
 
 \item{binary}{logical Deprecated! Do not use (see metric parameter).}
 }

@@ -1,5 +1,9 @@
 
 
+## Version Update (0.4.0)
+
+Added a new function with a pre-trained model from a related paper.
+
 ## Version Update (0.3.3)
 
 Based on some user testing we have clarified some common error messages. We also have added more documentation regarding the plot options. 

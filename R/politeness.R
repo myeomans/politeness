@@ -6,7 +6,7 @@
 #' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
 #' @param metric character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per word  Default is "count".
 #' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
-#' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
+#' @param num_mc_cores integer Number of cores for parallelization. Default is 1, but we encourage users to try parallel::detectCores() if possible.
 #' @param binary logical Deprecated! Do not use (see metric parameter).
 #' @details Some politeness features depend on part-of-speech tagged sentences (e.g. "bare commands" are a particular verb class).
 #'     To include these features in the analysis, a POS tagger must be initialized beforehand - we currently support SpaCy which must

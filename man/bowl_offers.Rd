@@ -10,7 +10,7 @@
   \item{condition}{binary label indicating if message is warm or tough}
 }}
 \source{
-Jeong, M., Minson, J., Yeomans, M. & Gino, F. (working paper).
+Jeong, M., Minson, J., Yeomans, M. & Gino, F. (2019).
 
 "Communicating Warmth in Distributed Negotiations is Surprisingly Ineffective." Study 3.
 

@@ -38,7 +38,7 @@
 #'   \item{message}{character of purchase offer message}
 #'   \item{condition}{binary label indicating if message is warm or tough}
 #' }
-#' @source Jeong, M., Minson, J., Yeomans, M. & Gino, F. (working paper).
+#' @source Jeong, M., Minson, J., Yeomans, M. & Gino, F. (2019).
 #'
 #' "Communicating Warmth in Distributed Negotiations is Surprisingly Ineffective."
 #'
@@ -55,7 +55,7 @@
 #'   \item{message}{character of purchase offer message}
 #'   \item{condition}{binary label indicating if message is warm or tough}
 #' }
-#' @source Jeong, M., Minson, J., Yeomans, M. & Gino, F. (working paper).
+#' @source Jeong, M., Minson, J., Yeomans, M. & Gino, F. (2019).
 #'
 #' "Communicating Warmth in Distributed Negotiations is Surprisingly Ineffective." Study 3.
 #'
@@ -70,3 +70,21 @@
 #' @format A data.frame with information about 36 politeness features.
 #'
 "feature_table"
+
+
+
+#' Receptivness Training Data
+#'
+#' A dataset containing responses to political arguments and
+#' an average rating of their receptiveness to opposing views.
+#' @format A data frame with 543 rows and 2 variables:
+#' \describe{
+#'   \item{message}{character of response}
+#'   \item{condition}{numeric average rating of writer's receptiveness}
+#' }
+#' @source  Yeomans, M., Minson, J., Collins, H., Chen, F. & Gino, F. (working paper).
+#'
+#' "Conversational Receptiveness: Improving Engagement with Opposing Views"
+#'
+#' Study 1. \url{https://osf.io/2n59b/}
+"receptTrain"
