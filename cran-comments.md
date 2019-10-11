@@ -1,5 +1,9 @@
 
 
+## Version Update (0.4.1)
+
+Correcting some typos in the last version (sorry).
+
 ## Version Update (0.4.0)
 
 Added a new function with a pre-trained model from a related paper.

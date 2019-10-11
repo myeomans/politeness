@@ -20,6 +20,7 @@ Pre-trained model to detect conversational receptiveness
 \details{
 This is a wrapper around a pre-trained model of "conversational receptiveness".
 The model trained from Study 1 of that paper can be applied to new text with a single function.
+This model requires grammar parsing via SpaCy. Please see \code{\link{spacyr}} for details on installation.
 }
 \examples{
 

@@ -7,6 +7,7 @@ utils::globalVariables(c("receptTrain")) # prevent incorrect "no global binding"
 #' @param num_mc_cores integer Number of cores for parallelization.
 #' @details This is a wrapper around a pre-trained model of "conversational receptiveness".
 #' The model trained from Study 1 of that paper can be applied to new text with a single function.
+#' This model requires grammar parsing via SpaCy. Please see \code{\link{spacyr}} for details on installation.
 #' @return a vector with receptiveness scores
 #' @references
 #' Yeomans, M., Minson, J., Collins, H., Chen, F. & Gino, F. (2019). Conversational Receptiveness: Improving Engagement with Opposing Views.
