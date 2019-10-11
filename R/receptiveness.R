@@ -25,8 +25,8 @@ utils::globalVariables(c("receptTrain")) # prevent incorrect "no global binding"
 receptiveness<-function(texts, num_mc_cores=1){
   textDat<-politeness(texts,drop_blank = F, metric="count", parser="spacy",num_mc_cores=num_mc_cores)
 
-  textRate<-as.numeric(politenessProjection(receptTrain$polite,
-                                 receptTrain$DV,
-                                 textDat)$test_proj)
+  textRate<-as.numeric(politenessProjection(politeness::receptTrain$polite,
+                                            politeness::receptTrain$DV,
+                                            textDat)$test_proj)
   return(textRate)
 }
