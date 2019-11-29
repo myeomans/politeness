@@ -119,7 +119,7 @@ politenessPlot<-function(df_polite,
     y.trans <- "identity"
   } else {
     map.type<-"Feature Count per Document"
-    split.data$se<-sqrt((split.data$count)/nrow(df_polite))
+    split.data$se<-sqrt(sd(split.data$count)/nrow(df_polite))
     tick.set<-c(0.1,0.5,1,2,5,10,20,50,100,200,500,1000)
     y.labels <- y.breaks <- tick.set
 

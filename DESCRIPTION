@@ -18,7 +18,8 @@ Imports:
     textir,
     glmnet,
     data.table,
-    stringr
+    stringr,
+    slam (= 0.)
 RoxygenNote: 6.1.1
 Suggests: knitr,
     rmarkdown,
