@@ -4,9 +4,16 @@
 \alias{politenessPlot}
 \title{Politeness plot}
 \usage{
-politenessPlot(df_polite, split = NULL, split_levels = NULL,
-  split_name = NULL, split_cols = c("firebrick", "navy"),
-  top_title = "", drop_blank = 0.05, middle_out = 0.5)
+politenessPlot(
+  df_polite,
+  split = NULL,
+  split_levels = NULL,
+  split_name = NULL,
+  split_cols = c("firebrick", "navy"),
+  top_title = "",
+  drop_blank = 0.05,
+  middle_out = 0.5
+)
 }
 \arguments{
 \item{df_polite}{a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.}

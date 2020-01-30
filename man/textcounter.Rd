@@ -4,8 +4,13 @@
 \alias{textcounter}
 \title{Text Counter}
 \usage{
-textcounter(counted, texts, words = FALSE, fixed = TRUE,
-  num_mc_cores = parallel::detectCores())
+textcounter(
+  counted,
+  texts,
+  words = FALSE,
+  fixed = TRUE,
+  num_mc_cores = parallel::detectCores()
+)
 }
 \arguments{
 \item{counted}{character vector of items to search for in the texts.}

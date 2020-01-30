@@ -1,3 +1,6 @@
+## Version Update (0.4.4)
+
+Some revisions to . Also adjsuted to account for changes to glmnet functions
 
 
 ## Version Update (0.4.1)

@@ -4,8 +4,13 @@
 \alias{dictWrap}
 \title{Dictionary Wrapper}
 \usage{
-dictWrap(text, dict = NULL, binary = FALSE,
-  num_mc_cores = parallel::detectCores(), ...)
+dictWrap(
+  text,
+  dict = NULL,
+  binary = FALSE,
+  num_mc_cores = parallel::detectCores(),
+  ...
+)
 }
 \arguments{
 \item{text}{a character vector of texts.}
