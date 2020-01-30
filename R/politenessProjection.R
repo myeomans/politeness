@@ -30,6 +30,7 @@
 #' mean(project$test_proj[bowl_offers$condition==1])
 #' mean(project$test_proj[bowl_offers$condition==0])
 #'
+#' @import glmnet
 #' @export
 
 
