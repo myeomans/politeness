@@ -2,7 +2,7 @@
 
 New package (textclean) used to clean sanitize character inputs. 
 New email address for maintainer (got a new job! so old email will expire soon)
-
+Updated advice for spacy installation
 
 ## Version Update (0.4.4)
 

@@ -18,14 +18,14 @@ You can install politeness directly, like so:
 ```
 
 Many of the politeness features containted in this package use
-part-of-speech tagging. We rely on the popular python library
+dependency parsing. We rely on the popular python library
 [SpaCy](https://spacy.io/), which is simple to install, although the
 procedure can vary for different machines. Our software depends on a
-convenient wrapper function,
-[spacyr](https://github.com/kbenoit/spacyr), that also includes several
-intallation tools. If you do not have SpaCy installed, a reduced set of
-features (i.e. those that do not require part-of-speech tags) is
-provided by the package.
+convenient wrapper function, [spacyr](https://spacyr.quanteda.io/), that
+also includes several intallation tools. If you do not have SpaCy
+installed, a reduced set of features is provided (i.e. those that do not
+require dependency tags) but this only recommended for initial tests,
+rather than final analyses.
 
 Please confirm that your machine can run SpaCy and spacyr first\! This
 step can be difficult for some machines, and we defer to the existing

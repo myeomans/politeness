@@ -46,9 +46,12 @@ knitr::kable(feature_table,align=rep("c",4),
              caption = "Table 1: Politeness Features")
 ```
 
-## Part of Speech Tagging
+## Dependency Parsing
 
-Many of the politeness features containted in this package use some part-of-speech tagging. We have prioritized compatibility with the [SpaCy](https://spacy.io/) library. This software is simple to install through python and has a convenient wrapper function for use through R, that can also handle installation in some cases [SpaCyR](https://github.com/kbenoit/spacyr). 
+Many of the politeness features containted in this package use dependency parsing. We have prioritized compatibility with the popular python NLP library [SpaCy](https://spacy.io/) This library is simple to install in python, although the procedure can vary for different machines. Our software also depends on a convenient wrapper function, [spacyr](https://spacyr.quanteda.io/), that includes several intallation tools.
+
+Please confirm that your machine can run SpaCy and spacyr first! This step can be difficult for some machines, and we defer to the existing documentation for that software as a guide. Users may also want to consider [RStudio Cloud](https://www.rstudio.cloud/), which can support all of this software without local installation issues. 
+
 
 When R (or Rstudio) is opened at first, the SpaCy engine must be initialized, so that it is ready for use during the session. SpaCyR has recently included tools to initialize automatically from R the first time it is called in a session - however, you may have to initialize it manually, using the location of their python initialization (e.g. "/anaconda/bin/python"):
 
@@ -58,7 +61,7 @@ spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
 
 ```
 
-Many of the politeness features can be run without using part-of-speech tagging by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python, so that they can get up and running without a lot of fixed startup costs. Without part-of-speech tags, some features are dropped entirely (e.g. Bare Commands are a specific verb class). However, some features are approximated. For example, tags allow users to differentiate between a mid-sentence "please" and a "please" to start a sentence, while the tagless version of the function will collapse them into a single feature. 
+Many of the politeness features can be run without using dependency parsing by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python. However, the performance of the package is significantly lower without  If the software cannot identify the grammar in the text, some features will be dropped entirely (e.g. Bare Commands are a specific verb class), and others will be approximated (e.g. question types will not be distinguished). We highly recommend conducting final analyses with grammar parsing.
 
 ## Data: phone_offers
 
@@ -72,7 +75,7 @@ Half the participants were told to use a "warm and friendly" communication style
 
 ## Detecting politeness features
 
-The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a part-of-speech tagger is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
+The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a dependency parser is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
 
 The cells are calculated in one of three ways. Setting `metric = "count"` will populate each cell with the raw count of each feature in the text. Alternatively, `metric = "binary" ` will return a binary indicator of the presence or absence of features. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words). An additional concern researchers may have is if their documents have a lot of variance on length - in that case, controlling for length with `metric = "average"` will generate the presence of each feature as a percentage of the total words in each document. We do not recommend this option as a default because length is often intrinsically correlated with politeness (e.g. "being short" with someone is synonymous with rudeness) so this may ony be desirable when the variance in length is large, and confounded by other factors besides politeness (e.g. a dataset with news )
 
