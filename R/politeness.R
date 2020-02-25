@@ -55,8 +55,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     metric <- ifelse(binary, "binary", "count")
   }
   ########################################################
-
-  text<-iconv(text,to="ASCII",sub=" ")
+  text<-iconv(textclean::replace_non_ascii(text),to="ASCII",sub=" ")
   text[is.na(text) | text==""] <- "   "
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts, num_mc_cores=num_mc_cores)

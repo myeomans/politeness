@@ -1,6 +1,12 @@
+## Version Update (0.5.0)
+
+New package (textclean) used to clean sanitize character inputs. 
+New email address for maintainer (got a new job! so old email will expire soon)
+
+
 ## Version Update (0.4.4)
 
-Some revisions to . Also adjsuted to account for changes to glmnet functions
+Some revisions to documentation. Also adjsuted to account for changes to glmnet functions
 
 
 ## Version Update (0.4.1)
