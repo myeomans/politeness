@@ -1,3 +1,7 @@
+## Version Update (0.5.1)
+
+Re-naming some of the outputs in the main function broke one of our pre-trained models, which had been trained using different labels. So we re-trained the pre-trained model. We also wrote a new set of tests for the pre-trained model so that this kind of error is caught in future. 
+
 ## Version Update (0.5.0)
 
 New package (textclean) used to clean sanitize character inputs. 
