@@ -1,6 +1,10 @@
+## Version Update (0.5.2)
+
+Based on user feedback, we re-wrote the pre-trained model to be fully pre-trained, rather than re-training each time on identical data. This will make the function much faster, and also eliminate any randomness due to algorithm initialization.
+
 ## Version Update (0.5.1)
 
-Re-naming some of the outputs in the main function broke one of our pre-trained models, which had been trained using different labels. So we re-trained the pre-trained model. We also wrote a new set of tests for the pre-trained model so that this kind of error is caught in future. 
+Re-naming some of the outputs in the main function broke one of our pre-trained models, which had been trained using different labels. So we re-trained the pre-trained model. We tried to write a new set of tests for the pre-trained model so that this kind of error is caught in future, but they don't seem to work on the CRAN server (only locally) so the test are commented out for now.
 
 ## Version Update (0.5.0)
 

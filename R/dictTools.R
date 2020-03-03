@@ -56,5 +56,6 @@ dictWrap<-function (text, dict = NULL, binary = FALSE,  num_mc_cores=parallel::d
 #                    positive_list,
 #                    negative_list,
 #                    polite_dicts,
+#                    receptive_model,
 #                    internal = TRUE,
 #                    overwrite= TRUE)

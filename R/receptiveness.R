@@ -24,10 +24,15 @@ utils::globalVariables(c("receptTrain")) # prevent incorrect "no global binding"
 #'
 #'@export
 receptiveness<-function(texts, num_mc_cores=1){
-  textDat<-politeness(texts,drop_blank = F, metric="count", parser="spacy",num_mc_cores=num_mc_cores)
 
-  textRate<-as.numeric(politenessProjection(politeness::receptTrain$polite,
-                                            politeness::receptTrain$DV,
-                                            textDat)$test_proj)
-  return(textRate)
+  m_polite_test = as.matrix(politeness::politeness(texts,drop_blank = F,
+                                                   metric="count",
+                                                   parser="spacy",
+                                                   num_mc_cores=num_mc_cores))
+
+  polite_predict<-as.vector(stats::predict(politeness::receptive_model,
+                                 newx=m_polite_test,
+                                 s="lambda.min", type="response"))
+
+  return(polite_predict)
 }

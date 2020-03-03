@@ -73,18 +73,20 @@
 
 
 
-#' Receptivness Training Data
+#' Pre-Trained Receptivness Model
 #'
-#' A dataset containing responses to political arguments and
-#' an average rating of their receptiveness to opposing views.
-#' @format A data frame with 543 rows and 2 variables:
-#' \describe{
-#'   \item{message}{character of response}
-#'   \item{condition}{numeric average rating of writer's receptiveness}
-#' }
+#' A pre-trained model for detecting conversational receptiveness.
+#' Estimated with glmnet using annotated data from an previous paper.
+#' Primarily for use within the receptiveness() function.
+#'
+#' @format A fitted glmnet model
 #' @source  Yeomans, M., Minson, J., Collins, H., Chen, F. & Gino, F. (working paper).
 #'
 #' "Conversational Receptiveness: Improving Engagement with Opposing Views"
 #'
 #' Study 1. \url{https://osf.io/2n59b/}
-"receptTrain"
+#'
+#'
+"receptive_model"
+
+
