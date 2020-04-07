@@ -9,8 +9,7 @@ politeness(
   parser = c("none", "spacy"),
   metric = c("count", "binary", "average"),
   drop_blank = TRUE,
-  num_mc_cores = 1,
-  binary = FALSE
+  num_mc_cores = 1
 )
 }
 \arguments{
@@ -23,8 +22,6 @@ politeness(
 \item{drop_blank}{logical Should features that were not found in any text be removed from the data.frame? Default is TRUE}
 
 \item{num_mc_cores}{integer Number of cores for parallelization. Default is 1, but we encourage users to try parallel::detectCores() if possible.}
-
-\item{binary}{logical Deprecated! Do not use (see metric parameter).}
 }
 \value{
 a data.frame of politeness features, with one row for every item in `text`. Possible politeness features are listed in \code{\link{feature_table}}

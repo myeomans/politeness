@@ -45,7 +45,7 @@ Length of \code{split} must be the same as number of rows of \code{df_polite}. T
 
 data("phone_offers")
 
-polite.data<-politeness(phone_offers$message, parser="none", binary=FALSE, drop_blank=FALSE)
+polite.data<-politeness(phone_offers$message, parser="none", drop_blank=FALSE)
 
 politeness::politenessPlot(polite.data,
                            split=phone_offers$condition,
@@ -54,7 +54,7 @@ politeness::politenessPlot(polite.data,
                            top_title = "Average Feature Counts")
 
 
-polite.data<-politeness(phone_offers$message, parser="none", binary=TRUE, drop_blank=FALSE)
+polite.data<-politeness(phone_offers$message, parser="none", metric="binary", drop_blank=FALSE)
 
 politeness::politenessPlot(polite.data,
                            split=phone_offers$condition,

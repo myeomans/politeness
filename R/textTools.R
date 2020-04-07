@@ -20,6 +20,7 @@ textcounter<-function (counted, texts, words=FALSE, fixed = TRUE, num_mc_cores =
                                        function(z) ifelse(z[1] == (-1), 0, length(z))))
     }
   }
+  counts[is.na(counts)]<-0
   return(counts)
 }
 

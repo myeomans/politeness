@@ -1,3 +1,7 @@
+## Version Update (0.6.0)
+
+Based on user feedback, We re-wrote the code to handle large corpora better. When more than 1000 documents are included, we automatically batch the results in a loop, with a progress bar. We also removed a long-since deprecated argument (binary) from the main function.
+
 ## Version Update (0.5.2)
 
 Based on user feedback, we re-wrote the pre-trained model to be fully pre-trained, rather than re-training each time on identical data. This will make the function much faster, and also eliminate any randomness due to algorithm initialization.
