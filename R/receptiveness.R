@@ -10,7 +10,7 @@ utils::globalVariables(c("receptTrain")) # prevent incorrect "no global binding"
 #' This model requires grammar parsing via SpaCy. Please see \code{\link{spacyr}} for details on installation.
 #' @return a vector with receptiveness scores
 #' @references
-#' Yeomans, M., Minson, J., Collins, H., Chen, F. & Gino, F. (2019). Conversational Receptiveness: Improving Engagement with Opposing Views.
+#' Yeomans, M., Minson, J., Collins, H., Chen, F. & Gino, F. (2020). Conversational Receptiveness: Improving Engagement with Opposing Views. OBHDP.
 #'
 #' @examples
 #'
