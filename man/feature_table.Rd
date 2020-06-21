@@ -4,7 +4,9 @@
 \name{feature_table}
 \alias{feature_table}
 \title{Table of Politeness Features}
-\format{A data.frame with information about 36 politeness features.}
+\format{
+A data.frame with information about 36 politeness features.
+}
 \usage{
 feature_table
 }

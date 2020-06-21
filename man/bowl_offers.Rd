@@ -4,11 +4,13 @@
 \name{bowl_offers}
 \alias{bowl_offers}
 \title{Purchase offers for bowl}
-\format{A data frame with 70 rows and 2 variables:
+\format{
+A data frame with 70 rows and 2 variables:
 \describe{
   \item{message}{character of purchase offer message}
   \item{condition}{binary label indicating if message is warm or tough}
-}}
+}
+}
 \source{
 Jeong, M., Minson, J., Yeomans, M. & Gino, F. (2019).
 

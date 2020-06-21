@@ -4,7 +4,9 @@
 \name{receptive_model}
 \alias{receptive_model}
 \title{Pre-Trained Receptivness Model}
-\format{A fitted glmnet model}
+\format{
+A fitted glmnet model
+}
 \source{
 Yeomans, M., Minson, J., Collins, H., Chen, F. & Gino, F. (working paper).
 

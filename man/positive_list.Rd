@@ -4,7 +4,9 @@
 \name{positive_list}
 \alias{positive_list}
 \title{Positive Emotions List}
-\format{A list of 2006 positively-valenced words}
+\format{
+A list of 2006 positively-valenced words
+}
 \usage{
 positive_list
 }

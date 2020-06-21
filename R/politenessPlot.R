@@ -95,7 +95,10 @@ politenessPlot<-function(df_polite,
                                  colMeans(l_polite_split[[2]],na.rm=TRUE)),
                          cond=factor(c(rep(split_levels[1],num_features),
                                        rep(split_levels[2],num_features)), levels = split_levels),
-                         se=rep(NA_real_,num_features*2))
+                         se=c(apply(l_polite_split[[1]],2,function(x) stats::sd(x)/sqrt(length(x))),
+                              apply(l_polite_split[[2]],2,function(x) stats::sd(x)/sqrt(length(x)))))
+
+
   ######################################################
   nonblanks <- colnames(df_polite)[colMeans(df_polite)>=drop_blank]
 
@@ -119,7 +122,6 @@ politenessPlot<-function(df_polite,
     y.trans <- "identity"
   } else {
     map.type<-"Feature Count per Document"
-    split.data$se<-sqrt(stats::sd(split.data$count)/nrow(df_polite))
     tick.set<-c(0.1,0.5,1,2,5,10,20,50,100,200,500,1000)
     y.labels <- y.breaks <- tick.set
 

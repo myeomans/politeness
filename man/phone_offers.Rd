@@ -4,11 +4,13 @@
 \name{phone_offers}
 \alias{phone_offers}
 \title{Purchase offers for phone}
-\format{A data frame with 355 rows and 2 variables:
+\format{
+A data frame with 355 rows and 2 variables:
 \describe{
   \item{message}{character of purchase offer message}
   \item{condition}{binary label indicating if message is warm or tough}
-}}
+}
+}
 \source{
 Jeong, M., Minson, J., Yeomans, M. & Gino, F. (2019).
 

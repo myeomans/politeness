@@ -4,7 +4,9 @@
 \name{polite_dicts}
 \alias{polite_dicts}
 \title{Feature Dictionaries}
-\format{A list of six \code{quanteda::dictionary} objects}
+\format{
+A list of six \code{quanteda::dictionary} objects
+}
 \usage{
 polite_dicts
 }

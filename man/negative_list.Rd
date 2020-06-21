@@ -4,7 +4,9 @@
 \name{negative_list}
 \alias{negative_list}
 \title{Negative Emotions List}
-\format{A list of 4783 negatively-valenced words}
+\format{
+A list of 4783 negatively-valenced words
+}
 \usage{
 negative_list
 }

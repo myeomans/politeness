@@ -1,6 +1,11 @@
+## Version Update (0.6.1)
+
+We have corrected an error in how standard errors are calculated for the plots.
+We have also added some tweaks to how some of the features are calculated.
+
 ## Version Update (0.6.0)
 
-Based on user feedback, We re-wrote the code to handle large corpora better. When more than 1000 documents are included, we automatically batch the results in a loop, with a progress bar. We also removed a long-since deprecated argument (binary) from the main function.
+Based on user feedback, We re-wrote the code to handle large corpora better. When more than 2000 documents are included, we automatically batch the results in a loop, with a progress bar. We also removed a long-since deprecated argument (binary) from the main function.
 
 ## Version Update (0.5.2)
 
