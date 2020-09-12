@@ -106,7 +106,10 @@ politenessPlot<-function(df_polite,
   if(middle_out<1){
     split.p<-unlist(lapply(names(df_polite), function(x) stats::t.test(l_polite_split[[1]][,x],
                                                                        l_polite_split[[2]][,x])$p.value))
-    split.enough<-names(df_polite)[(split.p<middle_out)&(!is.na(split.p))]
+    # For hypothesis-driven tests (e.g. to check p < 0.05) 
+    # it would make sense to correct for multiple comparisons before outputting
+    corrected_ps <- p.adjust(split.p, method="holm")
+    split.enough<-names(df_polite)[(corrected_ps<middle_out)&(!is.na(split.p))]
   }
 
   if(sum((split.data$feature%in%nonblanks)&(split.data$feature%in%split.enough))==0){
