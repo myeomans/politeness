@@ -12,7 +12,8 @@ politenessPlot(
   split_cols = c("firebrick", "navy"),
   top_title = "",
   drop_blank = 0.05,
-  middle_out = 0.5
+  middle_out = 0.5,
+  CI = 0.68
 )
 }
 \arguments{
@@ -31,6 +32,8 @@ politenessPlot(
 \item{drop_blank}{Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}}
 
 \item{middle_out}{Features less distinctive than this value (measured by p-value of t-test) are excluded. Defaults to 1 (i.e. include all).}
+
+\item{CI}{Coverage of error bars. Defaults to 0.68 (i.e. standard error).}
 }
 \value{
 a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.

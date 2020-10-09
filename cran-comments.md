@@ -1,7 +1,10 @@
+## Version Update (0.6.2)
+
+We have changed some of the features to accommodate British spelling.
+
 ## Version Update (0.6.1)
 
-We have corrected an error in how standard errors are calculated for the plots.
-We have also added some tweaks to how some of the features are calculated.
+We have adjusted the standard errors in the plot function to be customizable (e.g. for 95% CIs) and fixed a bug in the original formula.
 
 ## Version Update (0.6.0)
 

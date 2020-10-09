@@ -10,6 +10,7 @@
 #' @param top_title character default "". Title of plot.
 #' @param drop_blank Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}
 #' @param middle_out Features less distinctive than this value (measured by p-value of t-test) are excluded. Defaults to 1 (i.e. include all).
+#' @param CI Coverage of error bars. Defaults to 0.68 (i.e. standard error).
 #' @details Length of \code{split} must be the same as number of rows of \code{df_polite}. Typically \code{split} should be a two-category variable. However, if a continuous covariate is given, then the top and bottom terciles of that distribution are treated as the two categories (while dropping data from the middle tercile).
 #' @return a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
 #' @examples
@@ -42,8 +43,12 @@ politenessPlot<-function(df_polite,
                          split_cols = c("firebrick","navy"),
                          top_title = "",
                          drop_blank = 0.05,
-                         middle_out = 0.5){
-
+                         middle_out = 0.5,
+                         CI=.68){
+  # confirm that CI is meaningful
+  if(!(is.numeric(CI)&(CI>0)&(CI<1))){
+    stop("CI must be numeric betwwen 0 and 1")
+  }
   # confirm that split is the right type
   if(sum(is.na(split))>0){
     stop("split must not have NAs")
@@ -98,7 +103,7 @@ politenessPlot<-function(df_polite,
                          se=c(apply(l_polite_split[[1]],2,function(x) stats::sd(x)/sqrt(length(x))),
                               apply(l_polite_split[[2]],2,function(x) stats::sd(x)/sqrt(length(x)))))
 
-
+  SEscaler<-stats::qnorm(1-((1-CI)/2))
   ######################################################
   nonblanks <- colnames(df_polite)[colMeans(df_polite)>=drop_blank]
 
