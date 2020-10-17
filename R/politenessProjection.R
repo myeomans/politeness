@@ -3,14 +3,16 @@
 #' @description Training and projecting a regression model of politeness.
 #' @param df_polite_train a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.
 #' @param covar a vector of politeness labels, or other covariate.
-#' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for out-of-sample fitting. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both calls to \code{politeness}).
+#' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for out-of-sample fitting. Must have same feature set as polite_train (most easily achieved by setting \code{dropblank=FALSE} in both calls to \code{politeness}).
 #' @param classifier name of classification algorithm. Defaults to "glmnet" (see \code{glmnet}) but "mnir" (see \code{mnlm}) is also available.
+#' @param cv_folds Number of outer folds for projection of training data. Default is NULL (i.e. no nested cross-validation). However, positive values are highly recommended (e.g. 10) for in-sample accuracy estimation.
 #' @param ... additional parameters to be passed to the classification algorithm.
 #' @return List of df_polite_train and df_polite_test with projection. See details.
 #' @details List:
 #' * train_proj projection of politeness model within training set.
 #' * test_proj projection of politeness model onto test set (i.e. out-of-sample).
 #' * train_coef coefficients from the trained model.
+#'
 #' @md
 #' @examples
 #'
@@ -34,7 +36,10 @@
 #' @export
 
 
-politenessProjection <- function(df_polite_train, covar = NULL, df_polite_test = NULL, classifier = c("glmnet","mnir"),  ...){
+politenessProjection <- function(df_polite_train, covar = NULL,
+                                 df_polite_test = NULL,
+                                 classifier = c("glmnet","mnir"),
+                                 cv_folds=NULL, ...){
 
   if(is.null(covar)){
     stop("Must supply covariate to train model")
@@ -86,11 +91,43 @@ politenessProjection <- function(df_polite_train, covar = NULL, df_polite_test =
     is_binary <- length(unique(covar)) == 2
     model_family <- ifelse(is_binary, "binomial", "gaussian")
 
-    polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
-    polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
+    # Nested cross-validation for in-sample accuracy estimation
+    if(is.numeric(cv_folds)){
+      foldIDs<-foldset(length(covar), cv_folds)
+      tpb<-utils::txtProgressBar(0,cv_folds)
 
-    p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
-    polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
+      polite_fit<-rep(NA,cv_folds)
+
+      for(fold in 1:max(foldIDs)){
+        train.fold<-(foldIDs!=fold)
+        test.fold<-(foldIDs==fold)
+
+        polite_model_fold<-glmnet::cv.glmnet(x=m_polite_train[train.fold,],
+                                             y=covar[train.fold],
+                                             family=model_family, ...)
+
+        polite_fit[test.fold]<-as.vector(stats::predict(polite_model_fold,
+                                                        newx=m_polite_train[test.fold,],
+                                                        s="lambda.min", type="response"))
+        utils::setTxtProgressBar(tpb,fold)
+      }
+
+      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
+      p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
+      polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
+
+
+    } else{
+      # Fitted values with no cross-validation
+
+      warning("Note: no cross-validation. Projections in training data are not suitable for accuracy estimation.")
+      polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
+      polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
+
+      p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.1se"))
+      polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
+
+    }
 
     if(!is.null(df_polite_test)){
       m_polite_test <- as.matrix(df_polite_test)

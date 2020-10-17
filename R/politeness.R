@@ -5,7 +5,7 @@
 #' @param text character A vector of texts, each of which will be tallied for politeness features.
 #' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
 #' @param metric character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per word  Default is "count".
-#' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is TRUE
+#' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is FALSE
 #' @param num_mc_cores integer Number of cores for parallelization. Default is 1, but we encourage users to try parallel::detectCores() if possible.
 #' @details Some politeness features depend on part-of-speech tagged sentences (e.g. "bare commands" are a particular verb class).
 #'     To include these features in the analysis, a POS tagger must be initialized beforehand - we currently support SpaCy which must
@@ -46,7 +46,7 @@
 #'
 #'@export
 
-politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=TRUE, num_mc_cores=1){
+politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, num_mc_cores=1){
   ########################################################
   # Generates broad token lists for feature creation below
   if(length(text)<2000){

@@ -9,6 +9,7 @@ politenessProjection(
   covar = NULL,
   df_polite_test = NULL,
   classifier = c("glmnet", "mnir"),
+  cv_folds = NULL,
   ...
 )
 }
@@ -17,9 +18,11 @@ politenessProjection(
 
 \item{covar}{a vector of politeness labels, or other covariate.}
 
-\item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for out-of-sample fitting. Must have same feature set as polite_train (most easily acheived by setting \code{dropblank=FALSE} in both calls to \code{politeness}).}
+\item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for out-of-sample fitting. Must have same feature set as polite_train (most easily achieved by setting \code{dropblank=FALSE} in both calls to \code{politeness}).}
 
 \item{classifier}{name of classification algorithm. Defaults to "glmnet" (see \code{glmnet}) but "mnir" (see \code{mnlm}) is also available.}
+
+\item{cv_folds}{Number of outer folds for projection of training data. Default is NULL (i.e. no nested cross-validation). However, positive values are highly recommended (e.g. 10) for in-sample accuracy estimation.}
 
 \item{...}{additional parameters to be passed to the classification algorithm.}
 }

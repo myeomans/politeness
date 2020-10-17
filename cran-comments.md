@@ -1,3 +1,8 @@
+## Version Update (0.7.0)
+
+Larger changes - we have added a nested cross-validation option to the  politenessProjection function. We have also changed default behavior of the top-level function - the drop.blank argument now defaults as true, as basically all uses of the function include the full set. This new behavior does not affect any dependencies, as the drop.blank functionality was a mere convenience. This is a more sensible and common default.
+
+
 ## Version Update (0.6.2)
 
 We have changed some of the features to accommodate British spelling.

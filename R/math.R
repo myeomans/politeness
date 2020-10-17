@@ -18,3 +18,28 @@ slogodds <- function(x,y) {
 
   list(lor=lor, slor=(lor/sd.lor))
 }
+
+#' Fold Assignment for Cross-Validation
+#' @description background function to load
+#' @param sizer number of observations in dataset.
+#' @param nfold number of outer folds needed.
+#' @param balance Optional vector of a categorical covariate to stratify fold assignment
+#' @return vector of fold IDs
+#' @keywords internal
+foldset<-function (sizer, nfold, balance = NA) {
+
+  folds <- sample(rep(1:nfold, ceiling(sizer/nfold))[1:sizer])
+  if (!is.na(balance[1])) {
+    if ((length(balance) == sizer)) {
+      folds <- rep(NA, sizer)
+      for (u in unique(balance)) {
+        setID <- which(balance == u)
+        setfold <- sample(rep(1:nfold, ceiling(length(setID)/nfold))[1:length(setID)])
+        folds[setID] <- setfold
+      }
+    }
+    else "error: balance length does not match"
+  }
+  return(folds)
+}
+
