@@ -47,6 +47,7 @@
 #'@export
 
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, num_mc_cores=1){
+  text<-unlist(text)
   ########################################################
   # Generates broad token lists for feature creation below
   if(length(text)<2000){

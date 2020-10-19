@@ -30,7 +30,7 @@ rather than final analyses.
 Please confirm that your machine can run SpaCy and spacyr first\! This
 step can be difficult for some machines, and we defer to the existing
 documentation for that software as a guide. Users may also want to
-consider [RStudio Cloud](https://www.rstudio.cloud/), which can support
+consider [RStudio Cloud](https:/rstudio.cloud/), which can support
 all of this software without local installation issues.
 
 ## Example

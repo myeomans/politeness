@@ -40,7 +40,6 @@ politenessProjection <- function(df_polite_train, covar = NULL,
                                  df_polite_test = NULL,
                                  classifier = c("glmnet","mnir"),
                                  cv_folds=NULL, ...){
-
   if(is.null(covar)){
     stop("Must supply covariate to train model")
   }
@@ -119,19 +118,20 @@ politenessProjection <- function(df_polite_train, covar = NULL,
 
     } else{
       # Fitted values with no cross-validation
-
-      warning("Note: no cross-validation. Projections in training data are not suitable for accuracy estimation.")
+      if(is.null(df_polite_test)){
+        warning("Note: no cross-validation. Projections in training data are not suitable for accuracy estimation.")
+      }
       polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
-      polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.1se", type="response")
+      polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.min", type="response")[,1]
 
-      p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.1se"))
+      p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
       polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
 
     }
 
     if(!is.null(df_polite_test)){
       m_polite_test <- as.matrix(df_polite_test)
-      polite_predict<-stats::predict(polite_model, newx=m_polite_test, s="lambda.min", type="response")
+      polite_predict<-stats::predict(polite_model, newx=m_polite_test, s="lambda.min", type="response")[,1]
     } else {
       polite_predict <- NULL
     }
