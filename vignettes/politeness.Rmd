@@ -48,7 +48,7 @@ knitr::kable(feature_table,align=rep("c",4),
 
 ## Dependency Parsing
 
-Many of the politeness features containted in this package use dependency parsing. We have prioritized compatibility with the popular python NLP library [SpaCy](https://spacy.io/) This library is simple to install in python, although the procedure can vary for different machines. Our software also depends on a convenient wrapper function, [spacyr](https://spacyr.quanteda.io/), that includes several installation tools.
+Many of the politeness features contained in this package use dependency parsing. We have prioritized compatibility with the popular python NLP library [SpaCy](https://spacy.io/) This library is simple to install in python, although the procedure can vary for different machines. Our software also depends on a convenient wrapper function, [spacyr](https://spacyr.quanteda.io/), that includes several installation tools.
 
 Please confirm that your machine can run SpaCy and spacyr first! This step can be difficult for some machines, and we defer to the existing documentation for that software as a guide. Users may also want to consider [RStudio Cloud](https://rstudio.cloud/), which can support all of this software without local installation issues. 
 
@@ -75,7 +75,7 @@ Half the participants were told to use a "warm and friendly" communication style
 
 ## Detecting politeness features
 
-The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 36 features in total, but some user options affect the number of features that are returned. For one, if a dependency parser is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the default setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
+The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 37 features in total, but some user options affect the number of features that are returned. For one, if a dependency parser is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
 
 The cells are calculated in one of three ways. Setting `metric = "count"` will populate each cell with the raw count of each feature in the text. Alternatively, `metric = "binary" ` will return a binary indicator of the presence or absence of features. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words). An additional concern researchers may have is if their documents have a lot of variance on length - in that case, controlling for length with `metric = "average"` will generate the presence of each feature as a percentage of the total words in each document. We do not recommend this option as a default because length is often intrinsically correlated with politeness (e.g. "being short" with someone is synonymous with rudeness) so this may ony be desirable when the variance in length is large, and confounded by other factors besides politeness (e.g. a dataset with news )
 
@@ -95,7 +95,7 @@ The best way to inspect the results of the main `politeness` function is to plot
 
 The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle data of any metric - binary, count or average - but that distinction must be made in the initial call to `politeness()`. 
 
-Often some features are not meaningful for further analysis - either because they are too rare in the data, or else because they do not meaningfully covary with the covariate of interest. Users have two options to exclude these from the plot. First, the `drop_blank` parameter can remove rare features - it takes a number between 0 and 1, which determines a cut-off based on prevalence. Specifically, all features which appear in less than this proportion of texts are excluded from the plot. To include all features, leave this value at `0`. Second, the `middle_out` parameter can remove features which do not vary meaningfully across the covariate - it takes a number between 0 and 1, which determines a cut-off based on distinctiveness. Each feature is evaluated using a t.test, and features are removed when the p-value of this test lies above the user's cut-off. To include all features, simply set this value at `1`.
+Often some features are not meaningful for further analysis - either because they are too rare in the data, or else because they do not meaningfully covary with the covariate of interest. Users have two options to exclude these from the plot. First, the `drop_blank` parameter can remove rare features - it takes a number between 0 and 1, which determines a cut-off based on prevalence. Specifically, all features which appear in less than this proportion of texts are excluded from the plot. To include all features, leave this value at `0`. Second, the `middle_out` parameter can remove features which do not vary meaningfully across the covariate - it takes a number between 0 and 1, which determines a cut-off based on distinctiveness. Each feature is evaluated using a t.test, and features are removed when the p-value of this test lies above the user's cut-off. To include all features, simply set this value at `1`. We do not recommend this as a formal hypothesis test (there is no adjustment for multiple comparisons, for starters). Rather, this is useful as a dsecriptive sense for identifying the most distinctive features.
 
 ```{r, echo=TRUE, eval=FALSE}
 politeness::politenessPlot(df_politeness,
@@ -119,15 +119,15 @@ Users can generate a politeness classifier with the `politenessProjection` funct
 
 This function is a wrapper around supervised learning algorithms. The default uses \code{glmnet}, the vanilla LASSO implementation in R. This should be familiar to most users already. We also allow users to use a different algorithm, \code{texitr}, which implements a massively multinomial inverse regression. Intuitively, this model represents a more realistic causal structure to text-plus-covariate data - that is, the covariate typically has a causal effect on the words used by the speaker, rather than the other way around. 
 
-Both packages have their merits, though for now we recommend using \code{glmnet} to start, especialy if it is familiar. Both algorithms are computationally efficient, and can be improved by registering a parallel back-end (see package details) and indicating in `cluster`.
+Both packages have their merits, though for now we recommend using \code{glmnet} to start, especially if it is familiar. Both algorithms are computationally efficient, and can be improved by registering a parallel back-end (see package details) and passing the necessary argument on to the classifier function.
 
 In addition to the `phone_offers` dataset, we have also included a smaller `bowl_offers` dataset. Participants in this study were given similar instructions (i.e. communicate in a warm or tough style) but for a different negotiation exercise. We use the `phone_offers` dataset to define the construct of interest, and confirm that the treatment had similar effects in `bowl_offers` by using it as held-out data in `politenessProjection()`. The results confirm that the manipulation had similar consequences on the participants' politeness.
 
 ```{r, echo=TRUE, eval=TRUE}
 
-df_polite_train <- politeness(phone_offers$message, drop_blank=FALSE)
+df_polite_train <- politeness(phone_offers$message)
 
-df_polite_holdout<-politeness(bowl_offers$message, drop_blank=FALSE)
+df_polite_holdout<-politeness(bowl_offers$message)
 
 project<-politenessProjection(df_polite_train,
                               phone_offers$condition,

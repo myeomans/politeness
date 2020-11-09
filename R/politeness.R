@@ -128,20 +128,25 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features[["Agreement"]]<-(unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
                                                                                             "nsubj(agree, we)","nsubj(concur, we)",
                                                                                             "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
-                                                                                          num_mc_cores=1)-
+                                                                                          num_mc_cores=num_mc_cores)-
                                                                                 textcounter(c("neg(agree","neg(concur"),x,words=TRUE,
-                                                                                            num_mc_cores=1))))+
-                                textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=1))
+                                                                                            num_mc_cores=num_mc_cores))))+
+                                textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
     # SLOW POKE!!
     features[["Acknowledgement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)","nsubj(acknowledge, i)",
                                                                                                  "nsubj(hear, i)","nsubj(get, i)",
                                                                                                  "nsubj(understand, we)","nsubj(see, we)","nsubj(acknowledge, we)",
                                                                                                  "nsubj(hear, we)","nsubj(get, we)"),x, words=TRUE,
-                                                                                               num_mc_cores=1)-
-                                                                                     textcounter(c("neg(understand","neg(see","neg(acknowledge",
-                                                                                                   "acomp(get,","neg(get", # not mutually exclusive... fix!
-                                                                                                   "neg(hear"),x,num_mc_cores=1))))
+                                                                                               num_mc_cores=num_mc_cores))))
     #min(sum(grepl("acomp(get,",x,fixed=T),sum(grepl("neg(get",x,fixed=T))))))
+    # SLOW POKE!!
+    features[["Subjectivity"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(think, i)","nsubj(believe, i)","nsubj(suspect, i)",
+                                                                                              "nsubj(presume, i)","nsubj(reckon, i)","nsubj(feel, i)",
+                                                                                              "poss(perspective, my)","poss(belief, my)","poss(view, my)",
+                                                                                              "nsubj(think, we)","nsubj(believe, we)","nsubj(suspect, we)",
+                                                                                              "nsubj(presume, we)","nsubj(reckon, we)","nsubj(feel, we)",
+                                                                                              "poss(perspective, our)","poss(belief, our)","poss(view, our)"),x, words=TRUE,
+                                                                                               num_mc_cores=num_mc_cores))))
 
     # SLOW POKE!!
     features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=TRUE)&grepl("-vb)",unlist(x),fixed=TRUE)

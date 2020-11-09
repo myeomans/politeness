@@ -1,6 +1,10 @@
-## Version Update (0.7.1)
+## Version Update (0.7.2)
 
-Fixing a small error in politenessProjeciton. This makes it easier to extract coefficients of model without running full cross-validation
+Making it easier to extract coefficients of model without running full cross-validation in politenessProjectiion
+
+Fixing calculation for new CI feature in politeness plot
+
+Add new feature to main engine - subjectivity
 
 ## Version Update (0.7.0)
 
