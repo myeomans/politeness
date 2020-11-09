@@ -140,8 +140,8 @@ politenessPlot<-function(df_polite,
   f.order<-unique(wide$feature)[order(wide$slogodds)]
   split.data$feature<-factor(split.data$feature, ordered=TRUE,levels=f.order)
   split.data$cond<-factor(split.data$cond,ordered=TRUE,levels=rev(split_levels))
-  split.data$count_minus<-split.data$count-split.data$se
-  split.data$count_plus<-split.data$count+split.data$se
+  split.data$count_minus<-split.data$count-split.data$se*SEscaler
+  split.data$count_plus<-split.data$count+split.data$se*SEscaler
   ######################################################
   ggplot2::ggplot(data=split.data,
                   ggplot2::aes_string(x="feature",y="count",fill="cond"),width=2) +
@@ -164,7 +164,7 @@ politenessPlot<-function(df_polite,
                    legend.text = ggplot2::element_text(size=18),
                    legend.position = "top",
                    legend.background = ggplot2::element_rect(linetype = "solid", color="black"),
-                   plot.margin = ggplot2::unit(c(0,25,2,0),"points"),
+                   plot.margin = ggplot2::unit(c(4,25,4,0),"points"),
                    axis.title = ggplot2::element_text(size=16),
                    text=ggplot2::element_text(family="Times"))
 }
