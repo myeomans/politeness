@@ -21,6 +21,15 @@ Politeness is a universal dimension of human communication (Lakoff, 1973; Brown 
 library(politeness)
 ```
 
+## Citation
+
+If you find this package useful, please cite us, using the following reference from our R Journal publication.
+
+Yeomans, M., Kantor, A. & Tingley, D. (2018). Detecting Politeness in Natural Language. The R Journal, 10(2), 489-502.
+
+Note that this publication was written using version 0.2.4 of the package. We consider this vignette as a more up-to-date description of the functionality in the package.
+
+
 ## Motivation for package
 
 Politeness as a construct is universal. And research in many branches of social science might reasonable want to measure a construct like politeness in langauge and then compare it to some covariate of interest. For example, they might want to know whether some treatment caused people to speak more or less politely. Or they want to know whether speakers are more polite to some listeners than to others, perhaps based on the listeners' gender, or race, or status. 
@@ -33,7 +42,7 @@ If the researcher wants to generate a politeness classifier, they can do so usin
 
 ## Politeness Features
 
-The main value of this package is in the `politeness` function, which counts the use of 36 different politeness features in natural language. Here, we borrow directly from existing research on the computational linguistics of politeness (Danescu-Niculescu-Mizil et al., 2013; Voigt et al., 2017). These features are summarized in the table below, along with examples of each.
+The main value of this package is in the `politeness` function, which counts the use of 36 different politeness features in natural language. Here, we borrow directly from existing research on the computational linguistics of politeness (Brown & Levinson, 1987; Danescu-Niculescu-Mizil et al., 2013; Voigt et al., 2017). These features are summarized in the table below, along with examples of each.
 
 ```{r}
 data("feature_table")
@@ -183,3 +192,11 @@ This figure shows that `politeness` scales reasonably well for large sets of doc
 ## Conclusion
 
 That's it! Enjoy! And please reach out to us with any questions, concerns, bug reports, use cases, comments, or fun facts you might have.
+
+## References
+
+Brown, P., & Levinson, S. C. (1987). Politeness: Some universals in language usage (Vol. 4). Cambridge university press.
+
+Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J., & Potts, C. (2013). A computational approach to politeness with application to social factors. arXiv preprint arXiv:1306.6078.
+
+Voigt, R., Camp, N. P., Prabhakaran, V., Hamilton, W. L., ... & Eberhardt, J. L. (2017). Language from police body camera footage shows racial disparities in officer respect. Proceedings of the National Academy of Sciences, 201702413.

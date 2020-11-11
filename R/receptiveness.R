@@ -1,4 +1,4 @@
-utils::globalVariables(c("receptTrain")) # prevent incorrect "no global binding" note
+utils::globalVariables(c("receptive_train")) # prevent incorrect "no global binding" note
 
 #' Conversational Receptiveness
 #'
@@ -24,15 +24,18 @@ utils::globalVariables(c("receptTrain")) # prevent incorrect "no global binding"
 #'
 #'@export
 receptiveness<-function(texts, num_mc_cores=1){
-
-  m_polite_test = as.matrix(politeness::politeness(texts,drop_blank = F,
-                                                   metric="count",
+  m_polite_train = as.matrix(politeness::politeness(receptive_train$text,
                                                    parser="spacy",
                                                    num_mc_cores=num_mc_cores))
 
-  polite_predict<-as.vector(stats::predict(politeness::receptive_model,
-                                 newx=m_polite_test,
-                                 s="lambda.min", type="response"))
+  m_polite_test = as.matrix(politeness::politeness(texts,
+                                                   parser="spacy",
+                                                   num_mc_cores=num_mc_cores))
+
+  polite_predict<-as.vector(politeness::politenessProjection(m_polite_train,
+                                                   receptive_train$receptive,
+                                                   m_polite_test)$test_proj)
+
 
   return(polite_predict)
 }

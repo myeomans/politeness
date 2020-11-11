@@ -5,7 +5,7 @@
 \alias{hedge_list}
 \title{Hedge Words List}
 \format{
-A list of 99 hedging words.
+A list of 72 hedging words.
 }
 \usage{
 hedge_list

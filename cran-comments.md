@@ -1,10 +1,14 @@
-## Version Update (0.7.2)
+## Version Update (0.7.5)
 
-Making it easier to extract coefficients of model without running full cross-validation in politenessProjectiion
+Making it easier to extract coefficients of model without running full cross-validation in politenessProjection
 
-Fixing calculation for new CI feature in politeness plot
+Fixing calculation for new CI feature in politenessPlot
 
 Add new feature to main engine - subjectivity
+
+remove redundant features from the hedges list
+
+updated the vignette throughout
 
 ## Version Update (0.7.0)
 

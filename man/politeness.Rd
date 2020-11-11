@@ -9,6 +9,7 @@ politeness(
   parser = c("none", "spacy"),
   metric = c("count", "binary", "average"),
   drop_blank = FALSE,
+  uk_english = FALSE,
   num_mc_cores = 1
 )
 }
@@ -20,6 +21,8 @@ politeness(
 \item{metric}{character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per word  Default is "count".}
 
 \item{drop_blank}{logical Should features that were not found in any text be removed from the data.frame? Default is FALSE}
+
+\item{uk_english}{logical Does the text contain any British English spelling? Including variants (e.g. Canadian). Default is FALSE}
 
 \item{num_mc_cores}{integer Number of cores for parallelization. Default is 1, but we encourage users to try parallel::detectCores() if possible.}
 }

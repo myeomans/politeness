@@ -28,6 +28,16 @@ Many of the politeness features containted in this package use dependency parsin
 
 Please confirm that your machine can run SpaCy and spacyr first! This step can be difficult for some machines, and we defer to the existing documentation for that software as a guide. Users may also want to consider [RStudio Cloud](https://rstudio.cloud/), which can support all of this software without local installation issues. 
 
+
+## Citation
+
+If you find this package useful, please cite us, using the following reference from our R Journal publication.
+
+Yeomans, M., Kantor, A. & Tingley, D. (2018). Detecting Politeness in Natural Language. The R Journal, 10(2), 489-502.
+
+Note that this publication was written using version 0.2.4 of the package. For the most up-to-date description of the functionality, please see the vignette in this repository. 
+
+
 ## Example
 
 In the package we have included a dataset, `phone_offers`. It was collected from an experiment in which participants were told to write offers asking to buy a smartphone from a seller on Craigslist. We randomly manipulated their instructions so that their task was to write in a warm or tough style. The dataset includes the text of their messages, as well as the condition assignment.
