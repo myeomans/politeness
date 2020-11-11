@@ -24,7 +24,7 @@ utils::globalVariables(c("receptive_train")) # prevent incorrect "no global bind
 #'
 #'@export
 receptiveness<-function(texts, num_mc_cores=1){
-  m_polite_train = as.matrix(politeness::politeness(receptive_train$text,
+  m_polite_train = as.matrix(politeness::politeness(politeness::receptive_train$text,
                                                    parser="spacy",
                                                    num_mc_cores=num_mc_cores))
 
