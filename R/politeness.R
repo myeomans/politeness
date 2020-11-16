@@ -50,7 +50,7 @@
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
   text<-unlist(text)
   if(uk_english){
-    message("UK english not supported yet")
+    text<-usWords(text)
   }
   ########################################################
   # Generates broad token lists for feature creation below
@@ -122,7 +122,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="grateful"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="gratitude")))))
-    features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=TRUE,
+    features[["Apology"]]<-textcounter(c("sorry"," woops","oops","whoops","apologize"),sets[["c.words"]],words=TRUE,
                                        num_mc_cores=num_mc_cores)
     features[["Truth.Intensifier"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
                                                   num_mc_cores=num_mc_cores)+
@@ -177,7 +177,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                 unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
     features[["Apology"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["c.words"]],words=TRUE,
                                         num_mc_cores=num_mc_cores)
-                            +textcounter(c("dobj(excuse, me)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=TRUE,
+                            +textcounter(c("dobj(excuse, me)","nsubj(apologize, we)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.nonum"]], words=TRUE,
                                          num_mc_cores=num_mc_cores))
     features[["Truth.Intensifier"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
                                                   num_mc_cores=num_mc_cores)

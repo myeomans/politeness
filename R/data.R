@@ -92,3 +92,12 @@
 "receptive_train"
 
 
+#' UK to US Conversion dictionary
+#'
+#' For internal use only. This dataset contains a quanteda dictionary for converting UK words to US words. The models in this package were all trained on US English.
+#'
+#' @format A quanteda dictionary with named entries. Names are the US version, and entries are the UK version.
+#' @source Borrowed from the quanteda.dictionaries package on github (from user kbenoit)
+#'
+"uk2us"
+
