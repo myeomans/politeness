@@ -10,7 +10,7 @@ utils::globalVariables(c("sets","text"))
 #' @keywords internal
 #'
 getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
-  text<-iconv(textclean::replace_non_ascii(iconv(text,to="UTF-8",sub=" ")),to="ASCII",sub=" ")
+  try(text<-iconv(textclean::replace_non_ascii(iconv(text,to="UTF-8",sub=" ")),to="ASCII",sub=" "),silent=TRUE)
   text[is.na(text) | text==""] <- "   "
 
   sets<-list()
