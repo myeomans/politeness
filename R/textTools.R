@@ -86,3 +86,21 @@ usWords<-function(text){
   sentUS<-unlist(lapply(tokUS,paste, collapse=" "),use.names = F)
 }
 
+#' Cleaning weird encodings
+#' @description Handles curly quotes, umlauts, etc.
+#' @param text character Vector of strings to clean.
+#' @return character Vector of clean strings.
+#' @keywords internal
+cleanpunct<-function(text){
+  # text<- gsub("‘", "'",text)
+  # text<-gsub("’", "'", text)
+  # text<-gsub("“", '"', text)
+  # text<-gsub("”", '"', text)
+  text<-gsub("[\x84\x93\x94]", '"', text)
+  text<-gsub("[\u201C\u201D\u201E\u201F\u2033\u2036]", '"', text)
+  text<-gsub("[\x82\x91\x92]", "'", text)
+  text<-gsub("[\u2018\u2019\u201A\u201B\u2032\u2035]", "'", text)
+  text<-stringi::stri_trans_general(text, "latin-ascii")
+  return(text)
+}
+

@@ -19,7 +19,7 @@ Imports:
     glmnet,
     data.table,
     stringr,
-    textclean
+    stringi
 RoxygenNote: 7.1.1
 Suggests: knitr,
     rmarkdown,

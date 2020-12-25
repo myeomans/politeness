@@ -1,3 +1,7 @@
+## Version Update (0.7.6)
+
+removed dependency on textclean as it was throwing strange warnings. instead, we have a local funciton to ocnvert to ascii, and borrow from stringi as well. 
+
 ## Version Update (0.7.5)
 
 Making it easier to extract coefficients of model without running full cross-validation in politenessProjection
