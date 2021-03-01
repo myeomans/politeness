@@ -1,6 +1,10 @@
+## Version Update (0.7.7)
+
+Smoother negation handling
+
 ## Version Update (0.7.6)
 
-removed dependency on textclean as it was throwing strange warnings. instead, we have a local funciton to ocnvert to ascii, and borrow from stringi as well. 
+removed dependency on textclean as it was throwing strange warnings. instead, we have a local function to convert to ascii, and borrow from stringi as well. 
 
 ## Version Update (0.7.5)
 

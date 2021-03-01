@@ -48,6 +48,7 @@
 #'@export
 
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
+
   text<-unlist(text)
   if(uk_english){
     text<-usWords(text)
@@ -133,7 +134,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                             "nsubj(agree, we)","nsubj(concur, we)",
                                                                                             "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
                                                                                           num_mc_cores=num_mc_cores)-
-                                                                                textcounter(c("neg(agree","neg(concur"),x,words=TRUE,
+                                                                                textcounter(c("neg(agree","neg(concur"),x,
                                                                                             num_mc_cores=num_mc_cores))))+
                                 textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
     # SLOW POKE!!
@@ -141,7 +142,9 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                                  "nsubj(hear, i)","nsubj(get, i)",
                                                                                                  "nsubj(understand, we)","nsubj(see, we)","nsubj(acknowledge, we)",
                                                                                                  "nsubj(hear, we)","nsubj(get, we)"),x, words=TRUE,
-                                                                                               num_mc_cores=num_mc_cores))))
+                                                                                               num_mc_cores=num_mc_cores)-
+                                                                                     textcounter(c("neg(understand","neg(see","neg(get"),x,
+                                                                                                 num_mc_cores=num_mc_cores))))
     #min(sum(grepl("acomp(get,",x,fixed=T),sum(grepl("neg(get",x,fixed=T))))))
     # SLOW POKE!!
     features[["Subjectivity"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(think, i)","nsubj(believe, i)","nsubj(suspect, i)",
