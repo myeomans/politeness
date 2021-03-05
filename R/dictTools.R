@@ -7,18 +7,18 @@
 #' @param ... arguments passes onto the \code{quanteda:dfm} function
 #' @return a matrix with six columns (one for each feature) and a row for every text entered into the function.
 #' @keywords internal
-#'
+#' @importFrom quanteda dfm tokens tokens_lookup quanteda_options
 
 dictWrap<-function (text, dict = NULL, binary = FALSE,  num_mc_cores=parallel::detectCores(), ...) {
   if(is.null(dict)){
     stop("Dictionary Must Be Supplied")
   }
-  quanteda::quanteda_options(threads=num_mc_cores)
-  quanteda::quanteda_options("verbose" = FALSE)
+  quanteda_options(threads=num_mc_cores)
+  quanteda_options("verbose" = FALSE)
   CTB <- as.matrix(array(0, c(length(text), length(dict))))
   WC <- rep(1,length(text))
   wc1 <- (!is.na(stringr::str_count(text, "[[:alpha:]]+")))
-  dic.try<-quanteda::dfm(text[wc1], dictionary = dict,verbose = FALSE, ...)
+  dic.try <- dfm(tokens_lookup(tokens(text[wc1]), dictionary = dict), ...)
   if(length(dic.try)==0){
     emptyct<-matrix(0,nrow=length(text),ncol=length(dict))
     colnames(emptyct)<-names(dict)
