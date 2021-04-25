@@ -1,3 +1,8 @@
+## Version Update (0.7.8)
+
+Update for new quanteda version
+
+
 ## Version Update (0.7.7)
 
 Smoother negation handling
