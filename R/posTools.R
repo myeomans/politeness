@@ -5,7 +5,9 @@ utils::globalVariables(c("l_parses","parses",
                          "doc_id","sentence_id",
                          "token_id","token", ".",
                          "head_token","head_token_id",
-                         "dep_rel", "tag"))
+                         "dep_rel", "tag",
+                         "anyNeg","negP1","negP2",
+                         "negM1","negM2","negM3","negM4"))
 
 ################################################################
 # Workflow for SpaCy

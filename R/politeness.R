@@ -49,7 +49,7 @@
 
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
 
-  text<-unlist(text)
+  text<-as.character(unlist(text))
   if(uk_english){
     text<-usWords(text)
   }
