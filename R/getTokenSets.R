@@ -10,15 +10,13 @@ utils::globalVariables(c("sets","text"))
 #' @keywords internal
 #'
 getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
-
   text <- cleanpunct(text)
-
   text[is.na(text) | text==""] <- "   "
 
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts, num_mc_cores=num_mc_cores)
   sets[["clean"]]<-parallel::mclapply(text, cleantext, stop.words=FALSE,mc.cores=num_mc_cores)
-  sets[["c.words"]]<-parallel::mclapply(sets[["clean"]], strsplit, split=" ",mc.cores=num_mc_cores)
+  sets[["c.words"]]<-parallel::mclapply(sets[["clean"]], function(x) strsplit(x, split=" ")[[1]],mc.cores=num_mc_cores)
   if(parser[1]=="core"){
     # c.p<-core.parser(text)
     # sets[["parses"]]<-parallel::mclapply(c.p$parses,tolower)
@@ -27,9 +25,12 @@ getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
     # sets[["w.nums"]]<-parallel::mclapply(c.p$w.nums,tolower)
     #   w.nums<-substr(parses, sapply(parses, function(x) gregexpr(",",x,fixed=TRUE)[[1]][1])+2, nchar(parses)-1)
   } else if(parser[1]=="spacy"){
+    n.w<-lapply(sets[["c.words"]],negator)
+    sets[["unneg.words"]]<-parallel::mclapply(n.w, function(x) x$safe,mc.cores=num_mc_cores)
+    sets[["neg.words"]]<-parallel::mclapply(n.w, function(x) x$negged,mc.cores=num_mc_cores)
     s.p<-spacyParser(text, num_mc_cores=num_mc_cores)
     sets[["parses"]]<-parallel::mclapply(s.p$parses,tolower,mc.cores=num_mc_cores)
-    sets[["p.nonum"]]<-parallel::mclapply(s.p$nonums,tolower,mc.cores=num_mc_cores)
+    sets[["p.nonum"]]<-parallel::mclapply(s.p$p.nonums,tolower,mc.cores=num_mc_cores)
     sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower,mc.cores=num_mc_cores)
     sets[["w.nums"]]<-parallel::mclapply(s.p$w.nums,tolower,mc.cores=num_mc_cores)
     sets[["ques.pos.nums"]]<-parallel::mclapply(s.p$ques.pos.nums,tolower,mc.cores=num_mc_cores)

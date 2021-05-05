@@ -46,6 +46,11 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
   nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
+
+  # create a version of nonums with and without negations
+
+  # polite_dicts$Negation
+
   w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), keyby = "doc_id"][ , l_w_nums]
   question<-NULL
   ques.pos.nums <- parallel::mclapply(unique(dt_parsedtxt$doc_id),
@@ -54,7 +59,7 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   return(list(parses=all.parses,
               ques.pos.nums=ques.pos.nums,
               pos.nums=all.pos.nums,
-              nonums=nonums,
+              p.nonums=nonums,
               w.nums=w.nums))
 }
 

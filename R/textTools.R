@@ -1,3 +1,6 @@
+# Used to avoid incorrect notes of "no visible binding"
+utils::globalVariables(c("word","negged","negs","IDs"))
+
 #' Text Counter
 #'
 #' @description Counts total prevalence of a set of items in each of a set of texts.
@@ -104,3 +107,17 @@ cleanpunct<-function(text){
   return(text)
 }
 
+
+#' Negation Scoping
+#' @description Figures out which words are negated or not
+#' @param text character Vector of strings
+#' @return list of two character vector strings, based on what's been negated
+#' @keywords internal
+negator<-function(c.words){
+  W=data.table::data.table(word=unlist(c.words))
+  W[,IDs:=.I]
+  W[,negs:=word%in%polite_dicts$Negation]
+  W[,negged:=(IDs-W[,which(negs)]) %in%((-1):3)]
+  if(all(is.na(W$negged))) W$negged=FALSE
+  return(list(negged=W[(negged),word],safe=W[(!negged),word]))
+}

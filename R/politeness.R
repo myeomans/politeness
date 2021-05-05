@@ -77,9 +77,6 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   ########################################################
   features<-list()
   features[["Hedges"]]<-textcounter(hedge_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
-  features[["Positive.Emotion"]]<-textcounter(positive_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
-  features[["Negative.Emotion"]]<-textcounter(negative_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
-
   features[["Impersonal.Pronoun"]]<-sets[["dicts"]][,"Pronouns"]
   features[["Swearing"]]<-sets[["dicts"]][,"Swearing"]
   features[["Negation"]]<-sets[["dicts"]][,"Negation"]
@@ -119,6 +116,8 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   #if(parser[1]=="none"){
   if(parser[1]!="spacy"){
     cat("Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.")
+    features[["Positive.Emotion"]]<-textcounter(positive_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
+    features[["Negative.Emotion"]]<-textcounter(negative_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
     features[["Questions"]]<-textcounter("?",text, num_mc_cores=num_mc_cores)
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="grateful"))))+
@@ -129,6 +128,10 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                   num_mc_cores=num_mc_cores)+
                                         textcounter(c("in fact"),sets[["clean"]],num_mc_cores=num_mc_cores))
   } else {
+    features[["Positive.Emotion"]]<-(textcounter(positive_list,sets[["unneg.words"]],words=TRUE, num_mc_cores=num_mc_cores)
+                                     +textcounter(negative_list,sets[["neg.words"]],words=TRUE, num_mc_cores=num_mc_cores))
+    features[["Negative.Emotion"]]<-(textcounter(positive_list,sets[["neg.words"]],words=TRUE, num_mc_cores=num_mc_cores)
+                                     +textcounter(negative_list,sets[["unneg.words"]],words=TRUE, num_mc_cores=num_mc_cores))
     # SLOW POKE!!
     features[["Agreement"]]<-(unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
                                                                                             "nsubj(agree, we)","nsubj(concur, we)",
@@ -136,7 +139,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                           num_mc_cores=num_mc_cores)-
                                                                                 textcounter(c("neg(agree","neg(concur"),x,
                                                                                             num_mc_cores=num_mc_cores))))+
-                                textcounter(apply(expand.grid(c("good","great","excellent"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
+                                textcounter(apply(expand.grid(c("good","great","excellent","brilliant"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
     # SLOW POKE!!
     features[["Acknowledgement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)","nsubj(acknowledge, i)",
                                                                                                  "nsubj(hear, i)","nsubj(get, i)",
@@ -156,7 +159,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                               "nsubj(presume, we)","nsubj(reckon, we)","nsubj(feel, we)",
                                                                                               "poss(perspective, our)","poss(belief, our)","poss(view, our)",
                                                                                               "poss(knowledge, our)","poss(opinion, our)"),x, words=TRUE,
-                                                                                               num_mc_cores=num_mc_cores))))
+                                                                                            num_mc_cores=num_mc_cores))))
 
     # SLOW POKE!!
     features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=TRUE)&grepl("-vb)",unlist(x),fixed=TRUE)
@@ -183,7 +186,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                          num_mc_cores=num_mc_cores)
                             -textcounter(c("not sorry"),sets[["clean"]],num_mc_cores=num_mc_cores)
                             -textcounter(c("neg(apologize"),sets[["p.nonum"]],num_mc_cores=num_mc_cores)
-                            )
+    )
     features[["Truth.Intensifier"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
                                                   num_mc_cores=num_mc_cores)
                                       +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","case(fact, in)"),sets[["p.nonum"]], words=TRUE,
