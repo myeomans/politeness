@@ -106,18 +106,3 @@ cleanpunct<-function(text){
   text<-stringi::stri_trans_general(text, "latin-ascii")
   return(text)
 }
-
-
-#' Negation Scoping
-#' @description Figures out which words are negated or not
-#' @param text character Vector of strings
-#' @return list of two character vector strings, based on what's been negated
-#' @keywords internal
-negator<-function(c.words){
-  W=data.table::data.table(word=unlist(c.words))
-  W[,IDs:=.I]
-  W[,negs:=word%in%polite_dicts$Negation]
-  W[,negged:=(IDs-W[,which(negs)]) %in%((-1):3)]
-  if(all(is.na(W$negged))) W$negged=FALSE
-  return(list(negged=W[(negged),word],safe=W[(!negged),word]))
-}

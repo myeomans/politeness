@@ -56,11 +56,32 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   ques.pos.nums <- parallel::mclapply(unique(dt_parsedtxt$doc_id),
                         function(x) as.character(unlist(dt_parsedtxt[question==1 & doc_id==x, .(l_w_nums = list(pos.nums))])),
                         mc.cores=num_mc_cores)
+  setkeyv(dt_parsedtxt, c("doc_id", "sentence_id", "token_id"))
+
+  # Expand the negation window
+  dt_parsedtxt[,negs:=token%in%polite_dicts$Negation]
+  dt_parsedtxt[,negP1:=shift(negs,1),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,negP2:=shift(negs,2),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,negM1:=shift(negs,-1),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,negM2:=shift(negs,-2),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,negM3:=shift(negs,-3),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,negM4:=shift(negs,-4),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,anyNeg:=sum(negP1,negP2,negM1,negM2,negM3,negM4,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
+
+  blanks<-rbindlist(list(unique(dt_parsedtxt, by= "doc_id"),
+                         unique(dt_parsedtxt, by= "doc_id")))
+  blanks[,anyNeg:=duplicated(doc_id)]
+  blanks[,token:=" "]
+  dt_parsedtxt=rbindlist(list(dt_parsedtxt,blanks))
+  neg.words=dt_parsedtxt[(anyNeg), .(l_w_nums = list(token)), keyby = "doc_id"][ , l_w_nums]
+  unneg.words=dt_parsedtxt[(!anyNeg), .(l_w_nums = list(token)), keyby = "doc_id"][ , l_w_nums]
   return(list(parses=all.parses,
               ques.pos.nums=ques.pos.nums,
               pos.nums=all.pos.nums,
               p.nonums=nonums,
-              w.nums=w.nums))
+              w.nums=w.nums,
+              neg.words=neg.words,
+              unneg.words=unneg.words))
 }
 
 ################################################################

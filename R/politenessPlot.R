@@ -165,6 +165,6 @@ politenessPlot<-function(df_polite,
                    legend.position = "top",
                    legend.background = ggplot2::element_rect(linetype = "solid", color="black"),
                    plot.margin = ggplot2::unit(c(4,25,4,0),"points"),
-                   axis.title = ggplot2::element_text(size=16),
+      axis.title = ggplot2::element_text(size=16),
                    text=ggplot2::element_text(family="Times"))
 }
