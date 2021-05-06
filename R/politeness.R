@@ -48,14 +48,6 @@
 #'@export
 
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
-  # text=phone_offers$message
-  # parser=c("spacy")
-  # metric=c("count","binary","average")
-  # drop_blank=FALSE
-  # uk_english=FALSE
-  # num_mc_cores=1
-  text[is.na(text)]<-" "
-  text<-paste(as.character(unlist(text))," ")
   if(uk_english){
     text<-usWords(text)
   }
@@ -163,10 +155,17 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                               "poss(knowledge, our)","poss(opinion, our)"),x, words=TRUE,
                                                                                             num_mc_cores=num_mc_cores))))
 
-    # SLOW POKE!!
-    features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=TRUE)&grepl("-vb)",unlist(x),fixed=TRUE)
-                                                                                 &(textcounter(paste0("-",c("be","do","have","thank","please","hang","let"),"-"),
-                                                                                               unlist(x),fixed=T)==0))))
+
+    features[["Bare.Command"]]<-unlist(lapply(sets[["pos.nums"]],function(x) sum(grepl("(1-",unlist(x),fixed=TRUE)
+                                                                                 &grepl("-vb)",unlist(x),fixed=TRUE)
+                                                                                 &(!grepl(paste0("-be-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-do-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-have-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-thank-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-please-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-hang-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-let-"),unlist(x)))
+                                                                                 )))
 
     # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
     # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"

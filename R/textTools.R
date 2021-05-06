@@ -1,6 +1,3 @@
-# Used to avoid incorrect notes of "no visible binding"
-utils::globalVariables(c("word","negged","negs","IDs"))
-
 #' Text Counter
 #'
 #' @description Counts total prevalence of a set of items in each of a set of texts.
