@@ -48,8 +48,14 @@
 #'@export
 
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
-
-  text<-as.character(unlist(text))
+  # text=phone_offers$message
+  # parser=c("spacy")
+  # metric=c("count","binary","average")
+  # drop_blank=FALSE
+  # uk_english=FALSE
+  # num_mc_cores=1
+  text[is.na(text)]<-" "
+  text<-paste(as.character(unlist(text))," ")
   if(uk_english){
     text<-usWords(text)
   }
@@ -132,23 +138,19 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                      +textcounter(negative_list,sets[["neg.words"]],words=TRUE, num_mc_cores=num_mc_cores))
     features[["Negative.Emotion"]]<-(textcounter(positive_list,sets[["neg.words"]],words=TRUE, num_mc_cores=num_mc_cores)
                                      +textcounter(negative_list,sets[["unneg.words"]],words=TRUE, num_mc_cores=num_mc_cores))
-    # SLOW POKE!!
-    features[["Agreement"]]<-(unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
-                                                                                            "nsubj(agree, we)","nsubj(concur, we)",
-                                                                                            "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
-                                                                                          num_mc_cores=num_mc_cores)-
-                                                                                textcounter(c("neg(agree","neg(concur"),x,
-                                                                                            num_mc_cores=num_mc_cores))))+
-                                textcounter(apply(expand.grid(c("good","great","excellent","brilliant"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
-    # SLOW POKE!!
-    features[["Acknowledgement"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)","nsubj(acknowledge, i)",
-                                                                                                 "nsubj(hear, i)","nsubj(get, i)",
-                                                                                                 "nsubj(understand, we)","nsubj(see, we)","nsubj(acknowledge, we)",
-                                                                                                 "nsubj(hear, we)","nsubj(get, we)"),x, words=TRUE,
-                                                                                               num_mc_cores=num_mc_cores)-
-                                                                                     textcounter(c("neg(understand","neg(see","neg(get"),x,
-                                                                                                 num_mc_cores=num_mc_cores))))
-    # SLOW POKE!!
+
+    features[["Agreement"]]<-(unlist(lapply(sets[["p.unnegs"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
+                                                                                             "nsubj(agree, we)","nsubj(concur, we)",
+                                                                                             "acomp('re, right)","acomp(are, right)"),x, words=TRUE,
+                                                                                           num_mc_cores=num_mc_cores))))+
+                                textcounter(apply(expand.grid(c("good","great","excellent","brilliant","fair","amazing"),c("idea", "point")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores))
+
+    features[["Acknowledgement"]]<-unlist(lapply(sets[["p.unnegs"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)","nsubj(acknowledge, i)",
+                                                                                                  "nsubj(hear, i)","nsubj(get, i)",
+                                                                                                  "nsubj(understand, we)","nsubj(see, we)","nsubj(acknowledge, we)",
+                                                                                                  "nsubj(hear, we)","nsubj(get, we)"),x, words=TRUE,
+                                                                                                num_mc_cores=num_mc_cores))))
+
     features[["Subjectivity"]]<-unlist(lapply(sets[["p.nonum"]],function(x) sum(textcounter(c("nsubj(think, i)","nsubj(believe, i)","nsubj(suspect, i)",
                                                                                               "nsubj(thought, i)","nsubj(felt, i)",
                                                                                               "nsubj(presume, i)","nsubj(reckon, i)","nsubj(feel, i)",

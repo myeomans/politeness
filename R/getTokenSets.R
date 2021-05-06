@@ -22,7 +22,7 @@ getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
     # sets[["w.nums"]]<-parallel::mclapply(c.p$w.nums,tolower)
     #   w.nums<-substr(parses, sapply(parses, function(x) gregexpr(",",x,fixed=TRUE)[[1]][1])+2, nchar(parses)-1)
   } else if(parser[1]=="spacy"){
-    s.p<-spacyParser(text, num_mc_cores=num_mc_cores)
+    s.p<-spacyParser(text)
     sets[["parses"]]<-parallel::mclapply(s.p$parses,tolower,mc.cores=num_mc_cores)
     sets[["p.nonum"]]<-parallel::mclapply(s.p$p.nonums,tolower,mc.cores=num_mc_cores)
     sets[["pos.nums"]]<-parallel::mclapply(s.p$pos.nums,tolower,mc.cores=num_mc_cores)
@@ -30,6 +30,8 @@ getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
     sets[["ques.pos.nums"]]<-parallel::mclapply(s.p$ques.pos.nums,tolower,mc.cores=num_mc_cores)
     sets[["unneg.words"]]<-parallel::mclapply(s.p$unneg.words,tolower,mc.cores=num_mc_cores)
     sets[["neg.words"]]<-parallel::mclapply(s.p$neg.words,tolower,mc.cores=num_mc_cores)
+    sets[["p.negs"]]<-parallel::mclapply(s.p$p.negs,tolower,mc.cores=num_mc_cores)
+    sets[["p.unnegs"]]<-parallel::mclapply(s.p$p.unnegs,tolower,mc.cores=num_mc_cores)
   }
   return(sets)
 }

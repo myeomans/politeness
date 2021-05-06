@@ -1,13 +1,16 @@
 # Used to avoid incorrect notes of "no visible binding"
-utils::globalVariables(c("l_parses","parses",
+utils::globalVariables(c("l_parse_nums","parses",
+                         "l_parses","p.nonums",
                          "l_pos_nums","pos.nums",
                          "l_w_nums","w.nums",
                          "doc_id","sentence_id",
                          "token_id","token", ".",
                          "head_token","head_token_id",
-                         "dep_rel", "tag",
+                         "dep_rel", "tag","question",
                          "anyNeg","negP1","negP2",
-                         "negM1","negM2","negM3","negM4"))
+                         "negM1","negM2","negM3","negM4",
+                         "parseNeg",
+                         "parseNeg1","parseNeg2","parseNeg3"))
 
 ################################################################
 # Workflow for SpaCy
@@ -18,12 +21,11 @@ utils::globalVariables(c("l_parses","parses",
 #' Spacy Parser
 #' @description Return POS tags from natural language.
 #' @param txt a character vector of texts.
-#' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
 #' @return list of compiled POS-tagged items.
 #' @keywords internal
 #' @import data.table
-spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
-  parsedtxt <- spacyr::spacy_parse(txt, dependency=TRUE,lemma=FALSE,pos=TRUE,tag=TRUE,entity=TRUE)
+spacyParser<- function(txt){
+  parsedtxt <- spacyr::spacy_parse(txt, dependency=TRUE,lemma=FALSE,pos=TRUE,tag=TRUE,entity=FALSE)
   .ds<-paste0(parsedtxt$sentence_id,parsedtxt$doc_id)
   parsedtxt$question<-1*(.ds%in%(.ds[parsedtxt$token=="?"]))
   dt_parsedtxt <- data.table::data.table(parsedtxt)
@@ -38,30 +40,34 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   dt_parsedtxt[dep_rel=="ROOT" , head_token := "ROOT" ]
   dt_parsedtxt[dep_rel=="ROOT" , head_token_id := 0 ]
   dt_parsedtxt[dep_rel=="ROOT" , dep_rel := "root" ]
+
   dt_parsedtxt[ , pos.nums := paste0("(",token_id,"-",token,"-",tag,")")]
   dt_parsedtxt[ , parses := paste0(dep_rel, "(",head_token,"-",head_token_id,", ",token,"-",token_id,")")]
+  dt_parsedtxt[ , p.nonums := paste0(dep_rel, "(",head_token,", ",token,")")]
   dt_parsedtxt[ , w.nums := paste0(token,"-",token_id)]
 
-  all.parses <- dt_parsedtxt[ , .(l_parses = list(parses)), keyby = "doc_id"][ , l_parses]
-  all.parses <- dt_parsedtxt[ , .(l_parses = list(parses)), keyby = "doc_id"][ , l_parses]
+  all.parses <- dt_parsedtxt[ , .(l_parse_nums = list(parses)), keyby = "doc_id"][ , l_parse_nums]
   all.pos.nums <- dt_parsedtxt[ , .(l_pos_nums = list(pos.nums)), keyby = "doc_id"][ , l_pos_nums]
-  nonums=parallel::mclapply(all.parses,gsub, pattern="-[0-9][0-9][0-9]",replacement="", mc.cores=num_mc_cores)
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9][0-9]",replacement="", mc.cores=num_mc_cores)
-  nonums=parallel::mclapply(nonums,gsub, pattern="-[0-9]",replacement="", mc.cores=num_mc_cores)
-
-  # create a version of nonums with and without negations
-
-  # polite_dicts$Negation
-
+  p.nonums <- dt_parsedtxt[ , .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), keyby = "doc_id"][ , l_w_nums]
-  question<-NULL
-  ques.pos.nums <- parallel::mclapply(unique(dt_parsedtxt$doc_id),
-                        function(x) as.character(unlist(dt_parsedtxt[question==1 & doc_id==x, .(l_w_nums = list(pos.nums))])),
-                        mc.cores=num_mc_cores)
+
+  # Only from questions
+  blanks<-unique(dt_parsedtxt, by= "doc_id")
+  blanks[,pos.nums:=" "]
+  qSet <-dt_parsedtxt[question==1]
+
+  qFull=rbindlist(list(blanks,qSet))
+
+  ques.pos.nums=qFull[, .(l_w_nums = list(pos.nums)), by=doc_id][ , l_w_nums]
+
+  # Negations!
+
   setkeyv(dt_parsedtxt, c("doc_id", "sentence_id", "token_id"))
 
+
+  negations=c(polite_dicts$Negation,"n't","nobody","negate","negative","negation")
   # Expand the negation window
-  dt_parsedtxt[,negs:=token%in%polite_dicts$Negation]
+  dt_parsedtxt[,negs:=token%in%negations]
   dt_parsedtxt[,negP1:=shift(negs,1),by=list(doc_id,sentence_id)]
   dt_parsedtxt[,negP2:=shift(negs,2),by=list(doc_id,sentence_id)]
   dt_parsedtxt[,negM1:=shift(negs,-1),by=list(doc_id,sentence_id)]
@@ -75,15 +81,45 @@ spacyParser<- function(txt, num_mc_cores=parallel::detectCores()){
   blanks[,anyNeg:=duplicated(doc_id)]
   blanks[,token:=" "]
   dt_parsedtxt=rbindlist(list(dt_parsedtxt,blanks))
+
   neg.words=dt_parsedtxt[(anyNeg), .(l_w_nums = list(token)), keyby = "doc_id"][ , l_w_nums]
   unneg.words=dt_parsedtxt[(!anyNeg), .(l_w_nums = list(token)), keyby = "doc_id"][ , l_w_nums]
+
+  dt_parsedtxt=dt_parsedtxt[token!=" "]
+
+  dt_negged<-dt_parsedtxt[dep_rel=="neg",c("doc_id","sentence_id","head_token_id")]
+  dt_negged[,parseNeg1:=TRUE]
+  dt_parsedtxt <- dt_negged[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")] # left merge on dt_parsedtxt
+  setnames(dt_negged, c("head_token_id","parseNeg1"), c("token_id","parseNeg2"))
+  dt_parsedtxt <- dt_negged[dt_parsedtxt, on=c("doc_id","sentence_id","token_id")] # left merge on dt_parsedtxt
+
+  dt_parsedtxt[,parseNeg:=sum(parseNeg1,parseNeg2,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
+
+  dt_superhead=dt_parsedtxt[parseNeg==TRUE, c("doc_id","sentence_id","token_id")]
+  setnames(dt_superhead, "token_id","head_token_id")
+  dt_superhead[,parseNeg3:=TRUE]
+  dt_parsedtxt <- dt_superhead[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")] # left merge on dt_parsedtxt
+
+  dt_parsedtxt[,parseNeg:=sum(parseNeg,parseNeg3,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
+
+  blanks<-rbindlist(list(unique(dt_parsedtxt, by= "doc_id"),
+                         unique(dt_parsedtxt, by= "doc_id")))
+  blanks[,parseNeg:=duplicated(doc_id)]
+  blanks[,p.nonums:=" "]
+  dt_parsedtxt=rbindlist(list(dt_parsedtxt,blanks))
+
+
+  p.negs <- dt_parsedtxt[(parseNeg), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
+  p.unnegs <- dt_parsedtxt[(!parseNeg), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   return(list(parses=all.parses,
               ques.pos.nums=ques.pos.nums,
               pos.nums=all.pos.nums,
-              p.nonums=nonums,
+              p.nonums=p.nonums,
               w.nums=w.nums,
               neg.words=neg.words,
-              unneg.words=unneg.words))
+              unneg.words=unneg.words,
+              p.negs=p.negs,
+              p.unnegs=p.unnegs))
 }
 
 ################################################################

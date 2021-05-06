@@ -1,6 +1,6 @@
 ## Version Update (0.8.0)
 
-Much better negation handling
+Much better negation handling, sped up the slowpoke features
 
 ## Version Update (0.7.8)
 

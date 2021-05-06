@@ -70,7 +70,7 @@ spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
 
 ```
 
-Many of the politeness features can be run without using dependency parsing by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python. However, the performance of the package is significantly lower without  If the software cannot identify the grammar in the text, some features will be dropped entirely (e.g. Bare Commands are a specific verb class), and others will be approximated (e.g. question types will not be distinguished). We highly recommend conducting final analyses with grammar parsing.
+Many of the politeness features can be run without using dependency parsing by setting `parser="none"`. We recommend this as an initial first step for researchers who may be new to python. However, the performance of the package is significantly lower without  If the software cannot identify the grammar in the text, some features will be dropped entirely (e.g. Bare Commands are a specific verb class), and others will be approximated (e.g. question types will not be distinguished, emotion categories will not account for negators). We highly recommend conducting final analyses with grammar parsing.
 
 ## Data: phone_offers
 

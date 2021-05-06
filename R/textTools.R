@@ -95,7 +95,7 @@ usWords<-function(text){
 #' @return character Vector of clean strings.
 #' @keywords internal
 cleanpunct<-function(text){
-  # text<- gsub("‘", "'",text)
+  # text<-gsub("‘", "'",text)
   # text<-gsub("’", "'", text)
   # text<-gsub("“", '"', text)
   # text<-gsub("”", '"', text)
