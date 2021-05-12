@@ -7,9 +7,9 @@ utils::globalVariables(c("l_parse_nums","parses",
                          "token_id","token", ".",
                          "head_token","head_token_id",
                          "dep_rel", "tag","question",
-                         "anyNeg","negP1","negP2",
+                         "anyNeg","parseNeg","negs",
+                         "negP1","negP2",
                          "negM1","negM2","negM3","negM4",
-                         "parseNeg",
                          "parseNeg1","parseNeg2","parseNeg3"))
 
 ################################################################
@@ -106,11 +106,12 @@ spacyParser<- function(txt){
                          unique(dt_parsedtxt, by= "doc_id")))
   blanks[,parseNeg:=duplicated(doc_id)]
   blanks[,p.nonums:=" "]
+  blanks[,question:=0]
   dt_parsedtxt=rbindlist(list(dt_parsedtxt,blanks))
 
 
-  p.negs <- dt_parsedtxt[(parseNeg), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
-  p.unnegs <- dt_parsedtxt[(!parseNeg), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
+  p.negs <- dt_parsedtxt[(parseNeg)&(question==0), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
+  p.unnegs <- dt_parsedtxt[(!parseNeg)&(question==0), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   return(list(parses=all.parses,
               ques.pos.nums=ques.pos.nums,
               pos.nums=all.pos.nums,
