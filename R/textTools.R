@@ -84,6 +84,7 @@ usWords<-function(text){
   tokUS<-quanteda::tokens_lookup(toks, politeness::uk2us,
                                  exclusive = FALSE,capkeys = FALSE)
   sentUS<-unlist(lapply(tokUS,paste, collapse=" "),use.names = F)
+  return(sentUS)
 }
 
 #' Cleaning weird encodings

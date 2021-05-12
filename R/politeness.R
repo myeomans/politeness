@@ -48,11 +48,13 @@
 #'@export
 
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
+
+  text=as.character(unlist(text))
   text[is.na(text)]<-" "
-  text<-paste(as.character(unlist(text))," ")
   if(uk_english){
     text<-usWords(text)
   }
+  text<-paste(text," ")
   ########################################################
   # Generates broad token lists for feature creation below
   if(length(text)<2000){
@@ -133,29 +135,32 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features[["Negative.Emotion"]]<-(textcounter(positive_list,sets[["neg.words"]],words=TRUE, num_mc_cores=num_mc_cores)
                                      +textcounter(negative_list,sets[["unneg.words"]],words=TRUE, num_mc_cores=num_mc_cores))
 
-    features[["Agreement"]]<-(unlist(lapply(sets[["p.unnegs"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
-                                                                                             "nsubj(agree, we)","nsubj(concur, we)",
-                                                                                             "acomp('re, right)","acomp(are, right)",
-                                                                                             "acomp('re, correct)","acomp(are, correct)",
-                                                                                             "acomp('s, true)","acomp(is, true)"),x, words=TRUE,
-                                                                                           num_mc_cores=num_mc_cores))))+
+    features[["Agreement"]]<-(unlist(lapply(sets[["p.unnegs"]],
+                                            function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
+                                                                          "nsubj(agree, we)","nsubj(concur, we)",
+                                                                          "acomp('re, right)","acomp(are, right)",
+                                                                          "acomp('re, correct)","acomp(are, correct)",
+                                                                          "acomp('s, true)","acomp(is, true)"),x, words=TRUE,
+                                                                        num_mc_cores=num_mc_cores))))+
                                 textcounter(apply(expand.grid(c("good","great","excellent","brilliant","fair","amazing"),
                                                               c("idea", "point","suggestion")),1,paste, collapse=" "),
                                             sets[["clean"]],num_mc_cores=num_mc_cores))
-    features[["Disagreement"]]<-(unlist(lapply(sets[["p.negs"]],function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
-                                                                                              "nsubj(agree, we)","nsubj(concur, we)",
-                                                                                              "acomp('re, right)","acomp(are, right)",
-                                                                                              "acomp('re, correct)","acomp(are, correct)",
-                                                                                              "acomp('s, true)","acomp(is, true)"),x, words=TRUE,
-                                                                                            num_mc_cores=num_mc_cores))))
-                                 +unlist(lapply(sets[["p.unnegs"]],function(x) sum(textcounter(c("nsubj(disagree, i)","nsubj(object, i)",
-                                                                                                 "nsubj(disagree, we)","nsubj(object, we)",
-                                                                                                 "acomp('re, wrong)","acomp(are, wrong)",
-                                                                                                 "acomp('re, incorrect)","acomp(are, incorrect)",
-                                                                                                 "acomp('s, untrue)","acomp(is, untrue)",
-                                                                                                 "det(lie, a)","det(myth, a)",
-                                                                                                 "acomp('s, false)","acomp(is, false)"),x, words=TRUE,
-                                                                                               num_mc_cores=num_mc_cores))))
+    features[["Disagreement"]]<-(unlist(lapply(sets[["p.negs"]],
+                                               function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
+                                                                             "nsubj(agree, we)","nsubj(concur, we)",
+                                                                             "acomp('re, right)","acomp(are, right)",
+                                                                             "acomp('re, correct)","acomp(are, correct)",
+                                                                             "acomp('s, true)","acomp(is, true)"),x, words=TRUE,
+                                                                           num_mc_cores=num_mc_cores))))
+                                 +unlist(lapply(sets[["p.unnegs"]],
+                                                function(x) sum(textcounter(c("nsubj(disagree, i)","nsubj(object, i)",
+                                                                              "nsubj(disagree, we)","nsubj(object, we)",
+                                                                              "acomp('re, wrong)","acomp(are, wrong)",
+                                                                              "acomp('re, incorrect)","acomp(are, incorrect)",
+                                                                              "acomp('s, untrue)","acomp(is, untrue)",
+                                                                              "det(lie, a)","det(myth, a)",
+                                                                              "acomp('s, false)","acomp(is, false)"),x, words=TRUE,
+                                                                            num_mc_cores=num_mc_cores))))
                                  +textcounter(apply(expand.grid(c("bad","terrible","horrible","awful","dumb","stupid"),c("idea", "point","suggestion")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores)
     )
 
@@ -225,8 +230,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
 
   if(metric[1]=="binary"){
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
-  }
-  else if (metric[1]=="average"){
+  } else if (metric[1]=="average"){
     word_counts <- stringr::str_count(text, "[[:alpha:]]+")
     features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
   }

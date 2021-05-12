@@ -1,4 +1,4 @@
-## Version Update (0.8.0)
+## Version Update (0.8.1)
 
 Much better negation handling, sped up the slowpoke features
 
