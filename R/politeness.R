@@ -86,7 +86,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   features[["Informal.Title"]]<-sets[["dicts"]][,"InformalTitle"]
   features[["Formal.Title"]]<-sets[["dicts"]][,"FormalTitle"]
 
-  features[["Could.You"]]<-textcounter(c("could you","would you"),sets[["clean"]], num_mc_cores=num_mc_cores)
+  features[["Could.You"]]<-textcounter(c("could you","would you","might you"),sets[["clean"]], num_mc_cores=num_mc_cores)
   features[["Can.You"]]<-textcounter(c("can you","will you"),sets[["clean"]], num_mc_cores=num_mc_cores)
 
   features[["By.The.Way"]]<-textcounter(c("by the way"),sets[["clean"]], num_mc_cores=num_mc_cores)
@@ -99,7 +99,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
   features[["Reassurance"]]<-textcounter(c("is okay", "not worry", "no big deal", "not a big deal", "no problem",
                                            "no worries", "is fine", "you are good", "it's fine", "it's okay") ,sets[["clean"]],
                                          num_mc_cores=num_mc_cores)
-  features[["Ask.Agency"]]<-textcounter(c("do me a favor", "do me a favour", " let me ", " allow me ", " can i ", " should i ",
+  features[["Ask.Agency"]]<-textcounter(c("do me a favor", " let me ", " allow me ", " can i ", " should i ",
                                           " may i ", "might i ", " could i "),sets[["clean"]],
                                         num_mc_cores=num_mc_cores)
   features[["Give.Agency"]]<-textcounter(c("let you", "allow you", "you can ", " you may ", " you could "),sets[["clean"]],
@@ -150,6 +150,8 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features[["Disagreement"]]<-(unlist(lapply(sets[["p.negs"]],
                                                function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
                                                                              "nsubj(agree, we)","nsubj(concur, we)",
+                                                                             "nsubj(think, we)","nsubj(think, i)",
+                                                                             "nsubj(believe, we)","nsubj(believe, i)",
                                                                              "acomp('re, right)","acomp(are, right)",
                                                                              "acomp('re, correct)","acomp(are, correct)",
                                                                              "acomp('s, true)","acomp(is, true)"),x, words=TRUE,
