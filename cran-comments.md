@@ -1,4 +1,8 @@
-## Version Update (0.8.1)
+## Version Update (0.8.2) 
+
+Fixed bugs in short phrases (e.g. for me), expanded adverb limiters
+
+## Version Update (0.8.1) 
 
 Much better negation handling, sped up the slowpoke features
 

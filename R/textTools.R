@@ -46,6 +46,7 @@ cleantext<-function (text, language = "english", stop.words = TRUE) {
   }
   text <- tm::removeNumbers(text)
   text <- tm::stripWhitespace(text)
+  text <- paste0(" ",text," ")
   return(as.character(text))
 }
 
