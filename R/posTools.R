@@ -3,6 +3,8 @@ utils::globalVariables(c("l_parse_nums","parses",
                          "l_parses","p.nonums",
                          "l_pos_nums","pos.nums",
                          "l_w_nums","w.nums",
+                         "rd0","rd1","rd2","rd3","root_dist",
+                         "pos.dists","l_pos_dists",
                          "doc_id","sentence_id",
                          "token_id","token", ".",
                          "head_token","head_token_id",
@@ -41,6 +43,29 @@ spacyParser<- function(txt){
   dt_parsedtxt[dep_rel=="ROOT" , head_token_id := 0 ]
   dt_parsedtxt[dep_rel=="ROOT" , dep_rel := "root" ]
 
+  ###### ROOT DISTANCE (for questions)
+  dt_parsedtxt[dep_rel=="root" , rd0:=1]
+
+  dt_heads=dt_parsedtxt[rd0==1,c("doc_id","sentence_id","token_id")]
+  dt_heads[,rd1:=1]
+  setnames(dt_heads, c("token_id"),("head_token_id"))
+  dt_parsedtxt <- dt_heads[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
+  dt_parsedtxt[!is.na(rd0),rd1:=1]
+
+  dt_heads=dt_parsedtxt[rd1==1,c("doc_id","sentence_id","token_id")]
+  dt_heads[,rd2:=1]
+  setnames(dt_heads, c("token_id"),("head_token_id"))
+  dt_parsedtxt <- dt_heads[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
+  dt_parsedtxt[!is.na(rd1),rd2:=1]
+
+  dt_heads=dt_parsedtxt[rd2==1,c("doc_id","sentence_id","token_id")]
+  dt_heads[,rd3:=1]
+  setnames(dt_heads, c("token_id"),("head_token_id"))
+  dt_parsedtxt <- dt_heads[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
+  dt_parsedtxt[!is.na(rd2),rd3:=1]
+
+  dt_parsedtxt[,root_dist:=4-sum(rd0,rd1,rd2,rd3,na.rm=T),,by=list(doc_id, sentence_id, token_id)]
+  ###### Constuct Tag Sets
   dt_parsedtxt[ , pos.nums := paste0("(",token_id,"-",token,"-",tag,")")]
   dt_parsedtxt[ , parses := paste0(dep_rel, "(",head_token,"-",head_token_id,", ",token,"-",token_id,")")]
   dt_parsedtxt[ , p.nonums := paste0(dep_rel, "(",head_token,", ",token,")")]
@@ -51,16 +76,19 @@ spacyParser<- function(txt){
   p.nonums <- dt_parsedtxt[ , .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), keyby = "doc_id"][ , l_w_nums]
 
+  dt_parsedtxt[ , pos.dists := paste0("(",token_id,"-",token,"-",tag,")","-",root_dist)]
+
   # Only from questions
+
   blanks<-unique(dt_parsedtxt, by= "doc_id")
-  blanks[,pos.nums:=" "]
+  blanks[,pos.dists:=" "]
   qSet <-dt_parsedtxt[question==1]
 
   qFull=rbindlist(list(blanks,qSet))
 
-  ques.pos.nums=qFull[, .(l_w_nums = list(pos.nums)), by=doc_id][ , l_w_nums]
+  ques.pos.dists=qFull[, .(l_pos_dists = list(pos.dists)), by=doc_id][ , l_pos_dists]
 
-  # Negations!
+  #################### Negations!
 
   setkeyv(dt_parsedtxt, c("doc_id", "sentence_id", "token_id"))
 
@@ -113,7 +141,7 @@ spacyParser<- function(txt){
   p.negs <- dt_parsedtxt[(parseNeg)&(question==0), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   p.unnegs <- dt_parsedtxt[(!parseNeg)&(question==0), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   return(list(parses=all.parses,
-              ques.pos.nums=ques.pos.nums,
+              ques.pos.dists=ques.pos.dists,
               pos.nums=all.pos.nums,
               p.nonums=p.nonums,
               w.nums=w.nums,

@@ -1,3 +1,7 @@
+## Version Update (0.8.3) 
+
+Better question detection
+
 ## Version Update (0.8.2) 
 
 Fixed bugs in short phrases (e.g. for me), expanded adverb limiters
