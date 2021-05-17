@@ -198,18 +198,19 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                  &(!grepl(paste0("-let-"),unlist(x)))
     )))
 
-    # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
-    # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
      q.words<-c("who","what","where","when","why","how","which")
     features[["WH.Questions"]]<-unlist(lapply(sets[["ques.pos.dists"]],
                                                function(x) sum(textcounter(c(paste0(q.words,"-wrb"),paste0(q.words,"-wdt"),paste0(q.words,"-wp")),x))))
     # features[["WH.QuestionsX"]]<-unlist(lapply(sets[["ques.pos.dists"]],
     #                                           function(x) sum(textcounter(c("wrb)-0","wdt)-0","-wp)-0","wrb)-1","wdt)-1","-wp)-1"),x))))
     # maybe look for all words before the root? except...
+    # "At what point do you say enough is enough?"
     # "Given what has happened, do you feel that the actions in response to this were always appropriate?"
     features[["YesNo.Questions"]]<-unlist(lapply(sets[["ques.pos.dists"]],
                                                  function(x) sum(textcounter("-?-",x,num_mc_cores=num_mc_cores))))-features[["WH.Questions"]]
-
+    # Also....
+    # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
+    # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="grateful"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="gratitude"))))+
