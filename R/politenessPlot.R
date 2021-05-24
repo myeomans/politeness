@@ -49,6 +49,9 @@ politenessPlot<-function(df_polite,
   if(!(is.numeric(CI)&(CI>0)&(CI<1))){
     stop("CI must be numeric betwwen 0 and 1")
   }
+  if(is.null(split)){
+    stop("Must include covariate split")
+  }
   # confirm that split is the right type
   if(sum(is.na(split))>0){
     stop("split must not have NAs")
@@ -57,9 +60,9 @@ politenessPlot<-function(df_polite,
     split<-as.character(split)
   }
   # confirm that split only has two values
-  if( length(unique(split)) > 2){
+  if( length(unique(split)) != 2){
     if(is.character(split)){
-      stop("split must not have more than two values")
+      stop("split must have exactly two values")
     }
     # if split has more than 2 values transform it into a binary variable by taking the top 33% and top 33%
     # if the cut at 33% and 67% is the same we throw an error

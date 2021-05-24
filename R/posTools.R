@@ -115,6 +115,9 @@ spacyParser<- function(txt){
 
   dt_parsedtxt=dt_parsedtxt[token!=" "]
 
+  # adverbial clauses shouldn't propogate dependency negations.
+  dt_parsedtxt[dep_rel=="advcl",head_token_id:=0]
+
   dt_negged<-dt_parsedtxt[dep_rel=="neg",c("doc_id","sentence_id","head_token_id")]
   dt_negged[,parseNeg1:=TRUE]
   dt_parsedtxt <- dt_negged[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")] # left merge on dt_parsedtxt

@@ -1,3 +1,7 @@
+## Version Update (0.8.4) 
+
+Some changes to agreement, etc.
+
 ## Version Update (0.8.3) 
 
 Better question detection

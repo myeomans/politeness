@@ -142,6 +142,8 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                           "nsubj(agree, we)","nsubj(concur, we)",
                                                                           "acomp('re, right)","acomp(are, right)",
                                                                           "acomp('re, correct)","acomp(are, correct)",
+                                                                          "acomp('s, right)","acomp(is, right)",
+                                                                          "acomp('s, correct)","acomp(is, correct)",
                                                                           "acomp('s, true)","acomp(is, true)"),x, words=TRUE,
                                                                         num_mc_cores=num_mc_cores))))+
                                 textcounter(apply(expand.grid(c("good","great","excellent","brilliant","fair","amazing"),
@@ -154,6 +156,8 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                              "nsubj(believe, we)","nsubj(believe, i)",
                                                                              "acomp('re, right)","acomp(are, right)",
                                                                              "acomp('re, correct)","acomp(are, correct)",
+                                                                             "acomp('s, right)","acomp(is, right)",
+                                                                             "acomp('s, correct)","acomp(is, correct)",
                                                                              "acomp('s, true)","acomp(is, true)"),x, words=TRUE,
                                                                            num_mc_cores=num_mc_cores))))
                                  +unlist(lapply(sets[["p.unnegs"]],
@@ -161,11 +165,15 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                               "nsubj(disagree, we)","nsubj(object, we)",
                                                                               "acomp('re, wrong)","acomp(are, wrong)",
                                                                               "acomp('re, incorrect)","acomp(are, incorrect)",
+                                                                              "acomp('s, wrong)","acomp(is, wrong)",
+                                                                              "acomp('s, incorrect)","acomp(is, incorrect)",
                                                                               "acomp('s, untrue)","acomp(is, untrue)",
                                                                               "det(lie, a)","det(myth, a)",
                                                                               "acomp('s, false)","acomp(is, false)"),x, words=TRUE,
                                                                             num_mc_cores=num_mc_cores))))
-                                 +textcounter(apply(expand.grid(c("bad","terrible","horrible","awful","dumb","stupid"),c("idea", "point","suggestion")),1,paste, collapse=" "),sets[["clean"]],num_mc_cores=num_mc_cores)
+                                 +textcounter(apply(expand.grid(c("bad","terrible","horrible","awful","dumb","stupid"),
+                                                                c("idea", "point","suggestion")),1,paste, collapse=" "),
+                                              sets[["clean"]],num_mc_cores=num_mc_cores)
     )
 
     features[["Acknowledgement"]]<-unlist(lapply(sets[["p.unnegs"]],function(x) sum(textcounter(c("nsubj(understand, i)","nsubj(see, i)","nsubj(acknowledge, i)",
