@@ -200,6 +200,8 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                  &(!grepl(paste0("-be-"),unlist(x)))
                                                                                  &(!grepl(paste0("-do-"),unlist(x)))
                                                                                  &(!grepl(paste0("-have-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-hope-"),unlist(x)))
+                                                                                 &(!grepl(paste0("-excuse-"),unlist(x)))
                                                                                  &(!grepl(paste0("-thank-"),unlist(x)))
                                                                                  &(!grepl(paste0("-please-"),unlist(x)))
                                                                                  &(!grepl(paste0("-hang-"),unlist(x)))

@@ -1,6 +1,10 @@
+## Version Update (0.8.5) 
+
+Bare command tweak
+
 ## Version Update (0.8.4) 
 
-Some changes to agreement, etc.
+Some changes to agreement, and some two-word phrases
 
 ## Version Update (0.8.3) 
 

@@ -1,7 +1,7 @@
 Package: politeness
 Type: Package
 Title: Detecting Politeness Features in Text
-Version: 0.8.4
+Version: 0.8.5
 Author: Mike Yeomans, Alejandro Kantor, Dustin Tingley
 Maintainer: Mike Yeomans <mk.yeomans@gmail.com>
 Description: Detecting markers of politeness in English natural language. This package allows researchers to easily visualize and quantify politeness between groups of documents. This package combines prior research on the linguistic markers of politeness. We thank the Spencer Foundation, the Hewlett Foundation, and Harvard's Institute for Quantitative Social Science for support.
