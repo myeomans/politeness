@@ -1,6 +1,6 @@
 ## Version Update (0.8.5) 
 
-Bare command tweak
+Bare command tweak, and improvement to apology detection
 
 ## Version Update (0.8.4) 
 

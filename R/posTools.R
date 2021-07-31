@@ -12,7 +12,8 @@ utils::globalVariables(c("l_parse_nums","parses",
                          "anyNeg","parseNeg","negs",
                          "negP1","negP2",
                          "negM1","negM2","negM3","negM4",
-                         "parseNeg1","parseNeg2","parseNeg3"))
+                         "parseNeg1","parseNeg2","parseNeg3",
+                         "selfies","selfscope"))
 
 ################################################################
 # Workflow for SpaCy
@@ -21,7 +22,7 @@ utils::globalVariables(c("l_parse_nums","parses",
 ################################################################
 
 #' Spacy Parser
-#' @description Return POS tags from natural language.
+#' @description Return PO S tags from natural language.
 #' @param txt a character vector of texts.
 #' @return list of compiled POS-tagged items.
 #' @keywords internal
@@ -133,16 +134,27 @@ spacyParser<- function(txt){
 
   dt_parsedtxt[,parseNeg:=sum(parseNeg,parseNeg3,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
 
+  # selfie triplets (for apologies)
+  dt_parsedtxt[,selfies:=token%in%c("I","we","our","me","us")]
+  dt_selfies=dt_parsedtxt[selfies==1,c("doc_id","sentence_id","head_token_id")]
+  dt_selfies[,selfscope:=1]
+  dt_parsedtxt <- dt_selfies[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
+  dt_parsedtxt[is.na(selfscope),selfscope:=0]
+
+  # Fill in blanks
   blanks<-rbindlist(list(unique(dt_parsedtxt, by= "doc_id"),
+                         unique(dt_parsedtxt, by= "doc_id"),
                          unique(dt_parsedtxt, by= "doc_id")))
   blanks[,parseNeg:=duplicated(doc_id)]
   blanks[,p.nonums:=" "]
   blanks[,question:=0]
+  blanks[,selfscope:=1]
   dt_parsedtxt=rbindlist(list(dt_parsedtxt,blanks))
-
 
   p.negs <- dt_parsedtxt[(parseNeg)&(question==0), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   p.unnegs <- dt_parsedtxt[(!parseNeg)&(question==0), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
+
+  self.unnegs <- dt_parsedtxt[(!parseNeg)&(question==0)&(selfscope==1), .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
   return(list(parses=all.parses,
               ques.pos.dists=ques.pos.dists,
               pos.nums=all.pos.nums,
@@ -151,7 +163,8 @@ spacyParser<- function(txt){
               neg.words=neg.words,
               unneg.words=unneg.words,
               p.negs=p.negs,
-              p.unnegs=p.unnegs))
+              p.unnegs=p.unnegs,
+              self.unnegs=self.unnegs))
 }
 
 ################################################################

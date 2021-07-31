@@ -208,9 +208,9 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                                                                  &(!grepl(paste0("-let-"),unlist(x)))
     )))
 
-     q.words<-c("who","what","where","when","why","how","which")
+    q.words<-c("who","what","where","when","why","how","which")
     features[["WH.Questions"]]<-unlist(lapply(sets[["ques.pos.dists"]],
-                                               function(x) sum(textcounter(c(paste0(q.words,"-wrb"),paste0(q.words,"-wdt"),paste0(q.words,"-wp")),x))))
+                                              function(x) sum(textcounter(c(paste0(q.words,"-wrb"),paste0(q.words,"-wdt"),paste0(q.words,"-wp")),x))))
     # features[["WH.QuestionsX"]]<-unlist(lapply(sets[["ques.pos.dists"]],
     #                                           function(x) sum(textcounter(c("wrb)-0","wdt)-0","-wp)-0","wrb)-1","wdt)-1","-wp)-1"),x))))
     # maybe look for all words before the root? except...
@@ -226,11 +226,24 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="gratitude"))))+
                                 unlist(lapply(sets[["p.unnegs"]], function(x) sum(grepl("(appreciate, we)",x,fixed=TRUE))))+
                                 unlist(lapply(sets[["p.unnegs"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
-    features[["Apology"]]<-(textcounter(c("sorry"," woops","oops","whoops"),sets[["unneg.words"]],words=TRUE,
-                                        num_mc_cores=num_mc_cores)
-                            +textcounter(c("dobj(excuse, me)","nsubj(apologize, we)","nsubj(apologize, i)","dobj(forgive, me)"),sets[["p.unnegs"]], words=TRUE,
+
+    features[["Apology"]]<-(textcounter(c("woops","oops","whoops"),sets[["unneg.words"]],words=TRUE,num_mc_cores=num_mc_cores)
+                            +unlist(lapply(sets[["p.unnegs"]], function(x) sum((grepl("intj",unlist(x))|(grepl("root",unlist(x))))&
+                                                                                 (grepl("sorry)",unlist(x),fixed=TRUE)))))
+                            +textcounter(c("acomp(am, sorry)",
+                                           "nsubj(apologize, we)",
+                                           "nsubj(apologize, i)",
+                                           "nsubj(regret, i)", "nsubj(regret, we)",
+                                           "root(ROOT, excuse)",
+                                           "poss(apologies, my)","poss(apologies, our)",
+                                           "poss(forgiveness, your)",
+                                           "dobj(forgive, me)"),sets[["p.unnegs"]], words=TRUE,
                                          num_mc_cores=num_mc_cores)
-    )
+                            +textcounter(c("acomp(are, sorry)",
+                                           "nsubj(apologize, me)","nsubj(apologize, I)",
+                                           "xcomp(like, apologize)","xcomp(want, apologize)"),
+                                         sets[["self.unnegs"]], words=TRUE,
+                                         num_mc_cores=num_mc_cores))
     features[["Truth.Intensifier"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
                                                   num_mc_cores=num_mc_cores)
                                       +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","pobj(fact, in)","case(fact, in)"),sets[["p.nonum"]], words=TRUE,

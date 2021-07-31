@@ -13,6 +13,6 @@ spacyParser(txt)
 list of compiled POS-tagged items.
 }
 \description{
-Return POS tags from natural language.
+Return PO S tags from natural language.
 }
 \keyword{internal}

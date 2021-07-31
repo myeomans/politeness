@@ -32,6 +32,7 @@ getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
     sets[["neg.words"]]<-parallel::mclapply(s.p$neg.words,tolower,mc.cores=num_mc_cores)
     sets[["p.negs"]]<-parallel::mclapply(s.p$p.negs,tolower,mc.cores=num_mc_cores)
     sets[["p.unnegs"]]<-parallel::mclapply(s.p$p.unnegs,tolower,mc.cores=num_mc_cores)
+    sets[["self.unnegs"]]<-parallel::mclapply(s.p$self.unnegs,tolower,mc.cores=num_mc_cores)
   }
   return(sets)
 }
