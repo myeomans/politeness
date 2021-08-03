@@ -230,17 +230,18 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features[["Apology"]]<-(textcounter(c("woops","oops","whoops"),sets[["unneg.words"]],words=TRUE,num_mc_cores=num_mc_cores)
                             +unlist(lapply(sets[["p.unnegs"]], function(x) sum((grepl("intj",unlist(x))|(grepl("root",unlist(x))))&
                                                                                  (grepl("sorry)",unlist(x),fixed=TRUE)))))
-                            +textcounter(c("acomp(am, sorry)",
-                                           "nsubj(apologize, we)",
-                                           "nsubj(apologize, i)",
+                            +textcounter(c("acomp(am, sorry)","acomp('m, sorry)","amod(i'm, sorry)",
+                                           "nsubj(apologize, i)","nsubj(apologize, we)",
                                            "nsubj(regret, i)", "nsubj(regret, we)",
-                                           "root(ROOT, excuse)",
+                                           "dobj(excuse, me)","dobj(excuse, us)","dobj(excuse, our)",
+                                           "dobj(forgive, me)","dobj(forgive, us)","dobj(forgive, our)",
+                                           "root(root, pardon)",
+                                           "poss(forgiveness, your)","poss(pardon, your)",
                                            "poss(apologies, my)","poss(apologies, our)",
-                                           "poss(forgiveness, your)",
-                                           "dobj(forgive, me)"),sets[["p.unnegs"]], words=TRUE,
+                                           "nsubj(apologize, me)","nsubj(apologize, us)"),sets[["p.unnegs"]], words=TRUE,
                                          num_mc_cores=num_mc_cores)
-                            +textcounter(c("acomp(are, sorry)",
-                                           "nsubj(apologize, me)","nsubj(apologize, I)",
+                            +textcounter(c("acomp(are, sorry)","acomp('re, sorry)",
+                                           "acomp(was, sorry)","acomp(were, sorry)",
                                            "xcomp(like, apologize)","xcomp(want, apologize)"),
                                          sets[["self.unnegs"]], words=TRUE,
                                          num_mc_cores=num_mc_cores))

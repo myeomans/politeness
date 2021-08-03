@@ -10,8 +10,8 @@ utils::globalVariables(c("l_parse_nums","parses",
                          "head_token","head_token_id",
                          "dep_rel", "tag","question",
                          "anyNeg","parseNeg","negs",
-                         "negP1","negP2",
-                         "negM1","negM2","negM3","negM4",
+                         "negP1","negP2","negP3","negP4",
+                         "negM1","negM2",
                          "parseNeg1","parseNeg2","parseNeg3",
                          "selfies","selfscope"))
 
@@ -22,7 +22,7 @@ utils::globalVariables(c("l_parse_nums","parses",
 ################################################################
 
 #' Spacy Parser
-#' @description Return PO S tags from natural language.
+#' @description Return POS tags from natural language.
 #' @param txt a character vector of texts.
 #' @return list of compiled POS-tagged items.
 #' @keywords internal
@@ -43,7 +43,7 @@ spacyParser<- function(txt){
   dt_parsedtxt[dep_rel=="ROOT" , head_token := "ROOT" ]
   dt_parsedtxt[dep_rel=="ROOT" , head_token_id := 0 ]
   dt_parsedtxt[dep_rel=="ROOT" , dep_rel := "root" ]
-
+  dt_parsedtxt[,raw_head_token_id:=head_token_id]
   ###### ROOT DISTANCE (for questions)
   dt_parsedtxt[dep_rel=="root" , rd0:=1]
 
@@ -99,11 +99,11 @@ spacyParser<- function(txt){
   dt_parsedtxt[,negs:=token%in%negations]
   dt_parsedtxt[,negP1:=shift(negs,1),by=list(doc_id,sentence_id)]
   dt_parsedtxt[,negP2:=shift(negs,2),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,negP3:=shift(negs,3),by=list(doc_id,sentence_id)]
+  dt_parsedtxt[,negP4:=shift(negs,4),by=list(doc_id,sentence_id)]
   dt_parsedtxt[,negM1:=shift(negs,-1),by=list(doc_id,sentence_id)]
   dt_parsedtxt[,negM2:=shift(negs,-2),by=list(doc_id,sentence_id)]
-  dt_parsedtxt[,negM3:=shift(negs,-3),by=list(doc_id,sentence_id)]
-  dt_parsedtxt[,negM4:=shift(negs,-4),by=list(doc_id,sentence_id)]
-  dt_parsedtxt[,anyNeg:=sum(negP1,negP2,negM1,negM2,negM3,negM4,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
+  dt_parsedtxt[,anyNeg:=sum(negP1,negP2,negP3,negP4,negM1,negM2,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
 
   blanks<-rbindlist(list(unique(dt_parsedtxt, by= "doc_id"),
                          unique(dt_parsedtxt, by= "doc_id")))
@@ -116,8 +116,24 @@ spacyParser<- function(txt){
 
   dt_parsedtxt=dt_parsedtxt[token!=" "]
 
-  # adverbial clauses shouldn't propogate dependency negations.
-  dt_parsedtxt[dep_rel=="advcl",head_token_id:=0]
+
+  # selfie triplets (for apologies)
+  dt_parsedtxt[,selfies:=token%in%c("I","we","We","our","Our","me","Me","us","Us")]
+  dt_selfies=dt_parsedtxt[selfies==1,c("doc_id","sentence_id","head_token_id")]
+  dt_selfies[,selfscope1:=1]
+  dt_parsedtxt <- dt_selfies[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
+  dt_parsedtxt[is.na(selfscope1),selfscope1:=0]
+
+  dt_selfies=dt_parsedtxt[selfscope1==1,c("doc_id","sentence_id","token_id","selfscope1")]
+  setnames(dt_selfies, c("token_id","selfscope1"), c("head_token_id","selfscope2"))
+  dt_parsedtxt <- dt_selfies[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
+  dt_parsedtxt[is.na(selfscope2),selfscope2:=0]
+  dt_parsedtxt[,selfscope:=sum(selfscope1,selfscope2,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
+
+
+  # adverbial, adpositional and conjunctive clauses shouldn't propogate dependency negations.
+  dt_parsedtxt[dep_rel%in%c("advcl","prep"),head_token_id:=0]
+  dt_parsedtxt[dep_rel%in%c("conj") & abs(head_token_id-token_id)>3,head_token_id:=0]
 
   dt_negged<-dt_parsedtxt[dep_rel=="neg",c("doc_id","sentence_id","head_token_id")]
   dt_negged[,parseNeg1:=TRUE]
@@ -133,13 +149,6 @@ spacyParser<- function(txt){
   dt_parsedtxt <- dt_superhead[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")] # left merge on dt_parsedtxt
 
   dt_parsedtxt[,parseNeg:=sum(parseNeg,parseNeg3,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
-
-  # selfie triplets (for apologies)
-  dt_parsedtxt[,selfies:=token%in%c("I","we","our","me","us")]
-  dt_selfies=dt_parsedtxt[selfies==1,c("doc_id","sentence_id","head_token_id")]
-  dt_selfies[,selfscope:=1]
-  dt_parsedtxt <- dt_selfies[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
-  dt_parsedtxt[is.na(selfscope),selfscope:=0]
 
   # Fill in blanks
   blanks<-rbindlist(list(unique(dt_parsedtxt, by= "doc_id"),

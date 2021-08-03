@@ -10,6 +10,7 @@ utils::globalVariables(c("sets","text"))
 #' @keywords internal
 #'
 getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
+  text=cleanpunct(text)
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts, num_mc_cores=num_mc_cores)
   sets[["clean"]]<-parallel::mclapply(text, cleantext, stop.words=FALSE,mc.cores=num_mc_cores)
