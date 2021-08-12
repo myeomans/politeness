@@ -42,7 +42,7 @@ If the researcher wants to generate a politeness classifier, they can do so usin
 
 ## Politeness Features
 
-The main value of this package is in the `politeness` function, which counts the use of 36 different politeness features in natural language. Here, we borrow directly from existing research on the computational linguistics of politeness (Brown & Levinson, 1987; Danescu-Niculescu-Mizil et al., 2013; Voigt et al., 2017). These features are summarized in the table below, along with examples of each.
+The main value of this package is in the `politeness` function, which counts the use of different politeness features in natural language. Here, we initially borrowed directly from existing research on the computational linguistics of politeness (Brown & Levinson, 1987; Danescu-Niculescu-Mizil et al., 2013; Voigt et al., 2017). However, features have also been added and revised based on ongoing research (e.g. Acknowledgement, Subjectivity, Disagreement). These features are summarized in the table below, along with examples of each.
 
 ```{r}
 data("feature_table")
@@ -84,7 +84,7 @@ Half the participants were told to use a "warm and friendly" communication style
 
 ## Detecting politeness features
 
-The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. There are 37 features in total, but some user options affect the number of features that are returned. For one, if a dependency parser is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
+The function `politeness()` takes in an *n*-length vector of texts, and returns an *n*-by-*f* data.frame, with *f* columns corresponding to the number of calculated features. Some user options affect the number of features that are returned. For one, if a dependency parser is not used (by setting `parser = "none"`) then some features that depend on these tags will not be calculated. Additionally, you may use the setting `drop_blank = TRUE` which will remove features that were not detected in any of the texts.
 
 The cells are calculated in one of three ways. Setting `metric = "count"` will populate each cell with the raw count of each feature in the text. Alternatively, `metric = "binary" ` will return a binary indicator of the presence or absence of features. For many features these are essentially equivalent, since they are typically present only once, or not at all (e.g. "hello", "goodbye"). However, other features can be used many times in a single communication (e.g. positive words). An additional concern researchers may have is if their documents have a lot of variance on length - in that case, controlling for length with `metric = "average"` will generate the presence of each feature as a percentage of the total words in each document. We do not recommend this option as a default because length is often intrinsically correlated with politeness (e.g. "being short" with someone is synonymous with rudeness) so this may ony be desirable when the variance in length is large, and confounded by other factors besides politeness (e.g. a dataset with news )
 
