@@ -1,7 +1,10 @@
 
 ## Version Update (0.8.5) 
 
-Bare command tweak, an improvement to apology detection, and a bigger training dataset for receptiveness. 
+Bare command tweak, an improvement to apology detection, updates to our vignette, and a bigger training dataset for receptiveness. 
+
+Also a fix from the last submission - removing some tests that do not work on the CRAN server due to dependencies
+
 
 ## Version Update (0.8.4) 
 
