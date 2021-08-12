@@ -76,21 +76,30 @@
 #' Pre-Trained Receptiveness Data
 #'
 #' A dataset to train a model for detecting conversational receptiveness.
-#' @format A data frame with 543 rows and 2 variables:
+#' @format A data frame with 2860 rows and 2 variables:
 #' \describe{
 #'   \item{text}{character written response about policy disagreement}
-#'   \item{receptive}{numeric average of annotator ratings for "receptiveness"}
+#'   \item{receptive}{numeric standardized average of annotator ratings for "receptiveness"}
 #' }
-#' Primarily for use within the receptiveness() function.
+#' Primarily for use within the receptiveness() function. The data was compiled from
+#' Studies 1 and 4 of the original paper, as well as an unpublished study with a
+#' very similar design, in which text responses were rated by disagreeing others.
 #' @source  Yeomans, M., Minson, J., Collins, H., Chen, F. & Gino, F. (2020).
 #'
 #' "Conversational Receptiveness: Improving Engagement with Opposing Views"
 #'
-#' Study 1. \url{https://osf.io/2n59b/}
-#'
+#' \url{https://osf.io/2n59b/}
 #'
 "receptive_train"
 
+
+
+#' Pre-Trained Receptiveness Data
+#'
+#' A dataset to train a model for detecting conversational receptiveness.
+#' @format Pre-calculated politeness features for the receptive_train dataset
+#'
+"receptive_polite"
 
 #' UK to US Conversion dictionary
 #'

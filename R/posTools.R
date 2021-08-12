@@ -7,13 +7,15 @@ utils::globalVariables(c("l_parse_nums","parses",
                          "pos.dists","l_pos_dists",
                          "doc_id","sentence_id",
                          "token_id","token", ".",
+                         "raw_head_token_id",
                          "head_token","head_token_id",
                          "dep_rel", "tag","question",
                          "anyNeg","parseNeg","negs",
                          "negP1","negP2","negP3","negP4",
                          "negM1","negM2",
                          "parseNeg1","parseNeg2","parseNeg3",
-                         "selfies","selfscope"))
+                         "selfies","selfscope",
+                         "selfscope1","selfscope2"))
 
 ################################################################
 # Workflow for SpaCy

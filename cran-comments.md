@@ -1,6 +1,7 @@
+
 ## Version Update (0.8.5) 
 
-Bare command tweak, and improvement to apology detection
+Bare command tweak, an improvement to apology detection, and a bigger training dataset for receptiveness. 
 
 ## Version Update (0.8.4) 
 
