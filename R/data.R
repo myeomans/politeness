@@ -67,7 +67,7 @@
 #'
 #' This table describes all the text features extracted in this package. See vignette for details.
 #'
-#' @format A data.frame with information about 36 politeness features.
+#' @format A data.frame with information about the politeness features.
 #'
 "feature_table"
 
