@@ -123,7 +123,7 @@ spacyParser<- function(txt){
   dt_parsedtxt[,selfies:=token%in%c("I","we","We","our","Our","me","Me","us","Us")]
   dt_selfies=dt_parsedtxt[selfies==1,c("doc_id","sentence_id","head_token_id")]
   dt_selfies[,selfscope1:=1]
-  dt_parsedtxt <- dt_selfies[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")]
+  dt_parsedtxt <- dt_selfies[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id"),allow.cartesian=TRUE]
   dt_parsedtxt[is.na(selfscope1),selfscope1:=0]
 
   dt_selfies=dt_parsedtxt[selfscope1==1,c("doc_id","sentence_id","token_id","selfscope1")]
@@ -139,16 +139,16 @@ spacyParser<- function(txt){
 
   dt_negged<-dt_parsedtxt[dep_rel=="neg",c("doc_id","sentence_id","head_token_id")]
   dt_negged[,parseNeg1:=TRUE]
-  dt_parsedtxt <- dt_negged[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")] # left merge on dt_parsedtxt
+  dt_parsedtxt <- dt_negged[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id"),allow.cartesian=TRUE] # left merge on dt_parsedtxt
   setnames(dt_negged, c("head_token_id","parseNeg1"), c("token_id","parseNeg2"))
-  dt_parsedtxt <- dt_negged[dt_parsedtxt, on=c("doc_id","sentence_id","token_id")] # left merge on dt_parsedtxt
+  dt_parsedtxt <- dt_negged[dt_parsedtxt, on=c("doc_id","sentence_id","token_id"),allow.cartesian=TRUE] # left merge on dt_parsedtxt
 
   dt_parsedtxt[,parseNeg:=sum(parseNeg1,parseNeg2,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
 
   dt_superhead=dt_parsedtxt[parseNeg==TRUE, c("doc_id","sentence_id","token_id")]
   setnames(dt_superhead, "token_id","head_token_id")
   dt_superhead[,parseNeg3:=TRUE]
-  dt_parsedtxt <- dt_superhead[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id")] # left merge on dt_parsedtxt
+  dt_parsedtxt <- dt_superhead[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id"),allow.cartesian=TRUE] # left merge on dt_parsedtxt
 
   dt_parsedtxt[,parseNeg:=sum(parseNeg,parseNeg3,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
 

@@ -1,3 +1,7 @@
+## Version Update (0.8.6) 
+
+Fix random join errors
+
 
 ## Version Update (0.8.5) 
 
