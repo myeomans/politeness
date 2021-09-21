@@ -17,10 +17,10 @@ knitr::opts_chunk$set(
 ```{r, echo = FALSE, results='asis'}
 library(badger)
 cat(
-	badge_cran_release("politeness", "green"),
+	badge_cran_release("politeness", "blue"),
+	badge_cran_checks("politeness"),
 	badge_cran_download("politeness", "grand-total", "green"),
-	badge_cran_download("politeness", "last-month", "green"),
-	badge_cran_download("politeness", "last-week", "green")
+	badge_cran_download("politeness", "last-month", "green")
 )
 ```
 

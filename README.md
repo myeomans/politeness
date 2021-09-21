@@ -3,10 +3,11 @@
 
 # Politeness
 
-[![](https://www.r-pkg.org/badges/version/politeness?color=green)](https://cran.r-project.org/package=politeness)
+[![](https://www.r-pkg.org/badges/version/politeness?color=blue)](https://cran.r-project.org/package=politeness)
+[![CRAN
+checks](https://cranchecks.info/badges/summary/politeness)](https://cran.r-project.org/web/checks/check_results_politeness.html)
 [![](http://cranlogs.r-pkg.org/badges/grand-total/politeness?color=green)](https://cran.r-project.org/package=politeness)
 [![](http://cranlogs.r-pkg.org/badges/last-month/politeness?color=green)](https://cran.r-project.org/package=politeness)
-[![](http://cranlogs.r-pkg.org/badges/last-week/politeness?color=green)](https://cran.r-project.org/package=politeness)
 
 Politeness is a universal dimension of langauge (Lakoff, 1973; Brown &
 Levinson, 1987). In practically all communication, a speaker can choose
