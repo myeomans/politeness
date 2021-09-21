@@ -3,6 +3,11 @@
 
 # Politeness
 
+[![](https://www.r-pkg.org/badges/version/politeness?color=green)](https://cran.r-project.org/package=politeness)
+[![](http://cranlogs.r-pkg.org/badges/grand-total/politeness?color=green)](https://cran.r-project.org/package=politeness)
+[![](http://cranlogs.r-pkg.org/badges/last-month/politeness?color=green)](https://cran.r-project.org/package=politeness)
+[![](http://cranlogs.r-pkg.org/badges/last-week/politeness?color=green)](https://cran.r-project.org/package=politeness)
+
 Politeness is a universal dimension of langauge (Lakoff, 1973; Brown &
 Levinson, 1987). In practically all communication, a speaker can choose
 to be more or less polite to their audience. In this package, we provide
@@ -27,11 +32,23 @@ installed, a reduced set of features is provided (i.e. those that do not
 require dependency tags) but this only recommended for initial tests,
 rather than final analyses.
 
-Please confirm that your machine can run SpaCy and spacyr first\! This
+Please confirm that your machine can run SpaCy and spacyr first! This
 step can be difficult for some machines, and we defer to the existing
 documentation for that software as a guide. Users may also want to
-consider [RStudio Cloud](https:/rstudio.cloud/), which can support
-all of this software without local installation issues.
+consider [RStudio Cloud](https://rstudio.cloud/), which can support all
+of this software without local installation issues.
+
+## Citation
+
+If you find this package useful, please cite us, using the following
+reference from our R Journal publication.
+
+Yeomans, M., Kantor, A. & Tingley, D. (2018). Detecting Politeness in
+Natural Language. The R Journal, 10(2), 489-502.
+
+Note that this publication was written using version 0.2.4 of the
+package. For the most up-to-date description of the functionality,
+please see the vignette in this repository.
 
 ## Example
 
