@@ -4,6 +4,7 @@
 
 -sanitize list inputs to the plot (mainly for tidyverse)
 
+- fix denominator issue for zero-word-count docs
 
 ## Version Update (0.8.5) 
 
