@@ -43,8 +43,6 @@
 #'}
 #'
 #'
-#'
-#'
 #'@export
 
 politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
@@ -267,6 +265,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
   } else if (metric[1]=="average"){
     word_counts <- stringr::str_count(text, "[[:alpha:]]+")
+    word_counts[word_counts==0] <-1
     features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
   }
   feature.data<-as.data.frame(features)

@@ -1,6 +1,8 @@
 ## Version Update (0.8.6) 
 
-Fix random join errors
+-Fix random join errors
+
+-sanitize list inputs to the plot (mainly for tidyverse)
 
 
 ## Version Update (0.8.5) 
