@@ -59,7 +59,7 @@ politenessPlot<-function(df_polite,
   if(is.factor(split)){
     split<-as.character(split)
   }
-  if(is.list(split){
+  if(is.list(split)){
     split<-unlist(split)
   }
   # confirm that split only has two values
