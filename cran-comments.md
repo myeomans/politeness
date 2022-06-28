@@ -1,3 +1,7 @@
+## Version Update (0.8.7) 
+
+fixed byte compatibiity issue
+
 ## Version Update (0.8.6) 
 
 -Fix random join errors

@@ -62,8 +62,6 @@ politeness(phone_offers$message, parser="spacy",drop_blank=FALSE)
 }
 
 
-
-
 }
 \references{
 Brown, P., & Levinson, S. C. (1987). Politeness: Some universals in language usage (Vol. 4). Cambridge university press.
