@@ -1,3 +1,11 @@
+## Version Update (0.8.8) 
+
+fixed a different byte compatibiity issue
+
+remove leading dashes
+
+new options on the plot function
+
 ## Version Update (0.8.7) 
 
 fixed byte compatibiity issue

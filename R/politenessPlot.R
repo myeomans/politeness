@@ -10,6 +10,8 @@
 #' @param top_title character default "". Title of plot.
 #' @param drop_blank Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}
 #' @param middle_out Features less distinctive than this value (measured by p-value of t-test) are excluded. Defaults to 1 (i.e. include all).
+#' @param features character vector of feature names. If NULL all will be included.
+#' @param ordered logical should features be ordered according to features param? default is FALSE.
 #' @param CI Coverage of error bars. Defaults to 0.68 (i.e. standard error).
 #' @details Length of \code{split} must be the same as number of rows of \code{df_polite}. Typically \code{split} should be a two-category variable. However, if a continuous covariate is given, then the top and bottom terciles of that distribution are treated as the two categories (while dropping data from the middle tercile).
 #' @return a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
@@ -24,6 +26,14 @@
 #'                            split_levels = c("Tough","Warm"),
 #'                            split_name = "Condition",
 #'                            top_title = "Average Feature Counts")
+#'
+#'
+#' politeness::politenessPlot(polite.data,
+#'                            split=phone_offers$condition,
+#'                            split_levels = c("Tough","Warm"),
+#'                            split_name = "Condition",
+#'                            top_title = "Average Feature Counts",
+#'                            features=c("Positive.Emotion","Hedges","Negation"))
 #'
 #'
 #' polite.data<-politeness(phone_offers$message, parser="none", metric="binary", drop_blank=FALSE)
@@ -44,7 +54,12 @@ politenessPlot<-function(df_polite,
                          top_title = "",
                          drop_blank = 0.05,
                          middle_out = 0.5,
+                         features=NULL,
+                         ordered=FALSE,
                          CI=.68){
+  if(!is.null(features)){
+    df_polite <- df_polite[,features]
+  }
   # confirm that CI is meaningful
   if(!(is.numeric(CI)&(CI>0)&(CI<1))){
     stop("CI must be numeric betwwen 0 and 1")
@@ -139,12 +154,30 @@ politenessPlot<-function(df_polite,
     y.trans <- "sqrt"
   }
   ######################################################
-  wide<-stats::reshape(split.data, idvar = "feature", timevar = "cond", direction = "wide")
-  wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
-  wide$slogodds<-slogodds(wide[,paste0("count.",split_levels[1])],
-                          wide[,paste0("count.",split_levels[2])])$slor
-  f.order<-unique(wide$feature)[order(wide$slogodds)]
-  split.data$feature<-factor(split.data$feature, ordered=TRUE,levels=f.order)
+  # Custom feature ordering
+  ######################################################
+  if((!is.null(features))&ordered){
+    split.data$feature<-factor(split.data$feature,
+                               ordered=TRUE,
+                               levels=features)
+
+  } else{
+    wide<-stats::reshape(split.data,
+                         idvar = "feature",
+                         timevar = "cond",
+                         direction = "wide")
+    wide$count.total<-rowMeans(wide[,grepl("count",names(wide))])
+    wide$slogodds<-slogodds(wide[,paste0("count.",split_levels[1])],
+                            wide[,paste0("count.",split_levels[2])])$slor
+    f.order<-unique(wide$feature)[order(wide$slogodds)]
+
+    split.data$feature<-factor(split.data$feature,
+                               ordered=TRUE,
+                               levels=f.order)
+  }
+
+  ######################################################
+
   split.data$cond<-factor(split.data$cond,ordered=TRUE,levels=rev(split_levels))
   split.data$count_minus<-split.data$count-split.data$se*SEscaler
   split.data$count_plus<-split.data$count+split.data$se*SEscaler

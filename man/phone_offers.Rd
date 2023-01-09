@@ -3,7 +3,13 @@
 \docType{data}
 \name{phone_offers}
 \alias{phone_offers}
-\title{Purchase offers for phone}
+\title{#' Positive Emotions List
+#'
+#' Positive words.
+#'
+#' @format A list of 2006 positively-valenced words
+#'
+"positive_list"}
 \format{
 A data frame with 355 rows and 2 variables:
 \describe{
@@ -22,6 +28,31 @@ Study 1. \url{https://osf.io/t7sd6/}
 phone_offers
 }
 \description{
+#' Negative Emotions List
+#'
+#' Negative words.
+#'
+#' @format A list of 4783 negatively-valenced words
+#'
+"negative_list"
+}
+\details{
+#' Hedge Words List
+#'
+#' Hedges
+#'
+#' @format A list of 72 hedging words.
+#'
+"hedge_list"
+
+#' Feature Dictionaries
+#'
+#' Six dictionary-like features for the detector: Negations; Pauses; Swearing; Pronouns; Formal Titles; and Informal Titles.
+#'
+#' @format A list of six \code{quanteda::dictionary} objects
+"polite_dicts"
+Purchase offers for phone
+
 A dataset containing the purchase offer message and a
 label indicating if the writer was assigned to be warm (1) or tough (0)
 }

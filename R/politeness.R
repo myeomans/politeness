@@ -43,9 +43,15 @@
 #'}
 #'
 #'
+#'
+#'
 #'@export
 
-politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","average"), drop_blank=FALSE, uk_english=FALSE, num_mc_cores=1){
+politeness<-function(text, parser=c("none","spacy"),
+                     metric=c("count","binary","average"),
+                     drop_blank=FALSE,
+                     uk_english=FALSE,
+                     num_mc_cores=1){
 
   text=as.character(unlist(text))
   text[is.na(text)]<-" "
@@ -53,6 +59,27 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     text<-usWords(text)
   }
   text<-paste(text," ")
+  ########################################################
+  # See if I can force people into spacy
+  ########################################################
+  # if(parser[1]=="spacy"){
+  #
+  # }
+  # my_function <- function(x, y){
+  #   tryCatch(
+  #     #try to do this
+  #     {
+  #       #some expression
+  #     },
+  #     #if an error occurs, tell me the error
+  #     error=function(e) {
+  #       message('An Error Occurred')
+  #       print(e)
+  #       parser<-"none"
+  #     }
+  #   )
+  # }
+
   ########################################################
   # Generates broad token lists for feature creation below
   if(length(text)<2000){
@@ -117,7 +144,7 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                            num_mc_cores=num_mc_cores)
   #if(parser[1]=="none"){
   if(parser[1]!="spacy"){
-    cat("Note: Some features cannot be computed without part-of-speech tagging. See ?spacyr::spacyr for details.")
+    cat("Warning: Please install SpaCy first, using the spacyr R package. This is an INCOMPLETE version of the package.")
     features[["Positive.Emotion"]]<-textcounter(positive_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
     features[["Negative.Emotion"]]<-textcounter(negative_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
     features[["Questions"]]<-textcounter("?",text, num_mc_cores=num_mc_cores)
@@ -225,24 +252,19 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
                                 unlist(lapply(sets[["p.unnegs"]], function(x) sum(grepl("(appreciate, we)",x,fixed=TRUE))))+
                                 unlist(lapply(sets[["p.unnegs"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
 
-    features[["Apology"]]<-(textcounter(c("woops","oops","whoops"),sets[["unneg.words"]],words=TRUE,num_mc_cores=num_mc_cores)
-                            +unlist(lapply(sets[["p.unnegs"]], function(x) sum((grepl("intj",unlist(x))|(grepl("root",unlist(x))))&
-                                                                                 (grepl("sorry)",unlist(x),fixed=TRUE)))))
-                            +textcounter(c("acomp(am, sorry)","acomp('m, sorry)","amod(i'm, sorry)",
-                                           "nsubj(apologize, i)","nsubj(apologize, we)",
+    features[["Apology"]]<-(textcounter(c("woops","oops","whoops"),sets[["unneg.words"]],words=TRUE,
+                                        num_mc_cores=num_mc_cores)
+                            +textcounter(c("acomp(am, sorry)","root(root, sorry)",
+                                           "nsubj(apologize, we)","nsubj(apologize, i)",
                                            "nsubj(regret, i)", "nsubj(regret, we)",
-                                           "dobj(excuse, me)","dobj(excuse, us)","dobj(excuse, our)",
-                                           "dobj(forgive, me)","dobj(forgive, us)","dobj(forgive, our)",
-                                           "root(root, pardon)",
-                                           "poss(forgiveness, your)","poss(pardon, your)",
-                                           "poss(apologies, my)","poss(apologies, our)",
-                                           "nsubj(apologize, me)","nsubj(apologize, us)"),sets[["p.unnegs"]], words=TRUE,
+                                           "dobj(excuse, me)",
+                                           "poss(forgiveness, your)",
+                                           "dobj(forgive, me)"),sets[["p.unnegs"]], words=TRUE,
                                          num_mc_cores=num_mc_cores)
-                            +textcounter(c("acomp(are, sorry)","acomp('re, sorry)",
-                                           "acomp(was, sorry)","acomp(were, sorry)",
-                                           "xcomp(like, apologize)","xcomp(want, apologize)"),
-                                         sets[["self.unnegs"]], words=TRUE,
-                                         num_mc_cores=num_mc_cores))
+                            # "I would like to apologize" - "I want to apologize" - "would you like to apologize"
+                            # "We are sorry" - "they are sorry"
+
+    )
     features[["Truth.Intensifier"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
                                                   num_mc_cores=num_mc_cores)
                                       +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","pobj(fact, in)","case(fact, in)"),sets[["p.nonum"]], words=TRUE,
@@ -265,7 +287,6 @@ politeness<-function(text, parser=c("none","spacy"), metric=c("count","binary","
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
   } else if (metric[1]=="average"){
     word_counts <- stringr::str_count(text, "[[:alpha:]]+")
-    word_counts[word_counts==0] <-1
     features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
   }
   feature.data<-as.data.frame(features)

@@ -13,6 +13,8 @@ politenessPlot(
   top_title = "",
   drop_blank = 0.05,
   middle_out = 0.5,
+  features = NULL,
+  ordered = FALSE,
   CI = 0.68
 )
 }
@@ -32,6 +34,10 @@ politenessPlot(
 \item{drop_blank}{Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}}
 
 \item{middle_out}{Features less distinctive than this value (measured by p-value of t-test) are excluded. Defaults to 1 (i.e. include all).}
+
+\item{features}{character vector of feature names. If NULL all will be included.}
+
+\item{ordered}{logical should features be ordered according to features param? default is FALSE.}
 
 \item{CI}{Coverage of error bars. Defaults to 0.68 (i.e. standard error).}
 }
@@ -55,6 +61,14 @@ politeness::politenessPlot(polite.data,
                            split_levels = c("Tough","Warm"),
                            split_name = "Condition",
                            top_title = "Average Feature Counts")
+
+
+politeness::politenessPlot(polite.data,
+                           split=phone_offers$condition,
+                           split_levels = c("Tough","Warm"),
+                           split_name = "Condition",
+                           top_title = "Average Feature Counts",
+                           features=c("Positive.Emotion","Hedges","Negation"))
 
 
 polite.data<-politeness(phone_offers$message, parser="none", metric="binary", drop_blank=FALSE)

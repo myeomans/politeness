@@ -1,33 +1,33 @@
-#' Positive Emotions List
+#' #' Positive Emotions List
+#' #'
+#' #' Positive words.
+#' #'
+#' #' @format A list of 2006 positively-valenced words
+#' #'
+#' "positive_list"
 #'
-#' Positive words.
+#' #' Negative Emotions List
+#' #'
+#' #' Negative words.
+#' #'
+#' #' @format A list of 4783 negatively-valenced words
+#' #'
+#' "negative_list"
 #'
-#' @format A list of 2006 positively-valenced words
+#' #' Hedge Words List
+#' #'
+#' #' Hedges
+#' #'
+#' #' @format A list of 72 hedging words.
+#' #'
+#' "hedge_list"
 #'
-"positive_list"
-
-#' Negative Emotions List
-#'
-#' Negative words.
-#'
-#' @format A list of 4783 negatively-valenced words
-#'
-"negative_list"
-
-#' Hedge Words List
-#'
-#' Hedges
-#'
-#' @format A list of 72 hedging words.
-#'
-"hedge_list"
-
-#' Feature Dictionaries
-#'
-#' Six dictionary-like features for the detector: Negations; Pauses; Swearing; Pronouns; Formal Titles; and Informal Titles.
-#'
-#' @format A list of six \code{quanteda::dictionary} objects
-"polite_dicts"
+#' #' Feature Dictionaries
+#' #'
+#' #' Six dictionary-like features for the detector: Negations; Pauses; Swearing; Pronouns; Formal Titles; and Informal Titles.
+#' #'
+#' #' @format A list of six \code{quanteda::dictionary} objects
+#' "polite_dicts"
 
 #' Purchase offers for phone
 #'
