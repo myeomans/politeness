@@ -106,6 +106,7 @@ politenessPlot<-function(df_polite,
   }
 
   binary <- setequal(unique(unlist(df_polite)),0:1)
+  averages <- 1*(mean(df_polite==round(df_polite))!=1)
 
   num_features <- ncol(df_polite)
   l_polite_split <- split(data.frame(df_polite), split)
@@ -146,11 +147,15 @@ politenessPlot<-function(df_polite,
     y.breaks <- seq(0,1,.25)
     y.labels <- paste0(seq(0,100,25),"%")
     y.trans <- "identity"
+  } else if(averages){
+    map.type<-"Feature Count per 100 Words"
+    tick.set<-c(.01,0.1,0.5,1,2,5,10,25)
+    y.labels <- y.breaks <- tick.set
+    y.trans <- "sqrt"
   } else {
     map.type<-"Feature Count per Document"
     tick.set<-c(0.1,0.5,1,2,5,10,20,50,100,200,500,1000)
     y.labels <- y.breaks <- tick.set
-
     y.trans <- "sqrt"
   }
   ######################################################
