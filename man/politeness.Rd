@@ -18,7 +18,7 @@ politeness(
 
 \item{parser}{character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.}
 
-\item{metric}{character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per word  Default is "count".}
+\item{metric}{character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per 100 words. Default is "count".}
 
 \item{drop_blank}{logical Should features that were not found in any text be removed from the data.frame? Default is FALSE}
 

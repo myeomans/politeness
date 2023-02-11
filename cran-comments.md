@@ -1,3 +1,7 @@
+## Version Update (0.8.9) 
+
+Politeness plot handles averages, and averages are expressed per 100 words
+
 ## Version Update (0.8.8) 
 
 fixed a different byte compatibiity issue

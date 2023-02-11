@@ -4,7 +4,7 @@
 #'     This function is the workhorse of the \code{politeness} package, taking an N-length vector of text documents and returning an N-row data.frame of feature counts.
 #' @param text character A vector of texts, each of which will be tallied for politeness features.
 #' @param parser character Name of dependency parser to use (see details). Without a dependency parser, some features will be approximated, while others cannot be calculated at all.
-#' @param metric character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per word  Default is "count".
+#' @param metric character What metric to return? Raw feature count totals, Binary presence/absence of features, or feature counts per 100 words. Default is "count".
 #' @param drop_blank logical Should features that were not found in any text be removed from the data.frame? Default is FALSE
 #' @param uk_english logical Does the text contain any British English spelling? Including variants (e.g. Canadian). Default is FALSE
 #' @param num_mc_cores integer Number of cores for parallelization. Default is 1, but we encourage users to try parallel::detectCores() if possible.
@@ -287,7 +287,7 @@ politeness<-function(text, parser=c("none","spacy"),
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)
   } else if (metric[1]=="average"){
     word_counts <- stringr::str_count(text, "[[:alpha:]]+")
-    features<-parallel::mclapply(features, function(x) x/word_counts, mc.cores=num_mc_cores)
+    features<-parallel::mclapply(features, function(x) x*100/word_counts, mc.cores=num_mc_cores)
   }
   feature.data<-as.data.frame(features)
   feature.data[feature.data<0]<-0
