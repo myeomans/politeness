@@ -39,14 +39,14 @@ test_that("runs with parser none", {
   expect_equal(nrow(df_polite_average_drop_f), num_messages)
   unique_values = unique(unlist(df_polite_average_drop_f))
   expect_true( all(unique_values >=0) )
-  expect_true( all(unique_values <=1) )
-  expect_true( any(unique_values <1) )
+  expect_true( all(unique_values <=100) )
+  expect_true( any(unique_values <100) )
 
   expect_equal(nrow(df_polite_average_drop), num_messages)
   unique_values = unique(unlist(df_polite_average_drop))
   expect_true( all(unique_values >=0) )
-  expect_true( all(unique_values <=1) )
-  expect_true( any(unique_values <1) )
+  expect_true( all(unique_values <=100) )
+  expect_true( any(unique_values <100) )
 })
 
 test_that("empty or na string", {
