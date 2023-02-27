@@ -2,6 +2,7 @@
 
 export(findPoliteTexts)
 export(politeness)
+export(politenessModel)
 export(politenessPlot)
 export(politenessProjection)
 export(receptiveness)

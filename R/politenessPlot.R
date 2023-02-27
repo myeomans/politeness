@@ -1,3 +1,5 @@
+# Used to avoid incorrect notes of "no visible binding"
+utils::globalVariables(c("feature","count","cond"))
 
 #' Politeness plot
 #'
@@ -188,7 +190,10 @@ politenessPlot<-function(df_polite,
   split.data$count_plus<-split.data$count+split.data$se*SEscaler
   ######################################################
   ggplot2::ggplot(data=split.data,
-                  ggplot2::aes_string(x="feature",y="count",fill="cond"),width=2) +
+                  ggplot2::aes(x=feature,
+                               y=count,
+                               fill=cond),
+                  width=2) +
     ggplot2::geom_bar(position=ggplot2::position_dodge(width = 0.8),
                       stat="identity") +
     ggplot2::geom_errorbar(ggplot2::aes_string(ymin="count_minus", ymax="count_plus"), width=0.3,
