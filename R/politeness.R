@@ -134,12 +134,16 @@ politeness<-function(text, parser=c("none","spacy"),
                                     num_mc_cores=num_mc_cores)+
                           textcounter(c("good morning", "good evening", "good afternoon"),sets[["clean"]],
                                       num_mc_cores=num_mc_cores))
-  features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=TRUE))
+
+  features[["Please"]]<-textcounter("please",sets[["c.words"]],words=TRUE,
+                                    num_mc_cores=num_mc_cores)
 
   features[["First.Person.Plural"]]<-textcounter(c("we", "our", "ours", "us", "ourselves"),sets[["c.words"]],words=TRUE,
                                                  num_mc_cores=num_mc_cores)
+
   features[["First.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,
                                                  num_mc_cores=num_mc_cores)
+
   features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself", "yourselves"),sets[["c.words"]],words=TRUE,
                                            num_mc_cores=num_mc_cores)
   #if(parser[1]=="none"){

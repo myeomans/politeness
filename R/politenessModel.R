@@ -25,17 +25,11 @@ utils::globalVariables(c("polite_train")) # prevent incorrect "no global binding
 politenessModel<-function(texts, num_mc_cores=1){
   m_polite_train = as.matrix(politeness::polite_train$x)
 
-  m_polite_test = as.matrix(politeness::politeness(texts,
-                                                   parser="spacy",
-                                                   num_mc_cores=num_mc_cores))
+  m_polite_test = as.matrix(politeness::politenessDNM(texts))
 
-  # Remove 1st/2nd person pronouns
-  m_train=m_polite_train[,-which(colnames(m_polite_train)%in%c("First.Person.Single","Second.Person"))]
-  m_test=m_polite_test[,-which(colnames(m_polite_test)%in%c("First.Person.Single","Second.Person")),drop=FALSE]
-
-  recept_predict<-as.vector(politeness::politenessProjection(m_train,
+  recept_predict<-as.vector(politeness::politenessProjection(m_polite_train,
                                                              politeness::polite_train$y,
-                                                             m_test)$test_proj)
+                                                             m_polite_test)$test_proj)
 
 
   return(recept_predict)
