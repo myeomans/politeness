@@ -109,9 +109,6 @@ politenessPlot<-function(df_polite,
 
   binary <- setequal(unique(unlist(df_polite)),0:1)
   averages <- 1*(mean(df_polite==round(df_polite))!=1)
-  if(averages==1){
-    df_polite<-df_polite*100
-  }
 
   num_features <- ncol(df_polite)
   l_polite_split <- split(data.frame(df_polite), split)
