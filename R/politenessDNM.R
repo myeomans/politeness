@@ -26,7 +26,7 @@
 
 politenessDNM<-function(text,
                         uk_english=FALSE){
-  # settings from the main function hard-coded, to reproduce the original
+  # settings from the main function hard-coded. for reproducibility
   parser="spacy"
   metric="count"
   drop_blank=FALSE
@@ -92,7 +92,7 @@ politenessDNM<-function(text,
                                          num_mc_cores=num_mc_cores)
 
   features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
-                              unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
+                              unlist(lapply(sets[["p.nonums"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
 
   features[["Greeting"]]<-textcounter(c("hi","hello","hey"),sets[["c.words"]],words=TRUE,
                                       num_mc_cores=num_mc_cores)
@@ -127,109 +127,19 @@ politenessDNM<-function(text,
                                     num_mc_cores=num_mc_cores)
 
 
-  features[["Please.Start"]]<-textcounter(paste0(c("please"),"-1"),sets[["w.nums"]],words=TRUE,
-                                          num_mc_cores=num_mc_cores)
-
-  features[["First.Person.Single.Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=TRUE,
-                                                       num_mc_cores=num_mc_cores)
-
-  features[["Second.Person.Start"]]<-textcounter(paste0(c("you","your","yours","yourself", "yourselves"),"-1"),sets[["w.nums"]],words=TRUE,
-                                                 num_mc_cores=num_mc_cores)
-
-  features[["Please"]]<-textcounter(c("please"),sets[["c.words"]],words=TRUE,
-                                    num_mc_cores=num_mc_cores)-features[["Please.Start"]]
+  # add start features TKTKTKTK
+  features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=TRUE))
   features[["First.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,
-                                                 num_mc_cores=num_mc_cores)-features[["First.Person.Single.Start"]]
+                                                 num_mc_cores=num_mc_cores)
   features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself", "yourselves"),sets[["c.words"]],words=TRUE,
-                                           num_mc_cores=num_mc_cores)-features[["Second.Person.Start"]]
+                                           num_mc_cores=num_mc_cores)
+
 
   feature.data<-as.data.frame(features)
   feature.data[feature.data<0]<-0
+  if(drop_blank){
+    feature.data<-feature.data[,colMeans(feature.data,na.rm=TRUE)!=0, drop=FALSE]
+  }
   return(feature.data)
 }
 ###############################################################
-
-# ################################################
-# Features that are more or less the same (some different names)
-#
-# #
-# # 1. Gratitude
-# # 6. Apologizing
-# # 2. Deference (affirmation)
-# # 3. Greeting ( hello)
-# # 5. Factuality
-# # 9. Indirect (btw)
-# # 11. Direct start (conj start)
-# # 12. Counterfactual modal (Could/Would you)
-# # 13. Indicative modal (Can/Will you)
-# # 15. 1st person plural
-#
-# "Gratitude"
-# "Apology"
-# "Affirmation"
-# "Hello"
-# "Truth.Intensifier"
-# "By.The.Way"
-# "Conjunction.Start"
-# "Could.You"
-# "Can.You"
-# "First.Person.Plural"
-#
-# ################################################
-# # Similar feature, different definition
-#
-# # These two did not have negation scoping
-# # 4. Positive
-# # 5. Negative
-# "Positive.Emotion"
-# "Negative.Emotion"
-#
-# # This used to include a lot of subjectivity as well
-# # 4. Hedges (old hedges)
-# "Hedges"
-#
-# # This was just one category
-# # 10. Direct question
-# #why = lambda p: (getleftpos(p) in (1,2) and getleft(p) in ("what","why","who","how")) or (getrightpos(p) in (1,2) and getright(p) in ("what","why","who","how"))
-# #why.__name__ = "Direct question"
-# "WH.Questions"
-# "YesNo.Questions"
-#
-# # For these, they were originally split into "start" (first token) vs. generic, and we combined them
-# # 7. Please
-# # 8. Please start
-# # 16. 1st person
-# # 14. 1st person start
-# # 17. 2nd person
-# # 18. 2nd person start
-# "Please"
-# "First.Person.Single"
-# "Second.Person"
-#
-#
-# ################################################
-# # Not in the original paper at all
-# #
-# # "Impersonal.Pronoun"
-# # "Swearing"
-# # "Negation"
-# # "Filler.Pause"
-# # "Informal.Title"
-# # "Formal.Title"
-# # "Let.Me.Know"
-# # "Goodbye"
-# # "For.Me"
-# # "For.You"
-# # "Reasoning"
-# # "Reassurance"
-# # "Ask.Agency"
-# # "Give.Agency"
-# # "Agreement"
-# # "Disagreement"
-# # "Acknowledgement"
-# # "Subjectivity"
-# # "Bare.Command"
-# # "Adverb.Limiter"
-#
-
-

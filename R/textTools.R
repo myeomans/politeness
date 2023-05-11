@@ -33,9 +33,7 @@ textcounter<-function (counted, texts, words=FALSE, fixed = TRUE, num_mc_cores =
 #' @keywords internal
 cleantext<-function (text, language = "english", stop.words = TRUE) {
   text <- tolower(text)
-  if (language == "english") {
-    text <- ctxpand(text)
-  }
+
   text <- gsub("[[:punct:]]", " ", text)
   text <- gsub("[[:cntrl:]]", " ", text)
   if (length(stop.words) > 1) {
