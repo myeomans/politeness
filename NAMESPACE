@@ -2,6 +2,8 @@
 
 export(findPoliteTexts)
 export(politeness)
+export(politenessDNM)
+export(politenessModel)
 export(politenessPlot)
 export(politenessProjection)
 export(receptiveness)

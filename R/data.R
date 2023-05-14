@@ -93,13 +93,23 @@
 "receptive_train"
 
 
-
 #' Pre-Trained Receptiveness Data
 #'
 #' A dataset to train a model for detecting conversational receptiveness.
 #' @format Pre-calculated politeness features for the receptive_train dataset
 #'
 "receptive_polite"
+
+#' Pre-Trained Politeness
+#'
+#' A dataset to train a model for detecting politeness.
+#'
+#' @source Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J. & Potts, C. (2013). A computational approach to politeness with application to social factors. Proc. 51st ACL, 250-259.
+#'
+#' @format list of two objects. x contains pre-calculated politeness features for each document. y contains standardized human annotations for politeness.
+#'
+"polite_train"
+
 
 #' UK to US Conversion dictionary
 #'

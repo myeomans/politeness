@@ -1,5 +1,5 @@
 # Used to avoid incorrect notes of "no visible binding"
-utils::globalVariables(c("feature","count","cond"))
+utils::globalVariables(c("feature","count","cond","count_minus","count_plus"))
 
 #' Politeness plot
 #'
@@ -109,6 +109,9 @@ politenessPlot<-function(df_polite,
 
   binary <- setequal(unique(unlist(df_polite)),0:1)
   averages <- 1*(mean(df_polite==round(df_polite))!=1)
+  if(averages==1){
+    df_polite<-df_polite*100
+  }
 
   num_features <- ncol(df_polite)
   l_polite_split <- split(data.frame(df_polite), split)
@@ -131,6 +134,7 @@ politenessPlot<-function(df_polite,
   ######################################################
   nonblanks <- colnames(df_polite)[colMeans(df_polite)>=drop_blank]
 
+
   split.enough<-names(df_polite)
   if(middle_out<1){
     split.p<-unlist(lapply(names(df_polite), function(x) stats::t.test(l_polite_split[[1]][,x],
@@ -142,24 +146,6 @@ politenessPlot<-function(df_polite,
     stop("All features were excluded. Adjust exclusion settings.")
   }
   split.data<-split.data[(split.data$feature%in%nonblanks)&(split.data$feature%in%split.enough),]
-  ######################################################
-  if(binary){
-    map.type<-"Percentage of Documents Using Feature"
-    split.data$se <- sqrt(((split.data$count)*(1-split.data$count))/nrow(df_polite))
-    y.breaks <- seq(0,1,.25)
-    y.labels <- paste0(seq(0,100,25),"%")
-    y.trans <- "identity"
-  } else if(averages){
-    map.type<-"Feature Count per 100 Words"
-    tick.set<-c(.01,0.1,0.5,1,2,5,10,25)
-    y.labels <- y.breaks <- tick.set
-    y.trans <- "sqrt"
-  } else {
-    map.type<-"Feature Count per Document"
-    tick.set<-c(0.1,0.5,1,2,5,10,20,50,100,200,500,1000)
-    y.labels <- y.breaks <- tick.set
-    y.trans <- "sqrt"
-  }
   ######################################################
   # Custom feature ordering
   ######################################################
@@ -182,7 +168,33 @@ politenessPlot<-function(df_polite,
                                ordered=TRUE,
                                levels=f.order)
   }
-
+  ######################################################
+  if(binary){
+    map.type<-"Percentage of Documents Using Feature"
+    split.data$se <- sqrt(((split.data$count)*(1-split.data$count))/nrow(df_polite))
+    y.breaks <- seq(0,1,.25)
+    y.labels <- paste0(seq(0,100,25),"%")
+    y.trans <- "identity"
+  } else if(averages){
+    map.type<-"Feature Count per 100 Words"
+    if(max(split.data$count)>20){
+      tick.set<-c(1,5,10,25, 50)
+    } else{
+      tick.set<-c(0.1,0.5,1,2,5,10,25)
+    }
+    y.labels <- y.breaks <- tick.set
+    y.trans <- "sqrt"
+  } else {
+    map.type<-"Feature Count per Document"
+    if(max(split.data$count)>20){
+      tick.set<-c(1,5,10,20,50,100,200,500,1000)
+    }
+    else{
+      tick.set<-c(0.1,0.5,1,2,5,10,20,50)
+    }
+    y.labels <- y.breaks <- tick.set
+    y.trans <- "sqrt"
+  }
   ######################################################
 
   split.data$cond<-factor(split.data$cond,ordered=TRUE,levels=rev(split_levels))
@@ -196,7 +208,7 @@ politenessPlot<-function(df_polite,
                   width=2) +
     ggplot2::geom_bar(position=ggplot2::position_dodge(width = 0.8),
                       stat="identity") +
-    ggplot2::geom_errorbar(ggplot2::aes_string(ymin="count_minus", ymax="count_plus"), width=0.3,
+    ggplot2::geom_errorbar(ggplot2::aes(ymin=count_minus, ymax=count_plus), width=0.3,
                            position=ggplot2::position_dodge(width = 0.8)) +
     ggplot2::coord_flip() +
     ggplot2::scale_x_discrete(name="", breaks=colnames(df_polite),
