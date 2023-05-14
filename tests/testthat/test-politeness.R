@@ -53,15 +53,15 @@ test_that("empty or na string", {
  phone_offers$message[1] <- ""
 
  df_polite <- politeness(text = c("","a"), parser = "none", metric = "binary", drop_blank = FALSE, num_mc_cores=1)
- expect_equal(apply(df_polite, MARGIN = 1, FUN  = sum), c(0,0))
+ expect_true( all(apply(df_polite, MARGIN = 1, FUN  = sum)==c(0,0)))
 
  df_polite <- politeness(text = c(NA_character_,"a"), parser = "none", metric = "binary", drop_blank = FALSE, num_mc_cores=1)
- expect_equal(apply(df_polite, MARGIN = 1, FUN  = sum), c(0,0))
+ expect_true( all(apply(df_polite, MARGIN = 1, FUN  = sum)==c(0,0)))
 
  phone_offers$message[1] <- NA_character_
 
  df_polite <- politeness(text = phone_offers$message, parser = "none", metric = "binary", drop_blank = FALSE, num_mc_cores=1)
- expect_equal(apply(df_polite, MARGIN = 1, FUN  = sum)[1], 0)
+ expect_true( all(apply(df_polite, MARGIN = 1, FUN  = sum)[1]==0))
 })
 
 
