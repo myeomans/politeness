@@ -59,6 +59,7 @@ politenessProjection <- function(df_polite_train, covar = NULL,
       stop("There must be the same variables in df_polite_train and df_polite_test")
     }
   }
+
   if (classifier[1] == "mnir"){
     m_polite_train <- as.matrix(df_polite_train)
     mnlm_fit <- suppressWarnings(textir::mnlm(cl=NULL,
@@ -107,12 +108,12 @@ politenessProjection <- function(df_polite_train, covar = NULL,
 
         polite_fit[test.fold]<-as.vector(stats::predict(polite_model_fold,
                                                         newx=m_polite_train[test.fold,],
-                                                        s="lambda.min", type="response"))
+                                                        type="response"))
         utils::setTxtProgressBar(tpb,fold)
       }
 
       polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
-      p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
+      p_coefs<-as.matrix(stats::coef(polite_model))
       polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
 
 
@@ -122,16 +123,16 @@ politenessProjection <- function(df_polite_train, covar = NULL,
         warning("Note: no cross-validation. Projections in training data are not suitable for accuracy estimation.")
       }
       polite_model<-glmnet::cv.glmnet(x=m_polite_train, y=covar, family=model_family, ...)
-      polite_fit<-stats::predict(polite_model, newx=m_polite_train, s="lambda.min", type="response")[,1]
+      polite_fit<-stats::predict(polite_model, newx=m_polite_train, type="response")[,1]
 
-      p_coefs<-as.matrix(stats::coef(polite_model, s="lambda.min"))
+      p_coefs<-as.matrix(stats::coef(polite_model))
       polite_coefs<-p_coefs[(!(rownames(p_coefs)=="(Intercept)"))&p_coefs!=0,]
 
     }
 
     if(!is.null(df_polite_test)){
       m_polite_test <- as.matrix(df_polite_test)
-      polite_predict<-stats::predict(polite_model, newx=m_polite_test, s="lambda.min", type="response")[,1]
+      polite_predict<-stats::predict(polite_model, newx=m_polite_test, type="response")[,1]
     } else {
       polite_predict <- NULL
     }
