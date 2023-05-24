@@ -53,6 +53,7 @@ cleantext<-function (text, language = "english", stop.words = TRUE) {
 #' @return a character vector
 #' @keywords internal
 ctxpand<-function(text){
+  text=tolower(text)
   text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=TRUE))
