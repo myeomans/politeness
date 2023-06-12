@@ -121,6 +121,13 @@ politeness<-function(text, parser=c("none","spacy"),
   features[["For.You"]]<-textcounter(" for you ",sets[["clean"]], num_mc_cores=num_mc_cores)
   features[["Reasoning"]]<-textcounter(c("reason", "why i ", "why we ", "explain", "caused","because"),sets[["clean"]],
                                        num_mc_cores=num_mc_cores)
+
+  features[["Contrast.Conjunction"]]<-textcounter(c("but","however","instead",
+                                                    "although","even though",
+                                                    "despite","and yet",
+                                                    "nevertheless","nonetheless"),sets[["clean"]],
+                                                  num_mc_cores=num_mc_cores)
+
   features[["Reassurance"]]<-textcounter(c("is okay", "not worry", "no big deal", "not a big deal", "no problem",
                                            "no worries", "is fine", "you are good", "it's fine", "it's okay") ,sets[["clean"]],
                                          num_mc_cores=num_mc_cores)
@@ -146,6 +153,7 @@ politeness<-function(text, parser=c("none","spacy"),
 
   features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself", "yourselves"),sets[["c.words"]],words=TRUE,
                                            num_mc_cores=num_mc_cores)
+
   #if(parser[1]=="none"){
   if(parser[1]!="spacy"){
     cat("Warning: Please install and initialize SpaCy, using the spacyr R package. This is an INCOMPLETE version of the package.")
@@ -277,19 +285,21 @@ politeness<-function(text, parser=c("none","spacy"),
                                                   num_mc_cores=num_mc_cores)
                                       +textcounter(c("det(point, the)","det(reality, the)","det(truth, the)","pobj(fact, in)","case(fact, in)"),sets[["p.nonum"]], words=TRUE,
                                                    num_mc_cores=num_mc_cores))
-    features[["Affirmation"]]<-textcounter(paste0(c("yeah","yes","ok","okay","perfect","fine","wow","great","amazing","fantastic",
-                                                    "good","nice","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=TRUE,
-                                           num_mc_cores=num_mc_cores)
     features[["Adverb.Limiter"]]<-unlist(lapply(sets[["p.nonum"]] ,function(x) sum(grepl("advmod",unlist(x))&
                                                                                      (grepl("just)",unlist(x),fixed=TRUE)
                                                                                       |grepl("only)",unlist(x),fixed=TRUE)
                                                                                       |grepl("merely)",unlist(x),fixed=TRUE)
                                                                                       |grepl("simply)",unlist(x),fixed=TRUE)))
     ))
-
-    features[["Conjunction.Start"]]<-textcounter(paste0(c("so","then","and","but","or"),"-1"),sets[["w.nums"]],words=TRUE,
-                                                 num_mc_cores=num_mc_cores)
   }
+  features[["Affirmation"]]<-textcounter(c("yeah","yes","ok","okay","perfect","fine","wow","great","amazing"),
+                                         sets[["c.words"]],words=TRUE,start=TRUE,
+                                         num_mc_cores=num_mc_cores)
+
+  # listed at the end for backward compatibility
+  features[["Conjunction.Start"]]<-textcounter(c("so","then","and","but","or","however"),
+                                               sets[["c.words"]],words=TRUE,start=TRUE,
+                                               num_mc_cores=num_mc_cores)
 
   if(metric[1]=="binary"){
     features<-parallel::mclapply(features, function(x) 1*(x>0), mc.cores=num_mc_cores)

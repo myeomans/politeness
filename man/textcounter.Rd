@@ -9,6 +9,7 @@ textcounter(
   texts,
   words = FALSE,
   fixed = TRUE,
+  start = FALSE,
   num_mc_cores = parallel::detectCores()
 )
 }
@@ -20,6 +21,8 @@ textcounter(
 \item{words}{logical. Default FALSE. Does \code{counted} contain words, or sequences of chracters?}
 
 \item{fixed}{logical. Default TRUE. Use literal characters instead of regular expressions?}
+
+\item{start}{logical. Default FALSE. Does \code{counted} only look at the start of a sentence?}
 
 \item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
 }

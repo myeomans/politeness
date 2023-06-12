@@ -72,12 +72,12 @@ spacyParser<- function(txt){
   dt_parsedtxt[ , pos.nums := paste0("(",token_id,"-",token,"-",tag,")")]
   dt_parsedtxt[ , parses := paste0(dep_rel, "(",head_token,"-",head_token_id,", ",token,"-",token_id,")")]
   dt_parsedtxt[ , p.nonums := paste0(dep_rel, "(",head_token,", ",token,")")]
-  dt_parsedtxt[ , w.nums := paste0(token,"-",token_id)]
+  #dt_parsedtxt[ , w.nums := paste0(token,"-",token_id)]
 
   all.parses <- dt_parsedtxt[ , .(l_parse_nums = list(parses)), keyby = "doc_id"][ , l_parse_nums]
   all.pos.nums <- dt_parsedtxt[ , .(l_pos_nums = list(pos.nums)), keyby = "doc_id"][ , l_pos_nums]
   p.nonums <- dt_parsedtxt[ , .(l_parses = list(p.nonums)), keyby = "doc_id"][ , l_parses]
-  w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), keyby = "doc_id"][ , l_w_nums]
+  #w.nums <- dt_parsedtxt[ , .(l_w_nums = list(w.nums)), keyby = "doc_id"][ , l_w_nums]
 
   dt_parsedtxt[ , pos.dists := paste0("(",token_id,"-",token,"-",tag,")","-",root_dist)]
 
@@ -170,7 +170,7 @@ spacyParser<- function(txt){
               ques.pos.dists=ques.pos.dists,
               pos.nums=all.pos.nums,
               p.nonums=p.nonums,
-              w.nums=w.nums,
+              #w.nums=w.nums,
               neg.words=neg.words,
               unneg.words=unneg.words,
               p.negs=p.negs,
