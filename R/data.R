@@ -120,3 +120,15 @@
 #'
 "uk2us"
 
+#' A pre-trained model for detecting conversational receptiveness.
+#' Estimated with glmnet using annotated data from a previous paper.
+#' Primarily for use within the receptiveness() function.
+#'
+#' @format A fitted glmnet model
+#' @source  Minson, J., Yeomans, M., Collins, H. & Dorison, C.
+#'
+#' "Conversational Receptiveness: Improving Engagement with Opposing Views"
+#'
+#'
+#'
+"receptive_model"

@@ -24,22 +24,27 @@ utils::globalVariables(c("receptive_train")) # prevent incorrect "no global bind
 #'
 #'@export
 receptiveness<-function(texts, num_mc_cores=1){
-  train_dat=politeness::receptive_train
-
-  m_polite_train = as.matrix(politeness::receptive_polite)
+  # train_dat=politeness::receptive_train
+  #
+  # m_polite_train = as.matrix(politeness::receptive_polite)
 
   m_polite_test = as.matrix(politeness::politeness(texts,
-                                                   parser="spacy",
+                                                   parser="spacy",drop_blank = F,
                                                    num_mc_cores=num_mc_cores))
 
-  # Remove 1st/2nd person pronouns
-  m_train=m_polite_train[,-which(colnames(m_polite_train)%in%c("First.Person.Single","Second.Person"))]
-  m_test=m_polite_test[,-which(colnames(m_polite_test)%in%c("First.Person.Single","Second.Person")),drop=FALSE]
+  # Remove 1st/2nd person pronouns & rare features
+  m_test=m_polite_test[,which(colnames(m_polite_test)%in%politeness::receptive_names)]
 
-  recept_predict<-as.vector(politeness::politenessProjection(m_train,
-                                                             train_dat$receptive,
-                                                             m_test)$test_proj)
+  polite_predict<-as.vector(stats::predict(politeness::receptive_model,
+                                           newx=m_test,
+                                           s="lambda.1se", type="response"))
 
-
-  return(recept_predict)
+  return(polite_predict)
+  #
+  # recept_predict<-as.vector(politeness::politenessProjection(m_train,
+  #                                                            train_dat$receptive,
+  #                                                            m_test)$test_proj)
+  #
+  #
+  # return(recept_predict)
 }
