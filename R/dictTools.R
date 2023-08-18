@@ -4,12 +4,13 @@
 #' @param text a character vector of texts.
 #' @param dict a dictionary class object (see \link[quanteda]{dictionary}) containing dictionaries for six of the politeness features
 #' @param binary return the prevalence (percent of words) or the presence (yes/no) of a feature in each text?
+#' @param num_mc_cores integer Number of cores for parallelization. Default is 1.
 #' @param ... arguments passes onto the \code{quanteda:dfm} function
 #' @return a matrix with six columns (one for each feature) and a row for every text entered into the function.
 #' @keywords internal
 #' @importFrom quanteda dfm tokens tokens_lookup quanteda_options
 
-dictWrap<-function (text, dict = NULL, binary = FALSE,  num_mc_cores=parallel::detectCores(), ...) {
+dictWrap<-function (text, dict = NULL, binary = FALSE,  num_mc_cores=1, ...) {
   if(is.null(dict)){
     stop("Dictionary Must Be Supplied")
   }

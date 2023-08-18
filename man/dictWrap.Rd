@@ -4,13 +4,7 @@
 \alias{dictWrap}
 \title{Dictionary Wrapper}
 \usage{
-dictWrap(
-  text,
-  dict = NULL,
-  binary = FALSE,
-  num_mc_cores = parallel::detectCores(),
-  ...
-)
+dictWrap(text, dict = NULL, binary = FALSE, num_mc_cores = 1, ...)
 }
 \arguments{
 \item{text}{a character vector of texts.}
@@ -18,6 +12,8 @@ dictWrap(
 \item{dict}{a dictionary class object (see \link[quanteda]{dictionary}) containing dictionaries for six of the politeness features}
 
 \item{binary}{return the prevalence (percent of words) or the presence (yes/no) of a feature in each text?}
+
+\item{num_mc_cores}{integer Number of cores for parallelization. Default is 1.}
 
 \item{...}{arguments passes onto the \code{quanteda:dfm} function}
 }

@@ -6,12 +6,12 @@
 #' @param words logical. Default FALSE. Does \code{counted} contain words, or sequences of chracters?
 #' @param fixed logical. Default TRUE. Use literal characters instead of regular expressions?
 #' @param start logical. Default FALSE. Does \code{counted} only look at the start of a sentence?
-#' @param num_mc_cores integer Number of cores for parallelization. Default is parallel::detectCores().
+#' @param num_mc_cores integer Number of cores for parallelization. Default is 1.
 #' @return numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.
 #' @keywords internal
 #'
 textcounter<-function (counted, texts, words=FALSE, fixed = TRUE, start=FALSE,
-                       num_mc_cores = parallel::detectCores()) {
+                       num_mc_cores = 1) {
 
 
   if(words){

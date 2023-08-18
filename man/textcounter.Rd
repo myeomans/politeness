@@ -10,7 +10,7 @@ textcounter(
   words = FALSE,
   fixed = TRUE,
   start = FALSE,
-  num_mc_cores = parallel::detectCores()
+  num_mc_cores = 1
 )
 }
 \arguments{
@@ -24,7 +24,7 @@ textcounter(
 
 \item{start}{logical. Default FALSE. Does \code{counted} only look at the start of a sentence?}
 
-\item{num_mc_cores}{integer Number of cores for parallelization. Default is parallel::detectCores().}
+\item{num_mc_cores}{integer Number of cores for parallelization. Default is 1.}
 }
 \value{
 numeric vector as long as \code{texts} indicating total frequencies of \code{counted} items.
