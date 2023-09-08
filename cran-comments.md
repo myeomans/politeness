@@ -1,6 +1,6 @@
 ## Version Update (0.9.2.) 
 
-Some windows issues fixed. 
+Some windows issues fixed, and more consistency with plural pronouns.
 
 ## Version Update (0.9.1.) 
 
