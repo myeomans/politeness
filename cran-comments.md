@@ -1,3 +1,7 @@
+## Version Update (0.9.2.) 
+
+Some windows issues fixed. 
+
 ## Version Update (0.9.1.) 
 
 New features, fixed features.

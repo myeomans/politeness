@@ -132,3 +132,17 @@
 #'
 #'
 "receptive_model"
+
+
+
+#' This is the list of variables to be extracted for the receptiveness algorithm
+#' For internal use only, within the receptiveness() function.
+#'
+#' @format Character vector containing variable names
+#' @source  Minson, J., Yeomans, M., Collins, H. & Dorison, C.
+#'
+#' "Conversational Receptiveness: Improving Engagement with Opposing Views"
+#'
+#'
+#'
+"receptive_names"
