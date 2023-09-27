@@ -27,6 +27,7 @@
 politenessDNM<-function(text,
                         uk_english=FALSE){
   # settings from the main function hard-coded. for reproducibility
+
   parser="spacy"
   metric="count"
   drop_blank=FALSE
@@ -88,11 +89,12 @@ politenessDNM<-function(text,
                               +textcounter(c("nsubj(apologize, i)","dobj(excuse, me)","dobj(forgive, me)"),sets[["p.nonum"]], words=TRUE,
                                            num_mc_cores=num_mc_cores)
   )
+
   features[["Affirmation"]]<-textcounter(paste0(c("great","good","nice","good","interesting","cool","excellent","awesome"),"-1"),sets[["w.nums"]],words=TRUE,
                                          num_mc_cores=num_mc_cores)
 
   features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
-                              unlist(lapply(sets[["p.nonums"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
+                              unlist(lapply(sets[["p.nonum"]], function(x) sum(grepl("(appreciate, i)",x,fixed=TRUE)))))
 
   features[["Greeting"]]<-textcounter(c("hi","hello","hey"),sets[["c.words"]],words=TRUE,
                                       num_mc_cores=num_mc_cores)
@@ -127,13 +129,18 @@ politenessDNM<-function(text,
                                     num_mc_cores=num_mc_cores)
 
 
-  # add start features TKTKTKTK
-  features[["Please"]]<-1*(grepl("please",sets[["c.words"]],fixed=TRUE))
-  features[["First.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,
-                                                 num_mc_cores=num_mc_cores)
-  features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself", "yourselves"),sets[["c.words"]],words=TRUE,
-                                           num_mc_cores=num_mc_cores)
+  features[["Please.Start"]]<-textcounter("please-1",sets[["w.nums"]],words=TRUE,
+                                          num_mc_cores=num_mc_cores)
+  features[["Please"]]<-textcounter("please",sets[["c.words"]],words=TRUE,num_mc_cores=num_mc_cores)-features[["Please.Start"]]
 
+  features[["First.Person.Start"]]<-textcounter(paste0(c("i","my","mine","myself"),"-1"),sets[["w.nums"]],words=TRUE,
+                                                num_mc_cores=num_mc_cores)
+  features[["First.Person"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,num_mc_cores=num_mc_cores)-features[["First.Person.Start"]]
+
+  features[["Second.Person.Start"]]<-textcounter(paste0(c("you","your","yours","yourself"),"-1"),sets[["w.nums"]],words=TRUE,
+                                                 num_mc_cores=num_mc_cores)
+  features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself"),sets[["c.words"]],words=TRUE,
+                                           num_mc_cores=num_mc_cores)-features[["Second.Person.Start"]]
 
   feature.data<-as.data.frame(features)
   feature.data[feature.data<0]<-0

@@ -1,3 +1,7 @@
+## Version Update (0.9.3.) 
+
+Issue with the DNM reproduction fixed
+
 ## Version Update (0.9.2.) 
 
 Some windows issues fixed, and more consistency with plural pronouns.
