@@ -1,6 +1,6 @@
 ## Version Update (0.9.3.) 
 
-Issue with the DNM reproduction fixed
+DNM reproduction cleaned up, new documentation (with colab link), new pronoun feature
 
 ## Version Update (0.9.2.) 
 
