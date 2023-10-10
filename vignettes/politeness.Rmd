@@ -59,7 +59,9 @@ knitr::kable(feature_table,align=rep("c",4),
 
 Many of the politeness features contained in this package use dependency parsing. We have prioritized compatibility with the popular python NLP library [SpaCy](https://spacy.io/) This library is simple to install in python, although the procedure can vary for different machines. Our software also depends on a convenient wrapper function, [spacyr](https://spacyr.quanteda.io/), that includes several installation tools.
 
-Please confirm that your machine can run SpaCy and spacyr first! This step can be difficult for some machines, and we defer to the existing documentation for that software as a guide. Users may also want to consider [RStudio Cloud](https://rstudio.cloud/), which can support all of this software without local installation issues. 
+Please confirm that your machine can run SpaCy and spacyr first! This step can be difficult for some machines, and we defer to the existing documentation for that software as a guide.
+
+If SpaCy installation is proving difficult, we have created a notebook in  [Google Colab](https://colab.research.google.com/drive/1EmVhqlPLUIlFjYw73nzydtfT1PQ8QU2_?usp=sharing) that can run the package on the cloud without any difficult installation issues. This is recommended for first-time users who are not familiar with the underlying tools and would like to try out the package with minimal hassle. 
 
 
 When R (or Rstudio) is opened at first, the SpaCy engine must be initialized, so that it is ready for use during the session. SpaCyR has recently included tools to initialize automatically from R the first time it is called in a session - however, you may have to initialize it manually, using the location of their python initialization (e.g. "/anaconda/bin/python"):

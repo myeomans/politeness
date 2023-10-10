@@ -59,6 +59,9 @@ politenessPlot<-function(df_polite,
                          features=NULL,
                          ordered=FALSE,
                          CI=.68){
+  if(is.matrix(df_polite)){
+    df_polite <- as.data.frame(df_polite)
+  }
   if(!is.null(features)){
     df_polite <- df_polite[,features]
   }
