@@ -145,14 +145,24 @@ politeness<-function(text, parser=c("none","spacy"),
   features[["Please"]]<-textcounter("please",sets[["c.words"]],words=TRUE,
                                     num_mc_cores=num_mc_cores)
 
-  features[["First.Person.Plural"]]<-textcounter(c("we", "our", "ours", "us", "ourselves"),sets[["c.words"]],words=TRUE,
+  features[["First.Person.Plural"]]<-textcounter(c("we", "us", "our", "ours", "ourselves"),sets[["c.words"]],words=TRUE,
                                                  num_mc_cores=num_mc_cores)
 
-  features[["First.Person.Single"]]<-textcounter(c("i","my","mine","myself"),sets[["c.words"]],words=TRUE,
+  features[["First.Person.Single"]]<-textcounter(c("i","me","my","mine","myself"),sets[["c.words"]],words=TRUE,
                                                  num_mc_cores=num_mc_cores)
 
-  features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself", "yourselves"),sets[["c.words"]],words=TRUE,
+  features[["Second.Person"]]<-textcounter(c("you","your","yours","yourself", "yourselves","y'all"),sets[["c.words"]],words=TRUE,
                                            num_mc_cores=num_mc_cores)
+
+  features[["Third.Person"]]<-textcounter(c("he","him","his","himself",
+                                            "she","her","hers","herself",
+                                            "they","them","their","theirs","themselves"),
+                                          sets[["c.words"]],words=TRUE,
+                                           num_mc_cores=num_mc_cores)
+
+
+  #
+
 
   #if(parser[1]=="none"){
   if(parser[1]!="spacy"){
