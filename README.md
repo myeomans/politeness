@@ -38,7 +38,7 @@ documentation for that software as a guide.
 If you want to try out this package without having to configure SpaCy on
 your own machine, I have written a tutorial that will let you analyse
 the data on
-[Colab](https://colab.research.google.com/github/myeomans/politenessTutorial/blob/main/colabr.ipynb).
+[Colab](https://colab.research.google.com/drive/1EmVhqlPLUIlFjYw73nzydtfT1PQ8QU2_?usp=sharing).
 This will install everything you need automatically (though it does take
 ~ 20 minutes for everything to run). However, for people unfamiliar with
 python, it can be much easier to use colab to start, than to configure
