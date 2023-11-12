@@ -30,7 +30,7 @@ politenessProjection(
 List of df_polite_train and df_polite_test with projection. See details.
 }
 \description{
-Training and projecting a regression model of politeness.
+Training and projecting a regression model using politeness features.
 }
 \details{
 List:

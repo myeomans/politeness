@@ -2,8 +2,8 @@ utils::globalVariables(c("polite_train")) # prevent incorrect "no global binding
 
 #' Pre-Trained Politeness Classifier
 #'
-#' @description Pre-trained model to detect conversational receptiveness
-#' @param texts character A vector of texts, each of which will be tallied for politeness features.
+#' @description Pre-trained model to detect politeness based on data from Danescu-Niculescu-Mizil et al. (2013)
+#' @param texts character A vector of texts, each of which will be given a politeness score.
 #' @param num_mc_cores integer Number of cores for parallelization.
 #' @details This is a wrapper around a pre-trained model of "politeness" for all the data from the 2013 DNM et al paper.
 #' This model requires grammar parsing via SpaCy. Please see \code{\link{spacyr}} for details on installation.

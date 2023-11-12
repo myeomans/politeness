@@ -1,6 +1,6 @@
 #' Politeness projection
 #'
-#' @description Training and projecting a regression model of politeness.
+#' @description Training and projecting a regression model using politeness features.
 #' @param df_polite_train a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.
 #' @param covar a vector of politeness labels, or other covariate.
 #' @param df_polite_test  optional data.frame with politeness features as outputed by \code{\link{politeness}} used for out-of-sample fitting. Must have same feature set as polite_train (most easily achieved by setting \code{dropblank=FALSE} in both calls to \code{politeness}).

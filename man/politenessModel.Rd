@@ -7,7 +7,7 @@
 politenessModel(texts, num_mc_cores = 1)
 }
 \arguments{
-\item{texts}{character A vector of texts, each of which will be tallied for politeness features.}
+\item{texts}{character A vector of texts, each of which will be given a politeness score.}
 
 \item{num_mc_cores}{integer Number of cores for parallelization.}
 }
@@ -15,7 +15,7 @@ politenessModel(texts, num_mc_cores = 1)
 a vector with receptiveness scores
 }
 \description{
-Pre-trained model to detect conversational receptiveness
+Pre-trained model to detect politeness based on data from Danescu-Niculescu-Mizil et al. (2013)
 }
 \details{
 This is a wrapper around a pre-trained model of "politeness" for all the data from the 2013 DNM et al paper.

@@ -1,12 +1,12 @@
-## Version Update (0.9.3.) 
+## Version Update (0.9.3) 
 
 DNM reproduction cleaned up, new documentation (with colab link), new pronoun feature
 
-## Version Update (0.9.2.) 
+## Version Update (0.9.2) 
 
 Some windows issues fixed, and more consistency with plural pronouns.
 
-## Version Update (0.9.1.) 
+## Version Update (0.9.1) 
 
 New features, fixed features.
 
