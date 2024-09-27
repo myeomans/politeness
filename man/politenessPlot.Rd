@@ -4,51 +4,18 @@
 \alias{politenessPlot}
 \title{Politeness plot}
 \usage{
-politenessPlot(
-  df_polite,
-  split = NULL,
-  split_levels = NULL,
-  split_name = NULL,
-  split_cols = c("firebrick", "navy"),
-  top_title = "",
-  drop_blank = 0.05,
-  middle_out = 0.5,
-  features = NULL,
-  ordered = FALSE,
-  CI = 0.68
-)
+politenessPlot(df_polite, ...)
 }
 \arguments{
 \item{df_polite}{a data.frame with politeness features calculated from a document set, as output by \code{\link{politeness}}.}
 
-\item{split}{a vector of covariate values. must have a length equal to the number of documents included in \code{df_polite}. No NA values allowed.}
-
-\item{split_levels}{character vector of length 2 default NULL. Labels for covariate levels for legend. If NULL, this will be inferred from \code{split}.}
-
-\item{split_name}{character default NULL. Name of the covariate for legend.}
-
-\item{split_cols}{character vector of length 2. Name of colors to use.}
-
-\item{top_title}{character default "". Title of plot.}
-
-\item{drop_blank}{Features less prevalent than this in the sample value are excluded from the plot. To include all features, set to \code{0}}
-
-\item{middle_out}{Features less distinctive than this value (measured by p-value of t-test) are excluded. Defaults to 1 (i.e. include all).}
-
-\item{features}{character vector of feature names. If NULL all will be included.}
-
-\item{ordered}{logical should features be ordered according to features param? default is FALSE.}
-
-\item{CI}{Coverage of error bars. Defaults to 0.68 (i.e. standard error).}
+\item{...}{other arguments passed on to featurePlot. See featurePlot for details.}
 }
 \value{
 a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
 }
 \description{
-Plots the prevalence of politeness features in documents, divided by a binary covariate.
-}
-\details{
-Length of \code{split} must be the same as number of rows of \code{df_polite}. Typically \code{split} should be a two-category variable. However, if a continuous covariate is given, then the top and bottom terciles of that distribution are treated as the two categories (while dropping data from the middle tercile).
+Deprecated... This function has a new name now. See featurePlot for details.
 }
 \examples{
 

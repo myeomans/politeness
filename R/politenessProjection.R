@@ -12,6 +12,7 @@
 #' * train_proj projection of politeness model within training set.
 #' * test_proj projection of politeness model onto test set (i.e. out-of-sample).
 #' * train_coef coefficients from the trained model.
+#' * train_model The LASSO model itself (for modelPlot)
 #'
 #' @md
 #' @examples
@@ -138,7 +139,8 @@ politenessProjection <- function(df_polite_train, covar = NULL,
     }
     l_out <- list(train_proj = polite_fit,
                   test_proj = polite_predict,
-                  train_coefs = polite_coefs)
+                  train_coefs = polite_coefs,
+                  train_model = polite_model)
 
   }
 

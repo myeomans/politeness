@@ -137,7 +137,7 @@ politeness<-function(text, parser=c("none","spacy"),
   features[["Give.Agency"]]<-textcounter(c("let you", "allow you", "you can ", " you may ", " you could "),sets[["clean"]],
                                          num_mc_cores=num_mc_cores)
 
-  features[["Hello"]]<-(textcounter(c("hi","hello","hey","greetings"),sets[["c.words"]],words=TRUE,
+  features[["Hello"]]<-(textcounter(c("hi","hello","hey","greetings","howdy"),sets[["c.words"]],words=TRUE,
                                     num_mc_cores=num_mc_cores)+
                           textcounter(c("good morning", "good evening", "good afternoon"),sets[["clean"]],
                                       num_mc_cores=num_mc_cores))
@@ -166,7 +166,9 @@ politeness<-function(text, parser=c("none","spacy"),
 
   #if(parser[1]=="none"){
   if(parser[1]!="spacy"){
-    cat("Warning: Please install and initialize SpaCy, using the spacyr R package. This is an INCOMPLETE version of the package.")
+    if(length(parser)==2){
+      cat("Warning: Please install and initialize SpaCy, using the spacyr R package. This is an INCOMPLETE version of the package.")
+    }
     features[["Positive.Emotion"]]<-textcounter(positive_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
     features[["Negative.Emotion"]]<-textcounter(negative_list,sets[["c.words"]],words=TRUE, num_mc_cores=num_mc_cores)
     features[["Questions"]]<-textcounter("?",text, num_mc_cores=num_mc_cores)
@@ -254,6 +256,7 @@ politeness<-function(text, parser=c("none","spacy"),
                                                                                  &(!grepl(paste0("-hang-"),unlist(x)))
                                                                                  &(!grepl(paste0("-let-"),unlist(x)))
     )))
+    # what about when the first word is a negation, e.g. "don't go there"
 
     q.words<-c("who","what","where","when","why","how","which")
     features[["WH.Questions"]]<-unlist(lapply(sets[["ques.pos.dists"]],

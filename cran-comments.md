@@ -1,3 +1,7 @@
+## Version Update (0.9.4) 
+
+Added modelPlot, renamed politenessPlot to featurePlot, and added a model output for politenessProjection
+
 ## Version Update (0.9.3) 
 
 DNM reproduction cleaned up, new documentation (with colab link), new pronoun feature

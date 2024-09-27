@@ -38,6 +38,7 @@ List:
 \item train_proj projection of politeness model within training set.
 \item test_proj projection of politeness model onto test set (i.e. out-of-sample).
 \item train_coef coefficients from the trained model.
+\item train_model The LASSO model itself (for modelPlot)
 }
 }
 \examples{
