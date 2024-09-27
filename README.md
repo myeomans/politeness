@@ -35,6 +35,7 @@ Please confirm that your machine can run SpaCy and spacyr first! This
 step can be difficult for some machines, and we defer to the existing
 documentation for that software as a guide.
 
+<!---
 If you want to try out this package without having to configure SpaCy on
 your own machine, I have written a tutorial that will let you analyse
 the data on
@@ -43,6 +44,7 @@ This will install everything you need automatically (though it does take
 ~ 20 minutes for everything to run). However, for people unfamiliar with
 python, it can be much easier to use colab to start, than to configure
 their own computer.
+-->
 
 ## Citation
 
