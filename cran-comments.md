@@ -1,6 +1,9 @@
 ## Version Update (0.9.4) 
 
-Added modelPlot, renamed politenessPlot to featurePlot, and added a model output for politenessProjection
+Added modelPlot, and added a model output for trainModel.
+renamed politenessPlot to featurePlot.
+renamed findPoliteTexts to exampleTexts.
+renamed politenessProjection to trainModel.
 
 ## Version Update (0.9.3) 
 

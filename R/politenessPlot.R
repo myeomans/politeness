@@ -1,6 +1,3 @@
-# Used to avoid incorrect notes of "no visible binding"
-utils::globalVariables(c("feature","count","cond","count_minus","count_plus"))
-
 #' Politeness plot
 #'
 #' @description Deprecated... This function has a new name now. See featurePlot for details.
@@ -18,23 +15,6 @@ utils::globalVariables(c("feature","count","cond","count_minus","count_plus"))
 #'                            split_levels = c("Tough","Warm"),
 #'                            split_name = "Condition",
 #'                            top_title = "Average Feature Counts")
-#'
-#'
-#' politeness::politenessPlot(polite.data,
-#'                            split=phone_offers$condition,
-#'                            split_levels = c("Tough","Warm"),
-#'                            split_name = "Condition",
-#'                            top_title = "Average Feature Counts",
-#'                            features=c("Positive.Emotion","Hedges","Negation"))
-#'
-#'
-#' polite.data<-politeness(phone_offers$message, parser="none", metric="binary", drop_blank=FALSE)
-#'
-#' politeness::politenessPlot(polite.data,
-#'                            split=phone_offers$condition,
-#'                            split_levels = c("Tough","Warm"),
-#'                            split_name = "Condition",
-#'                            top_title = "Binary Feature Use")
 #'
 #' @export
 

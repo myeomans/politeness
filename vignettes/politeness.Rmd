@@ -36,9 +36,9 @@ Politeness as a construct is universal. And research in many branches of social 
 
 In these cases it would be helpful to have a model that could condense text into a single "politeness score" that could, say, be entered into a regression. However, the causes and consequences of politeness are often situationally specific. Furthermore, the particular set of linguistic markers that define politeness can also vary from context to context. Thus, it would be difficult (or misleading) to estimate a single model as some universal "politeness classifier" for all situations. 
 
-Instead, we offer tools for a workflow that we beleive will be useful to most researchers interested in linguistic politeness. First, we offer a tool, `politeness` that will calculate a set of linguistic features that have been identified in the past as relating to politeness. Second, we offer a tool, `politenessPlot` to visualize these counts, in comparison to a binary covariate of interest (e.g. high/low status). 
+Instead, we offer tools for a workflow that we believe will be useful to most researchers interested in linguistic politeness. First, we offer a tool, `politeness` that will calculate a set of linguistic features that have been identified in the past as relating to politeness. Second, we offer a tool, `featurePlot` to visualize these counts, in comparison to a binary covariate of interest (e.g. high/low status). Third, we offer a tool, `findExamples` for exploring texts at the extremes of a dimension - either a continuous covariate, or else the output of a classifier model.
 
-If the researcher wants to generate a politeness classifier, they can do so using the `politenessProjection` function, which creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the researcher has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
+If the researcher wants to generate a politeness classifier, they can do so using the `trainModel` function, which creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the researcher has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
 
 ## Politeness Features
 
@@ -102,37 +102,37 @@ df_politeness[20:30,1:5]
 
 ## Plotting politeness features
 
-The best way to inspect the results of the main `politeness` function is to plot the counts using `politenessPlot()`. This function produces a `ggplot2` object that compares how the counts of every politeness feature differ across a binary covariate of interest (e.g. how often each feature is used in the treatment condition versus the control). The covariate vector must itself be binary `(0/1)` but users can adjust the labels on the graph as necessary. 
+The best way to inspect the results of the main `politeness` function is to plot the counts using `featurePlot()`. This function produces a `ggplot2` object that compares how the counts of every politeness feature differ across a binary covariate of interest (e.g. how often each feature is used in the treatment condition versus the control). The covariate vector must itself be binary `(0/1)` but users can adjust the labels on the graph as necessary. 
 
 The order of the features is determined by calculating the variance-weighted log odds of each feature with resepct to the binary covariate. The plot sorts features automatically so that the most distinctive are towards the top and bottom of the plot. The function can handle data of any metric - binary, count or average - but that distinction must be made in the initial call to `politeness()`. 
 
 Often some features are not meaningful for further analysis - either because they are too rare in the data, or else because they do not meaningfully covary with the covariate of interest. Users have two options to exclude these from the plot. First, the `drop_blank` parameter can remove rare features - it takes a number between 0 and 1, which determines a cut-off based on prevalence. Specifically, all features which appear in less than this proportion of texts are excluded from the plot. To include all features, leave this value at `0`. Second, the `middle_out` parameter can remove features which do not vary meaningfully across the covariate - it takes a number between 0 and 1, which determines a cut-off based on distinctiveness. Each feature is evaluated using a t.test, and features are removed when the p-value of this test lies above the user's cut-off. To include all features, simply set this value at `1`. We do not recommend this as a formal hypothesis test (there is no adjustment for multiple comparisons, for starters). Rather, this is useful as a dsecriptive sense for identifying the most distinctive features.
 
 ```{r, echo=TRUE, eval=FALSE}
-politeness::politenessPlot(df_politeness,
-                           split=phone_offers$condition,
-                           split_levels = c("Tough","Warm"),
-                           split_name = "Condition")
+politeness::featurePlot(df_politeness,
+                        split=phone_offers$condition,
+                        split_levels = c("Tough","Warm"),
+                        split_name = "Condition")
 ```
 
 ```{r, fig.width=6, fig.height=8, eval=TRUE}
-politeness::politenessPlot(df_politeness,
-                           split=phone_offers$condition,
-                           split_levels = c("Tough","Warm"),
-                           split_name = "Condition")
+politeness::featurePlot(df_politeness,
+                        split=phone_offers$condition,
+                        split_levels = c("Tough","Warm"),
+                        split_name = "Condition")
 ```
 
 ## Projecting politeness features
 
-`politenessProjection()` 
+`trainModel()` 
 
-Users can generate a politeness classifier with the `politenessProjection` function. This creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the user has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
+Users can generate a politeness classifier with the `trainModel` function. This creates a single mapping from the politeness features in the supplied text to the covariate of interest. This can then be used to predict the covariate itself in held-out texts. In particular, if the user has some "ground truth" hand-generated labels of politeness over a set of texts, they can use this function as a politeness classifier, and automatically assign politeness scores to many more new texts. 
 
 This function is a wrapper around supervised learning algorithms. The default uses \code{glmnet}, the vanilla LASSO implementation in R. This should be familiar to most users already. We also allow users to use a different algorithm, \code{texitr}, which implements a massively multinomial inverse regression. Intuitively, this model represents a more realistic causal structure to text-plus-covariate data - that is, the covariate typically has a causal effect on the words used by the speaker, rather than the other way around. 
 
 Both packages have their merits, though for now we recommend using \code{glmnet} to start, especially if it is familiar. Both algorithms are computationally efficient, and can be improved by registering a parallel back-end (see package details) and passing the necessary argument on to the classifier function.
 
-In addition to the `phone_offers` dataset, we have also included a smaller `bowl_offers` dataset. Participants in this study were given similar instructions (i.e. communicate in a warm or tough style) but for a different negotiation exercise. We use the `phone_offers` dataset to define the construct of interest, and confirm that the treatment had similar effects in `bowl_offers` by using it as held-out data in `politenessProjection()`. The results confirm that the manipulation had similar consequences on the participants' politeness.
+In addition to the `phone_offers` dataset, we have also included a smaller `bowl_offers` dataset. Participants in this study were given similar instructions (i.e. communicate in a warm or tough style) but for a different negotiation exercise. We use the `phone_offers` dataset to define the construct of interest, and confirm that the treatment had similar effects in `bowl_offers` by using it as held-out data in `trainModel()`. The results confirm that the manipulation had similar consequences on the participants' politeness.
 
 ```{r, echo=TRUE, eval=TRUE}
 
@@ -140,7 +140,7 @@ df_polite_train <- politeness(phone_offers$message)
 
 df_polite_holdout<-politeness(bowl_offers$message)
 
-project<-politenessProjection(df_polite_train,
+project<-trainModel(df_polite_train,
                               phone_offers$condition,
                               df_polite_holdout)
 
@@ -153,30 +153,24 @@ mean(project$test_proj[bowl_offers$condition==0])
 
 ## Reading texts that are high or low in politeness
 
-`findPoliteTexts()`
+`exampleTexts()`
 
-The projected quantities from the `politenessProjection` function can be used in other analyses, but users should first be curious about examples of texts that best represent the extremes of that projection (i.e. the most or least polite texts). The `findPoliteTexts` function replicates the analyses of `politenessProjection` but instead returns a selection of the texts that are the most extreme (i.e. high, or low, or both) along the projected dimension. The parameters `type` and `num_docs` allow users to specify the type and number of texts that are returned.
+The projected quantities from the `trainModel` function can be used in other analyses, but users should first be curious about examples of texts that best represent the extremes of that projection (i.e. the most or least polite texts). The `exampleTexts` function returns a selection of the texts that are the most extreme (i.e. high, or low, or both) along a covariate - this could be either the one used to train the model, or the output of the model itself. The parameters `type` and `num_docs` allow users to specify the type and number of texts that are returned.
 
 ```{r, echo=TRUE, eval=TRUE}
-fpt_most<-findPoliteTexts(phone_offers$message,
-                     df_polite_train,
-                     phone_offers$condition,
-                     type="most")
-fpt_least<-findPoliteTexts(phone_offers$message,
-                     df_polite_train,
-                     phone_offers$condition,
-                     type="least")
+fpt_most<-exampleTexts(phone_offers$message,
+                       phone_offers$condition,
+                       type="most")
+fpt_least<-exampleTexts(phone_offers$message,
+                        phone_offers$condition,
+                        type="least")
 ```
 
 ```{r, echo=FALSE, eval=TRUE}
 print("Most Polite")
-for(x in 1:nrow(fpt_most)){
-  print(as.character(fpt_most[x,1]))
-}
+print(fpt_most)
 print("Least Polite")
-for(x in 1:nrow(fpt_least)){
-  print(as.character(fpt_least[x,1]))
-}
+print(fpt_least)
 ```
 
 ## Execution time 
@@ -199,6 +193,6 @@ That's it! Enjoy! And please reach out to us with any questions, concerns, bug r
 
 Brown, P., & Levinson, S. C. (1987). Politeness: Some universals in language usage (Vol. 4). Cambridge university press.
 
-Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J., & Potts, C. (2013). A computational approach to politeness with application to social factors. arXiv preprint arXiv:1306.6078.
+Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J., & Potts, C. (2013). A Computational Approach to Politeness with Application to Social Factors. In 51st Annual Meeting of the Association for Computational Linguistics (pp. 250-259). ACL.
 
 Voigt, R., Camp, N. P., Prabhakaran, V., Hamilton, W. L., ... & Eberhardt, J. L. (2017). Language from police body camera footage shows racial disparities in officer respect. Proceedings of the National Academy of Sciences, 201702413.

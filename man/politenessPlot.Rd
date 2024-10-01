@@ -29,21 +29,4 @@ politeness::politenessPlot(polite.data,
                            split_name = "Condition",
                            top_title = "Average Feature Counts")
 
-
-politeness::politenessPlot(polite.data,
-                           split=phone_offers$condition,
-                           split_levels = c("Tough","Warm"),
-                           split_name = "Condition",
-                           top_title = "Average Feature Counts",
-                           features=c("Positive.Emotion","Hedges","Negation"))
-
-
-polite.data<-politeness(phone_offers$message, parser="none", metric="binary", drop_blank=FALSE)
-
-politeness::politenessPlot(polite.data,
-                           split=phone_offers$condition,
-                           split_levels = c("Tough","Warm"),
-                           split_name = "Condition",
-                           top_title = "Binary Feature Use")
-
 }

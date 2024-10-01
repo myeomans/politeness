@@ -4,58 +4,29 @@
 \alias{findPoliteTexts}
 \title{Find polite text}
 \usage{
-findPoliteTexts(
-  text,
-  df_polite,
-  covar,
-  type = c("most", "least", "both"),
-  num_docs = 5L,
-  ...
-)
+findPoliteTexts(text, covar, ...)
 }
 \arguments{
 \item{text}{a character vector of texts.}
 
-\item{df_polite}{a data.frame with politeness features, as outputed by \code{\link{politeness}}, used to train model.}
-
 \item{covar}{a vector of politeness labels, or other covariate.}
 
-\item{type}{a string indicating if function should return the most or least polite texts or both. If \code{length > 1} only first value is used.}
-
-\item{num_docs}{integer of number of documents to be returned. Default is 5.}
-
-\item{...}{additional parameters to be passed to \code{politenessProjection}.}
+\item{...}{other arguments passed on to exampleTexts. See exampleTexts for details.}
 }
 \value{
-data.frame with texts ranked by (more or least) politeness. See details for more information.
+a ggplot of the prevalence of politeness features, conditional on \code{split}. Features are sorted by variance-weighted log odds ratio.
 }
 \description{
-Finds examples of most or least polite text in a corpus
-}
-\details{
-Function returns a data.frame ranked by (more or least) politeness.
-If \code{type == 'most'}, the \code{num_docs} most polite texts will be returned.
-If \code{type == 'least'}, the \code{num_docs} least polite texts will be returned.
-If \code{type == 'both'}, both most and least polite text will be returned.
-if \code{num_docs} is even, half will be most and half least polite else half + 1 will be most polite.
-
-\code{df_polite} must have the same number of rows as the \code{length(text)} and \code{length(covar)}.
+Deprecated... This function has a new name now. See exampleTexts for details.
 }
 \examples{
-
 data("phone_offers")
 polite.data<-politeness(phone_offers$message, parser="none",drop_blank=FALSE)
 
 findPoliteTexts(phone_offers$message,
-                polite.data,
                 phone_offers$condition,
                 type = "most",
                 num_docs = 5)
 
-findPoliteTexts(phone_offers$message,
-                polite.data,
-                phone_offers$condition,
-                type = "least",
-                num_docs = 10)
 
 }

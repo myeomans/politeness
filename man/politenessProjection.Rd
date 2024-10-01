@@ -4,42 +4,23 @@
 \alias{politenessProjection}
 \title{Politeness projection}
 \usage{
-politenessProjection(
-  df_polite_train,
-  covar = NULL,
-  df_polite_test = NULL,
-  classifier = c("glmnet", "mnir"),
-  cv_folds = NULL,
-  ...
-)
+politenessProjection(df_polite_train, covar = NULL, ...)
 }
 \arguments{
 \item{df_polite_train}{a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.}
 
 \item{covar}{a vector of politeness labels, or other covariate.}
 
-\item{df_polite_test}{optional data.frame with politeness features as outputed by \code{\link{politeness}} used for out-of-sample fitting. Must have same feature set as polite_train (most easily achieved by setting \code{dropblank=FALSE} in both calls to \code{politeness}).}
-
-\item{classifier}{name of classification algorithm. Defaults to "glmnet" (see \code{glmnet}) but "mnir" (see \code{mnlm}) is also available.}
-
-\item{cv_folds}{Number of outer folds for projection of training data. Default is NULL (i.e. no nested cross-validation). However, positive values are highly recommended (e.g. 10) for in-sample accuracy estimation.}
-
-\item{...}{additional parameters to be passed to the classification algorithm.}
+\item{...}{additional parameters to be passed. See \code{\link{trainModel()}}.}
 }
 \value{
-List of df_polite_train and df_polite_test with projection. See details.
+list of model objects.
 }
 \description{
-Training and projecting a regression model using politeness features.
+Deprecated. Function is now called \code{\link{trainModel()}}.
 }
 \details{
-List:
-\itemize{
-\item train_proj projection of politeness model within training set.
-\item test_proj projection of politeness model onto test set (i.e. out-of-sample).
-\item train_coef coefficients from the trained model.
-\item train_model The LASSO model itself (for modelPlot)
-}
+See \code{\link{trainModel()}} for details.
 }
 \examples{
 

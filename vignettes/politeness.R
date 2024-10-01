@@ -31,16 +31,16 @@ df_politeness <- politeness(phone_offers$message, metric="binary")
 df_politeness[20:30,1:5]
 
 ## ----echo=TRUE, eval=FALSE----------------------------------------------------
-#  politeness::politenessPlot(df_politeness,
-#                             split=phone_offers$condition,
-#                             split_levels = c("Tough","Warm"),
-#                             split_name = "Condition")
+#  politeness::featurePlot(df_politeness,
+#                          split=phone_offers$condition,
+#                          split_levels = c("Tough","Warm"),
+#                          split_name = "Condition")
 
 ## ----fig.width=6, fig.height=8, eval=TRUE-------------------------------------
-politeness::politenessPlot(df_politeness,
-                           split=phone_offers$condition,
-                           split_levels = c("Tough","Warm"),
-                           split_name = "Condition")
+politeness::featurePlot(df_politeness,
+                        split=phone_offers$condition,
+                        split_levels = c("Tough","Warm"),
+                        split_name = "Condition")
 
 ## ----echo=TRUE, eval=TRUE-----------------------------------------------------
 
@@ -48,7 +48,7 @@ df_polite_train <- politeness(phone_offers$message)
 
 df_polite_holdout<-politeness(bowl_offers$message)
 
-project<-politenessProjection(df_polite_train,
+project<-trainModel(df_polite_train,
                               phone_offers$condition,
                               df_polite_holdout)
 
@@ -59,24 +59,18 @@ mean(project$test_proj[bowl_offers$condition==0])
 
 
 ## ----echo=TRUE, eval=TRUE-----------------------------------------------------
-fpt_most<-findPoliteTexts(phone_offers$message,
-                     df_polite_train,
-                     phone_offers$condition,
-                     type="most")
-fpt_least<-findPoliteTexts(phone_offers$message,
-                     df_polite_train,
-                     phone_offers$condition,
-                     type="least")
+fpt_most<-exampleTexts(phone_offers$message,
+                       phone_offers$condition,
+                       type="most")
+fpt_least<-exampleTexts(phone_offers$message,
+                        phone_offers$condition,
+                        type="least")
 
 ## ----echo=FALSE, eval=TRUE----------------------------------------------------
 print("Most Polite")
-for(x in 1:nrow(fpt_most)){
-  print(as.character(fpt_most[x,1]))
-}
+print(fpt_most)
 print("Least Polite")
-for(x in 1:nrow(fpt_least)){
-  print(as.character(fpt_least[x,1]))
-}
+print(fpt_least)
 
 ## ----out.width = "650px"------------------------------------------------------
 knitr::include_graphics("executionTime.png")

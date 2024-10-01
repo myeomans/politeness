@@ -62,7 +62,7 @@ politeness::politeness(phone_offers$message)
 #spacyr::spacy_initialize(python_executable = "PYTHON_PATH")
 #politeness::politeness(phone_offers$message, parser="spacy")
 
-politeness::politenessPlot(politeness::politeness(phone_offers$message),
+politeness::featurePlot(politeness::politeness(phone_offers$message),
                            split=phone_offers$condition,
                            split_levels = c("Warm","Tough"),
                            split_name = "Condition")

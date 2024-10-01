@@ -41,7 +41,7 @@ receptiveness<-function(texts, num_mc_cores=1){
 
   return(polite_predict)
   #
-  # recept_predict<-as.vector(politeness::politenessProjection(m_train,
+  # recept_predict<-as.vector(politeness::trainModel(m_train,
   #                                                            train_dat$receptive,
   #                                                            m_test)$test_proj)
   #

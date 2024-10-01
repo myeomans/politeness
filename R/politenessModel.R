@@ -27,9 +27,9 @@ politenessModel<-function(texts, num_mc_cores=1){
 
   m_polite_test = as.matrix(politeness::politenessDNM(texts))
 
-  recept_predict<-as.vector(politeness::politenessProjection(m_polite_train,
-                                                             politeness::polite_train$y,
-                                                             m_polite_test)$test_proj)
+  recept_predict<-as.vector(politeness::trainModel(m_polite_train,
+                                                   politeness::polite_train$y,
+                                                   m_polite_test)$test_proj)
 
 
   return(recept_predict)
