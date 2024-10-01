@@ -3,6 +3,7 @@
 export(exampleTexts)
 export(featurePlot)
 export(findPoliteTexts)
+export(modelPlot)
 export(politeness)
 export(politenessDNM)
 export(politenessModel)

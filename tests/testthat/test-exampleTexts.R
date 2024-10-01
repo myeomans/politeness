@@ -30,7 +30,6 @@ test_that("find polite runs with different parameter" , {
   expect_that({
     suppressWarnings(exampleTexts(text = phone_offers$message,
                                      type = "least",
-                                     df_polite = df_polite,
                                      covar = phone_offers$condition,
                                      num_docs = 5))
   }, is_a("character"))
@@ -39,7 +38,6 @@ test_that("find polite runs with different parameter" , {
 
   expect_that({
     suppressWarnings(exampleTexts(text = phone_offers$message,
-                                     df_polite = df_polite,
                                      covar = continous_condition,
                                      num_docs = 13))
   }, is_a("character"))
