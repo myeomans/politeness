@@ -1,11 +1,11 @@
 #' Politeness projection
 #'
-#' @description Deprecated. Function is now called \code{\link{trainModel()}}.
+#' @description Deprecated. Function is now called \code{\link{trainModel}}.
 #' @param df_polite_train a data.frame with politeness features as outputed by \code{\link{politeness}} used to train model.
 #' @param covar a vector of politeness labels, or other covariate.
-#' @param ... additional parameters to be passed. See \code{\link{trainModel()}}.
+#' @param ... additional parameters to be passed. See \code{\link{trainModel}}.
 #' @return list of model objects.
-#' @details See \code{\link{trainModel()}} for details.
+#' @details See \code{\link{trainModel}} for details.
 #' @md
 #' @examples
 #'

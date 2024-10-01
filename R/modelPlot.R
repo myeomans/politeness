@@ -12,6 +12,8 @@ utils::globalVariables(c("feat","score","freq"))
 #' @description
 #' This plots the coefficients from a trained LASSO model.
 #'
+#'@export
+
 modelPlot<-function(model1,counts,model2=NULL,dat=FALSE){
 
   plotCoefs<-model1 %>%

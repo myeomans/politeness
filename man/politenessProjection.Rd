@@ -11,16 +11,16 @@ politenessProjection(df_polite_train, covar = NULL, ...)
 
 \item{covar}{a vector of politeness labels, or other covariate.}
 
-\item{...}{additional parameters to be passed. See \code{\link{trainModel()}}.}
+\item{...}{additional parameters to be passed. See \code{\link{trainModel}}.}
 }
 \value{
 list of model objects.
 }
 \description{
-Deprecated. Function is now called \code{\link{trainModel()}}.
+Deprecated. Function is now called \code{\link{trainModel}}.
 }
 \details{
-See \code{\link{trainModel()}} for details.
+See \code{\link{trainModel}} for details.
 }
 \examples{
 
