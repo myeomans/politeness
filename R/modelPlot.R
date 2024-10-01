@@ -18,12 +18,13 @@ modelPlot<-function(model1,counts,model2=NULL,dat=FALSE){
 
   plotCoefs<-model1 %>%
     stats::coef(s="lambda.min") %>%
-    drop() %>%
+    drop() #%>%
     as.data.frame() %>%
     tibble::rownames_to_column(var = "feat") %>%
     dplyr::rename(score=".") %>%
     dplyr::filter(score!=0 & feat!="(Intercept)" & !is.na(score))
 
+  return(plotCoefs)
   # if(nrow(plotCoefs)==0){
   #   stop("Model must have non-zero coefficients")
   # }
