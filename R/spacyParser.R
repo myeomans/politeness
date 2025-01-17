@@ -120,7 +120,7 @@ spacyParser<- function(txt){
 
 
   # selfie triplets (for apologies)
-  dt_parsedtxt[,selfies:=token%in%c("I","we","We","our","Our","me","Me","us","Us")]
+  dt_parsedtxt[,selfies:=token%in%c("I","i","we","We","our","Our","me","Me","us","Us")]
   dt_selfies=dt_parsedtxt[selfies==1,c("doc_id","sentence_id","head_token_id")]
   dt_selfies[,selfscope1:=1]
   dt_parsedtxt <- dt_selfies[dt_parsedtxt, on=c("doc_id","sentence_id","head_token_id"),allow.cartesian=TRUE]

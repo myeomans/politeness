@@ -287,11 +287,13 @@ politeness<-function(text, parser=c("none","spacy"),
                                            "poss(forgiveness, your)",
                                            "dobj(forgive, me)"),sets[["p.unnegs"]], words=TRUE,
                                          num_mc_cores=num_mc_cores)
-                            +min(sum(textcounter("nsubj(are, we)",sets[["p.unnegs"]],words=TRUE)),
-                                 sum(textcounter("acomp(are, sorry)",sets[["p.unnegs"]],words=TRUE)))
-                            +min(sum(textcounter("nsubj('re, we)",sets[["p.unnegs"]],words=TRUE)),
-                                 sum(textcounter("acomp('re, sorry)",sets[["p.unnegs"]],words=TRUE)))
-                            # "I would like to apologize" - "I want to apologize" - "would you like to apologize"
+                            +(textcounter("nsubj(are, we)",sets[["p.unnegs"]],words=TRUE)&textcounter("acomp(are, sorry)",sets[["p.unnegs"]],words=TRUE))
+                            +(textcounter("nsubj('re, we)",sets[["p.unnegs"]],words=TRUE)&textcounter("acomp('re, sorry)",sets[["p.unnegs"]],words=TRUE))
+                            +(textcounter("xcomp(want, apologize)",sets[["self.unnegs"]]))
+                            +(textcounter("xcomp(have, apologize)",sets[["self.unnegs"]]))
+                            +(textcounter("xcomp(need, apologize)",sets[["self.unnegs"]]))
+                            +(textcounter("xcomp(like, apologize)",sets[["self.unnegs"]]))
+                            +(textcounter("intj(say, sorry)",sets[["self.unnegs"]]))
 
     )
     features[["Truth.Intensifier"]]<-(textcounter(c("really", "actually", "honestly", "surely"),sets[["c.words"]],words=TRUE,
