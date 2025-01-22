@@ -14,6 +14,7 @@ getTokenSets<-function(text,parser=c("none","spacy"),num_mc_cores=1){
   text=ctxpand(text)
   sets<-list()
   sets[["dicts"]]<-dictWrap(text, dict=polite_dicts, num_mc_cores=num_mc_cores)
+
   sets[["clean"]]<-parallel::mclapply(text, cleantext, stop.words=FALSE,mc.cores=num_mc_cores)
   sets[["c.words"]]<-parallel::mclapply(sets[["clean"]], function(x) strsplit(x, split=" ")[[1]],mc.cores=num_mc_cores)
   sets[["c.words"]]<-parallel::mclapply(sets[["c.words"]],function(x) x[x!=""],mc.cores=num_mc_cores)

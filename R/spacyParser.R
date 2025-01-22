@@ -133,6 +133,8 @@ spacyParser<- function(txt){
   dt_parsedtxt[,selfscope:=sum(selfscope1,selfscope2,na.rm=T)>0,by=list(doc_id, sentence_id, token_id)]
 
 
+
+
   # adverbial, adpositional and conjunctive clauses shouldn't propogate dependency negations.
   dt_parsedtxt[dep_rel%in%c("advcl","prep"),head_token_id:=0]
   dt_parsedtxt[dep_rel%in%c("conj") & abs(head_token_id-token_id)>3,head_token_id:=0]

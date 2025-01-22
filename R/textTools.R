@@ -75,6 +75,8 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("u.s.", "usa", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("i i ", "i ", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("i, i ", "i ", x, fixed=TRUE))
   names(text)<-NULL
   return(text)
 }

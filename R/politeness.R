@@ -111,6 +111,8 @@ politeness<-function(text, parser=c("none","spacy"),
   features[["Informal.Title"]]<-sets[["dicts"]][,"InformalTitle"]
   features[["Formal.Title"]]<-sets[["dicts"]][,"FormalTitle"]
 
+  # Titles - "boss" vs "my boss", "son" vs "our son"
+
   features[["Could.You"]]<-textcounter(c("could you","would you","might you"),sets[["clean"]], num_mc_cores=num_mc_cores)
   features[["Can.You"]]<-textcounter(c("can you","will you"),sets[["clean"]], num_mc_cores=num_mc_cores)
 
@@ -198,6 +200,7 @@ politeness<-function(text, parser=c("none","spacy"),
                                 textcounter(apply(expand.grid(c("good","great","excellent","brilliant","fair","amazing"),
                                                               c("idea", "point","suggestion")),1,paste, collapse=" "),
                                             sets[["clean"]],num_mc_cores=num_mc_cores))
+
     features[["Disagreement"]]<-(unlist(lapply(sets[["p.negs"]],
                                                function(x) sum(textcounter(c("nsubj(agree, i)","nsubj(concur, i)",
                                                                              "nsubj(agree, we)","nsubj(concur, we)",
@@ -271,6 +274,7 @@ politeness<-function(text, parser=c("none","spacy"),
     # Also....
     # Tag Questions cases like "right?" and "don't you?", "eh?", "you know?" "what do you think?"
     # Repair Questions	(from SpeedDate)? "pardon?" "sorry?"
+
     features[["Gratitude"]]<-(unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="thank"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="grateful"))))+
                                 unlist(lapply(sets[["c.words"]], function(x) sum(startsWith(unlist(x), prefix="gratitude"))))+
