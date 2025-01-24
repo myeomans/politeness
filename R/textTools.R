@@ -59,9 +59,7 @@ cleantext<-function (text, language = "english", stop.words = TRUE) {
 #' @return a character vector
 #' @keywords internal
 ctxpand<-function(text){
-  text=tolower(text)
   text<-sapply(text, function(x) gsub("let's", "let us", x, fixed=TRUE))
-  text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("won't", "will not", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("can't", "cannot", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("shan't", "shall not", x, fixed=TRUE))
@@ -75,8 +73,12 @@ ctxpand<-function(text){
   text<-sapply(text, function(x) gsub("u.s.", "usa", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("e.g.", "eg", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("i.e.", "ie", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("i'm", "i am", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("i i ", "i ", x, fixed=TRUE))
   text<-sapply(text, function(x) gsub("i, i ", "i ", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("I'm", "I am", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("I I ", "I ", x, fixed=TRUE))
+  text<-sapply(text, function(x) gsub("I, I ", "I ", x, fixed=TRUE))
   names(text)<-NULL
   return(text)
 }
