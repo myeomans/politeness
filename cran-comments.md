@@ -5,6 +5,8 @@ renamed politenessPlot to featurePlot.
 renamed findPoliteTexts to exampleTexts.
 renamed politenessProjection to trainModel.
 
+Improved question features
+
 ## Version Update (0.9.3) 
 
 DNM reproduction cleaned up, new documentation (with colab link), new pronoun feature
