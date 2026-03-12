@@ -7,6 +7,7 @@ utils::globalVariables(c("feat","score","freq"))
 #' @param model2 Trained glmnet model (optional) If you want the Y axis to reflect a second set of coefficients, instead of feature counts.
 #' @param counts Feature counts - either from training data or test data (choose based on application of interest)
 #' @param dat logical If TRUE, then function will return a list with the data.frame used for plotting, as well as the plot itself.
+#' @param l.1se logical If TRUE, then function will use a more conservative threshold (lambda.1se) for feature selection. See ?cv.glmnet for details.
 #' @import magrittr
 #' @return ggplot object. Layers can be added like any ggplot object
 #' @description
@@ -14,15 +15,20 @@ utils::globalVariables(c("feat","score","freq"))
 #'
 #'@export
 
-modelPlot<-function(model1,counts,model2=NULL,dat=FALSE){
+modelPlot<-function(model1,counts,model2=NULL,dat=FALSE,
+                    l.1se=FALSE){
+
+  threshold=ifelse(l.1se,"lambda.1se","lambda.min")
 
   plotCoefs<-model1 %>%
-    stats::coef(s="lambda.min") %>%
+    stats::coef(s=threshold) %>%
     drop() %>%
     as.matrix() %>%
     as.data.frame() %>%
-    tibble::rownames_to_column(var = "feat") %>%
-    dplyr::rename(score="s1") %>%
+    tibble::rownames_to_column(var = "feat")
+
+  plotCoefs<- plotCoefs %>%
+    dplyr::rename(score=names(plotCoefs)[2]) %>%
     dplyr::filter(score!=0 & feat!="(Intercept)" & !is.na(score))
 
   if(nrow(plotCoefs)==0){
@@ -39,7 +45,7 @@ modelPlot<-function(model1,counts,model2=NULL,dat=FALSE){
 
   xrange=range(plotDat$score)*1.2
   yrange=c(.01,.05,.1,.2,.5,1,2,5,10,20,50)
-  yrange=yrange[yrange<max(colMeans(counts))]
+  yrange=yrange[yrange<max(colMeans(as.matrix(counts)))]
 
   thePlot<-plotDat %>%
     ggplot2::ggplot(ggplot2::aes(x=score,y=freq,label=feat,color=score)) +

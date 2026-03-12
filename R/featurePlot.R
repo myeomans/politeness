@@ -207,8 +207,7 @@ featurePlot<-function(df_polite,
   ggplot2::ggplot(data=split.data,
                   ggplot2::aes(x=feature,
                                y=count,
-                               fill=cond),
-                  width=2) +
+                               fill=cond)) +
     ggplot2::geom_bar(position=ggplot2::position_dodge(width = 0.8),
                       stat="identity") +
     ggplot2::geom_errorbar(ggplot2::aes(ymin=count_minus, ymax=count_plus), width=0.3,

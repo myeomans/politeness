@@ -1,8 +1,17 @@
 Package: politeness
 Type: Package
 Title: Detecting Politeness Features in Text
-Version: 0.9.4
-Author: Mike Yeomans, Alejandro Kantor, Dustin Tingley
+Version: 0.9.5
+Authors@R: c(person(given = "Mike",
+                        family = "Yeomans",
+                        role = c("aut", "cre"),
+                        email = "mk.yeomans@gmail.com"),
+                 person(given = "Alejandro",
+                        family = "Kantor",
+                        role = "aut"),
+                 person(given = "Dustin",
+                        family = "Tingley",
+                        role = "aut"))
 Maintainer: Mike Yeomans <mk.yeomans@gmail.com>
 Description: Detecting markers of politeness in English natural language. This package allows researchers to easily visualize and quantify politeness between groups of documents. This package combines prior research on the linguistic markers of politeness. We thank the Spencer Foundation, the Hewlett Foundation, and Harvard's Institute for Quantitative Social Science for support.
 License: MIT + file LICENSE
@@ -24,7 +33,7 @@ Imports:
     dplyr,
     ggrepel,
     tibble
-RoxygenNote: 7.3.2
+RoxygenNote: 7.3.3
 Suggests: knitr,
     rmarkdown,
     testthat

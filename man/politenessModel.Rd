@@ -19,7 +19,7 @@ Pre-trained model to detect politeness based on data from Danescu-Niculescu-Mizi
 }
 \details{
 This is a wrapper around a pre-trained model of "politeness" for all the data from the 2013 DNM et al paper.
-This model requires grammar parsing via SpaCy. Please see \code{\link{spacyr}} for details on installation.
+This model requires grammar parsing via SpaCy. Please see \code{\link[spacyr:spacyr]{spacyr}} for details on installation.
 }
 \examples{
 

@@ -4,7 +4,7 @@
 \alias{modelPlot}
 \title{LASSO Coefficient Plot}
 \usage{
-modelPlot(model1, counts, model2 = NULL, dat = FALSE)
+modelPlot(model1, counts, model2 = NULL, dat = FALSE, l.1se = FALSE)
 }
 \arguments{
 \item{model1}{Trained glmnet model}
@@ -14,6 +14,8 @@ modelPlot(model1, counts, model2 = NULL, dat = FALSE)
 \item{model2}{Trained glmnet model (optional) If you want the Y axis to reflect a second set of coefficients, instead of feature counts.}
 
 \item{dat}{logical If TRUE, then function will return a list with the data.frame used for plotting, as well as the plot itself.}
+
+\item{l.1se}{logical If TRUE, then function will use a more conservative threshold (lambda.1se) for feature selection. See ?cv.glmnet for details.}
 }
 \value{
 ggplot object. Layers can be added like any ggplot object

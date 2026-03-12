@@ -6,7 +6,7 @@ utils::globalVariables(c("polite_train")) # prevent incorrect "no global binding
 #' @param texts character A vector of texts, each of which will be given a politeness score.
 #' @param num_mc_cores integer Number of cores for parallelization.
 #' @details This is a wrapper around a pre-trained model of "politeness" for all the data from the 2013 DNM et al paper.
-#' This model requires grammar parsing via SpaCy. Please see \code{\link{spacyr}} for details on installation.
+#' This model requires grammar parsing via SpaCy. Please see \code{\link[spacyr:spacyr]{spacyr}} for details on installation.
 #' @return a vector with receptiveness scores
 #' @references
 #' Danescu-Niculescu-Mizil, C., Sudhof, M., Jurafsky, D., Leskovec, J. & Potts, C. (2013). A computational approach to politeness with application to social factors. Proc. 51st ACL, 250-259.
